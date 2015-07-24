@@ -9,6 +9,13 @@
 
         var RATE_LIMIT = 10;
 
+        //how many games I want to grab from a match history
+        var DESIRED_GAMES = 3;
+
+        //how long I want to store data in local storage for
+        var STORAGE_TIME = 1800000;
+
+
         $scope.master = function() {
             //call to service to get summoner by summoner name
             getSummoner.getSummoner($scope.entry).then(function(summoner) {
@@ -176,7 +183,6 @@
 
         $scope.getGames = function(selectedTeam) {
 
-            var DESIRED_GAMES = 8;
 
             if (selectedTeam.matchHistory.length < DESIRED_GAMES){
                 DESIRED_GAMES = selectedTeam.matchHistory.length;
@@ -194,7 +200,15 @@
                 gameIds[i] = match.gameId;
             }
 
-            //do if statement heres so u dont gotta f with promise?
+            var date = new Date().getTime();
+            if (localStorage[selectedTeam]){
+                var dateDiff = date - localStorage[selectedTeam+'Date'];
+            }
+
+            //if there is a team store and the difference between this time and the time it was stored is greater than 30 mins...
+            if (localStorage[selectedTeam] && dateDiff < STORAGE_TIME){
+                console.log('lets grab from localStorage');
+            }
             var myPromise = getMatchDetails.getMatchDetails(gameIds, selectedTeam);
 
 
@@ -208,6 +222,14 @@
                     count++;
                 });
 
+                //remove existing entry from local storage since the api request is being made again.
+                if (localStorage[selectedTeam]){
+                    localStorage.removeItem(selectedTeam);
+                    localStorage.removeItem(selectedTeam+'Date');
+                }
+
+                var storageDate = new Date().getTime();
+                localStorage.setItem(selectedTeam+'Date', storageDate);
                 localStorage.setItem(selectedTeam, games);
 
                 var currentMembers = getMemberNames(selectedTeam, games);
