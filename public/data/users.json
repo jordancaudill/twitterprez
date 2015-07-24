@@ -1,0 +1,68 @@
+[
+    {
+      "id": 1,
+      "firstName": "Brad",
+      "lastName": "Alexander",
+      "address": "3701 E Plano Pkwy",
+      "city": "Plano",
+      "state": "TX",
+      "zip": "75074",
+      "email": "balexander@esi-estech.com",
+      "phone": "972-422-9700 x2406"
+    },
+    {
+      "id": 2,
+      "firstName": "Scott",
+      "lastName": "LaCoste",
+      "address": "1 Planet Rd",
+      "city": "Mars Colony",
+      "state": "US",
+      "zip": "0000001",
+      "email": "slacosta@esi-estech.com",
+      "phone": "972-422-9700 x2417"
+    },
+    {
+      "id": 3,
+      "firstName": "Tres",
+      "lastName": "Sisson",
+      "address": "25 Hottown St",
+      "city": "Hottown Venus",
+      "state": "US",
+      "zip": "0100001",
+      "email": "wsisson@esi-estech.com",
+      "phone": "972-422-9700 x2424"
+    },
+    {
+      "id": 4,
+      "firstName": "Bennilyn",
+      "lastName": "Quek",
+      "address": "90 Normaville Way",
+      "city": "Normal",
+      "state": "TX",
+      "zip": "78989",
+      "email": "bquek@esi-estech.com",
+      "phone": "972-422-9700 x3455"
+    },
+    {
+      "id": 5,
+      "firstName": "Thomas",
+      "lastName": "Grice",
+      "address": "1001 Weirdo Dr",
+      "city": "The North",
+      "state": "GOT",
+      "zip": "2",
+      "email": "tgrice@esi-estech.com",
+      "phone": "972-422-9700 x2408"
+    },
+    {
+      "id": 6,
+      "firstName": "Tracy",
+      "lastName": "Barker",
+      "address": "321 The Future",
+      "city": "USS Enterprise",
+      "state": "ST",
+      "zip": "asv5423",
+      "email": "tbarker@esi-estech.com",
+      "phone": "972-422-9700 x129"
+    }
+]
