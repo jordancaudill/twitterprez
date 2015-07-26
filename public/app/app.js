@@ -13,7 +13,8 @@
         var DESIRED_GAMES = 3;
 
         //how long I want to store data in local storage for
-        var STORAGE_TIME = 1800000;
+        // first number is minutes -- * 60000 makes it milliseconds
+        var STORAGE_TIME = 30 * 60000;
 
 
         $scope.master = function() {
@@ -44,7 +45,6 @@
                 var member = selectedTeam.roster.memberList[i];
                 rosterIds[i] = member.playerId;
             }
-
 
             angular.forEach(games, function(game){
                 angular.forEach(game.participantIdentities, function(participant){
@@ -147,7 +147,71 @@
                 }
         };
 
+        var processData = function(teamGames, selectedTeam, dateDiff){
 
+            var teamName = selectedTeam.name;
+            //this is the main object that contains the stats i want to gather and organize for the whole team
+            var teamStats = {};
+            var games = [];
+            var count = 0;
+
+            angular.forEach(teamGames, function(teamGame){
+                if(teamGame['data']){
+                    games[count] = teamGame['data'];
+                    count++;
+                }
+                else{
+                    games[count] = teamGame;
+                    count++;
+                }
+            });
+
+            if (localStorage[teamName] && dateDiff > STORAGE_TIME){
+                localStorage.removeItem(teamName);
+                localStorage.removeItem(teamName+'Date');
+            }
+
+            if (!(localStorage[teamName]) || localStorage[teamName] && dateDiff > STORAGE_TIME){
+                var storageDate = new Date().getTime();
+                localStorage.setItem(teamName+'Date', storageDate);
+
+                //stringify games object to store in local Storage.
+                var gamesString = JSON.stringify(games);
+                localStorage.setItem(teamName, gamesString);
+            }
+
+
+
+
+            var currentMembers = getMemberNames(selectedTeam, games);
+            var gameNameList = [];
+
+            for(m = 0; m < currentMembers.memberNames.length; m++){
+                var memberName = currentMembers.memberNames[m];
+                teamStats[memberName] = {};
+                var memberStats = teamStats[memberName];
+                memberStats.killParticipation = [];
+                memberStats.summonerName = memberName;
+                memberStats.summonerId = currentMembers.memberIds[m];
+            }
+            for (i = 0; i < DESIRED_GAMES; i++){
+                gameNameList[i] = 'Game ' + (i + 1);
+                var allyIds = getAllies(currentMembers.memberIds, games[i]);
+                //calculate total Team Kills for this game
+                var totalTeamKills = getTotalTeamKills(games[i], allyIds);
+
+                angular.forEach(teamStats, function(memberObject){
+                    var thisMemberKP = memberObject.killParticipation;
+                    thisMemberKP[i] = getKillParticipation(games[i], memberObject, totalTeamKills);
+                });
+            }
+
+            getAverage(currentMembers, teamStats, selectedTeam, 'killParticipation', DESIRED_GAMES);
+
+            $scope.teamStats = teamStats;
+            $scope.gameNameList = gameNameList;
+            console.log(teamStats);
+        };
 
         //averages whatever stat you send in
         var getAverage = function(currentMembers, teamStats, selectedTeam, statToAverage, DESIRED_GAMES){
@@ -183,13 +247,11 @@
 
         $scope.getGames = function(selectedTeam) {
 
+            var teamName = selectedTeam.name;
 
             if (selectedTeam.matchHistory.length < DESIRED_GAMES){
                 DESIRED_GAMES = selectedTeam.matchHistory.length;
             }
-
-            //object containing all team stats
-            var teamStats = {};
 
             var gameIds = [];
 
@@ -201,71 +263,26 @@
             }
 
             var date = new Date().getTime();
-            if (localStorage[selectedTeam]){
-                var dateDiff = date - localStorage[selectedTeam+'Date'];
+            if (localStorage[teamName]){
+                var dateDiff = date - localStorage[teamName+'Date'];
+                console.log('It has been '+(dateDiff/60000).toFixed(0)+' minutes since a request was made for this team.');
             }
 
             //if there is a team store and the difference between this time and the time it was stored is greater than 30 mins...
-            if (localStorage[selectedTeam] && dateDiff < STORAGE_TIME){
+            if (localStorage[teamName] && dateDiff <= STORAGE_TIME){
                 console.log('lets grab from localStorage');
+                var storedGames = JSON.parse(localStorage[teamName]);
+
+                processData(storedGames, selectedTeam, dateDiff);
             }
-            var myPromise = getMatchDetails.getMatchDetails(gameIds, selectedTeam);
-
-
-            //runs once a response has been received for every matchDetails request
-            myPromise.then(function(responseObjects){
-                var games = [];
-                var count = 0;
-
-                angular.forEach(responseObjects, function(responseObject){
-                    games[count] = responseObject.data;
-                    count++;
-                });
-
-                //remove existing entry from local storage since the api request is being made again.
-                if (localStorage[selectedTeam]){
-                    localStorage.removeItem(selectedTeam);
-                    localStorage.removeItem(selectedTeam+'Date');
-                }
-
-                var storageDate = new Date().getTime();
-                localStorage.setItem(selectedTeam+'Date', storageDate);
-                localStorage.setItem(selectedTeam, games);
-
-                var currentMembers = getMemberNames(selectedTeam, games);
-                var gameNameList = [];
-
-                for(m = 0; m < currentMembers.memberNames.length; m++){
-                    var memberName = currentMembers.memberNames[m];
-                    teamStats[memberName] = {};
-                    var memberStats = teamStats[memberName];
-                    memberStats.killParticipation = [];
-                    memberStats.summonerName = memberName;
-                    memberStats.summonerId = currentMembers.memberIds[m];
-                }
-                for (i = 0; i < DESIRED_GAMES; i++){
-                    gameNameList[i] = 'Game ' + (i + 1);
-                    var allyIds = getAllies(currentMembers.memberIds, games[i]);
-                    //calculate total Team Kills for this game
-                    var totalTeamKills = getTotalTeamKills(games[i], allyIds);
-
-                    angular.forEach(teamStats, function(memberObject){
-                        var thisMemberKP = memberObject.killParticipation;
-                        thisMemberKP[i] = getKillParticipation(games[i], memberObject, totalTeamKills);
-                    });
-                }
-
-                getAverage(currentMembers, teamStats, selectedTeam, 'killParticipation', DESIRED_GAMES);
-
-                $scope.teamStats = teamStats;
-                $scope.gameNameList = gameNameList;
-                console.log(teamStats);
-
-            }.bind(this));
-
-
-
-
+            else{
+                console.log('lets make a request');
+                var myPromise = getMatchDetails.getMatchDetails(gameIds, selectedTeam);
+                //runs once a response has been received for every matchDetails request
+                myPromise.then(function(teamGames){
+                    processData(teamGames, selectedTeam, dateDiff);
+                }.bind(this));
+            }
         };
     }]);
 }(angular));
