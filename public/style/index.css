@@ -167,6 +167,13 @@ html .team button:hover {
   margin-right: auto;
   margin-left: auto;
 }
+.styled-select {
+  width: 240px;
+  height: 34px;
+  overflow: hidden;
+  background: url(new_arrow.png) no-repeat right #dddddd;
+  border: 1px solid #ccc;
+}
 .styled-select select {
   background: #a03550;
   width: 150px;
