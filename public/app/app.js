@@ -13,7 +13,7 @@
         var DESIRED_GAMES = 3;
 
         //how long I want to store data in local storage for
-        // first number is minutes -- * 60000 makes it milliseconds
+        // first number is minutes * 60000 makes it milliseconds
         var STORAGE_TIME = 30 * 60000;
 
 
@@ -29,6 +29,7 @@
 
         //call to service to get teams by summoner ID
         var getUserTeams = function(summonerId) {
+            $scope.gotTeams = true;
             getTeams.getTeams($scope.summonerId).then(function(teams) {
                 $scope.teams = teams[summonerId];
             });
@@ -147,7 +148,12 @@
                 }
         };
 
+        //organizes all the data grabbed from matches into an easy to navigate object
         var processData = function(teamGames, selectedTeam, dateDiff){
+
+            //a list of all possible stats that will be shown in a graph
+            var graphStats = ['Kill Participation', 'Kill Participation Averages'];
+            $scope.graphStats = graphStats;
 
             var teamName = selectedTeam.name;
             //this is the main object that contains the stats i want to gather and organize for the whole team
@@ -180,9 +186,6 @@
                 localStorage.setItem(teamName, gamesString);
             }
 
-
-
-
             var currentMembers = getMemberNames(selectedTeam, games);
             var gameNameList = [];
 
@@ -210,7 +213,35 @@
 
             $scope.teamStats = teamStats;
             $scope.gameNameList = gameNameList;
+            makeChart(teamStats, gameNameList);
             console.log(teamStats);
+
+
+        };
+
+        var makeChart = function(teamStats, gameNameList){
+            var data = {
+                // A labels array that can contain any sort of values
+                // Our series array that contains series objects or in this case series data arrays
+            };
+            data.series = [];
+            data.labels = [];
+
+            angular.forEach(teamStats, function(member){
+                data.series.push(member.killParticipationAverage);
+                data.labels.push(member.summonerName);
+            });
+
+            // Create a new line chart object where as first parameter we pass in a selector
+            // that is resolving to our chart container element. The Second parameter
+            // is the actual data object.
+
+            var options = {
+                distributeSeries: true
+
+            };
+
+            new Chartist.Bar('.ct-chart', data, options);
         };
 
         //averages whatever stat you send in
@@ -246,6 +277,8 @@
         };
 
         $scope.getGames = function(selectedTeam) {
+
+            $scope.teamClicked = true;
 
             var teamName = selectedTeam.name;
 

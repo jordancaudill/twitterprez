@@ -1,0 +1,182 @@
+/* Colors */
+/*Responsively scaling body and heading font sizes and line heights, etc. */
+html {
+  font-size: 16px;
+}
+a {
+  color: #490012;
+}
+a:hover {
+  color: #eca0b3;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+a:visited {
+  text-decoration: none;
+}
+/* Sets the html heading and paragraph tags to the appropriate CSS rules. */
+p {
+  font-family: "Lato", Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 560px;
+  color: #444444;
+  line-height: 1.25em;
+}
+@media (min-width: 768px) {
+  p {
+    line-height: 1.4em;
+  }
+}
+h1 {
+  font-family: "Ubuntu", Helvetica, Arial, sans-serif;
+  text-align: center;
+  font-size: 2rem;
+  line-height: 1.25em;
+  color: #444444;
+}
+@media (min-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+    line-height: 1.125em;
+  }
+}
+@media (min-width: 992px) {
+  h1 {
+    font-size: 3rem;
+    line-height: 1.05em;
+  }
+}
+h2 {
+  font-family: "Ubuntu", Helvetica, Arial, sans-serif;
+  text-align: center;
+  font-size: 1.625rem;
+  line-height: 1.15em;
+  color: #444444;
+}
+@media (min-width: 768px) {
+  h2 {
+    font-size: 2rem;
+    line-height: 1.25em;
+  }
+}
+@media (min-width: 992px) {
+  h2 {
+    font-size: 2.25rem;
+  }
+}
+h3 {
+  font-family: "Ubuntu", Helvetica, Arial, sans-serif;
+  text-align: center;
+  font-size: 1.375rem;
+  line-height: 1.135em;
+  color: #444444;
+}
+@media (min-width: 768px) {
+  h3 {
+    font-size: 1.5rem;
+    line-height: 1.25em;
+  }
+}
+@media (min-width: 992px) {
+  h3 {
+    font-size: 1.75rem;
+  }
+}
+h4 {
+  font-family: "Ubuntu", Helvetica, Arial, sans-serif;
+  text-align: center;
+  font-size: 1.125rem;
+  line-height: 1.1em;
+  color: #444444;
+}
+@media (min-width: 768px) {
+  h4 {
+    line-height: 1.2em;
+  }
+}
+#pageContent,
+html {
+  background-color: #453d3f;
+  text-align: center;
+}
+#pageContent h1,
+html h1 {
+  color: #eeeeee;
+  font-size: 4em;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+}
+#pageContent p,
+html p {
+  color: #eeeeee;
+  font-size: 1.2em;
+  text-align: center;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+}
+#pageContent #summonerForm,
+html #summonerForm {
+  margin-top: 50px;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  font-size: 20px;
+}
+#pageContent #summonerForm #summoner,
+html #summonerForm #summoner {
+  height: 40px;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+  border-style: none;
+  background-color: #222222;
+  color: white;
+}
+#pageContent #summonerForm #enterSummoner,
+html #summonerForm #enterSummoner {
+  background-color: #a03550;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  border-radius: 5px;
+  border-style: none;
+  color: white;
+}
+#pageContent #summonerForm #enterSummoner:hover,
+html #summonerForm #enterSummoner:hover {
+  background-color: #78132c;
+}
+#pageContent .team button,
+html .team button {
+  margin-top: 15px;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  height: 40px;
+  width: 245px;
+  background-color: #a03550;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  border-style: none;
+}
+#pageContent .team button:hover,
+html .team button:hover {
+  background-color: #78132c;
+}
+.chart-div {
+  max-width: 800px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.styled-select select {
+  background: #a03550;
+  width: 150px;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1;
+  border: 0;
+  border-radius: 5px;
+  height: 34px;
+  -webkit-appearance: none;
+  color: white;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+}

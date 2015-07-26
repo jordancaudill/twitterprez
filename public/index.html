@@ -2,40 +2,43 @@
 <html>
     <head lang="en">
         <meta charset="UTF-8">
-        <title>Jordan's Angular</title>
-        <link rel="stylesheet" href="css/app.css"/>
+        <title>Team Statter</title>
+        <link rel="stylesheet" href="style/index.css">
+        <link rel="stylesheet" href="style/typography.css">
+        <link rel="stylesheet" href="style/variables.css">
+        <link rel="stylesheet" href="style/animate.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="bower_components/chartist/dist/scss/chartist.css">
+
     </head>
     <body ng-app="league">
-        <div ng-controller="UserController">
+        <div id="pageContent" ng-controller="UserController">
+            <div class="container">
+                <div class="row">
+                        <h1 class="text-center">Team Statter</h1>
+                    <form ng-hide="teamClicked" id="summonerForm" ng-submit="master()">
+                        <div class="col-xs-12 text-center">
+                            <input placeholder="Summoner Name" type="text" class="text-center" id="summoner" ng-model="entry">
+                            <input id="enterSummoner" type="submit" value="Go">
+                        </div>
+                    </form>
 
-            <form ng-submit="master()">
-                <input type="text" ng-model="entry">
-                <input type="submit" class="btn btn-danger" value="GET SUMMONER!">
-            </form>
-
-            </br>
-            Summoner ID: {{ summonerId }}
-            </br>
-            Teams:
-            <div ng-repeat="team in teams">
-                <button ng-click="getGames(team)" class="btn btn-primary">{{team.name}}</button>
+                    <div ng-hide="teamClicked" class="col-xs-12 text-center team" ng-repeat="team in teams">
+                        <button ng-click="getGames(team)" class="team-btn">{{team.name}}</button>
+                    </div>
+                    <div class="col-xs-12 styled-select" ng-show="teamClicked">
+                        <select>
+                            <option ng-repeat="graphStat in graphStats" value="graphStat">{{graphStat}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-12 text-center" ng-show="teamClicked">
+                        <div class="chart-div">
+                            <div class="ct-chart ct-perfect-fourth"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            </br>
-
-            <table class="table">
-                <tr>
-                    <th></th>
-                    <th>Average</th>
-                    <th ng-repeat="gameName in gameNameList">{{gameName}}</th>
-                </tr>
-                <tr ng-repeat="(property, value) in teamStats">
-                    <th>{{property}}</th>
-                    <td>{{value.killParticipationAverage + '%'}}</td>
-                    <td ng-repeat="kp in value.killParticipation track by $index">{{kp}}</td>
-                </tr>
-
-            </table>
 
         </div>
 
@@ -43,6 +46,8 @@
         <script src="app/app.js"></script>
         <script src="app/services.js"></script>
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="js/index.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="bower_components/chartist/dist/chartist.min.js"></script>
     </body>
 </html>

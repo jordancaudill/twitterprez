@@ -1,0 +1,99 @@
+@import "variables.less";
+@import "typography.less";
+
+#pageContent, html{
+  background-color: #453d3f;
+  text-align: center;
+
+  //this will eventually be a logo
+  h1{
+    color: #eeeeee;
+    font-size: 4em;
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+
+  }
+  p{
+    color: #eeeeee;
+    font-size: 1.2em;
+    text-align: center;
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+
+  }
+
+  #summonerForm{
+      margin-top: 50px;
+      font-family: "PT Serif", Helvetica, Arial, sans-serif;
+      font-size: 20px;
+
+      #summoner{
+          height: 40px;
+          width: 200px;
+          margin-left: auto;
+          margin-right: auto;
+          border-radius: 5px;
+          border-style: none;
+          background-color: #222222;
+          color: white;
+
+
+
+      }
+      #enterSummoner{
+        background-color: @brand;
+        height: 40px;
+        width: 40px;
+        text-align: center;
+        border-radius: 5px;
+        border-style: none;
+        color: white;
+      }
+
+      #enterSummoner:hover{
+        background-color: @brand-dull;
+      }
+  }
+
+
+  .team {
+    button {
+      margin-top: 15px;
+      font-family: "PT Serif", Helvetica, Arial, sans-serif;
+      font-size: 20px;
+      height: 40px;
+      width: 245px;
+      background-color: @brand;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      border-style: none;
+    }
+
+    button:hover{
+      background-color: @brand-dull;
+    }
+  }
+}
+
+.chart-div {
+  max-width: 800px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.styled-select {
+}
+
+.styled-select select {
+  background: @brand;
+  width: 150px;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1;
+  border: 0;
+  border-radius: 5px;
+  height: 34px;
+  -webkit-appearance: none;
+  color: white;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+
+}
