@@ -10,7 +10,7 @@
         var RATE_LIMIT = 10;
 
         //how many games I want to grab from a match history
-        var DESIRED_GAMES = 3;
+        var DESIRED_GAMES = 8;
 
         //how long I want to store data in local storage for
         // first number is minutes * 60000 makes it milliseconds
@@ -18,20 +18,34 @@
 
 
         $scope.master = function() {
+            var summonerName = $scope.entry.toLowerCase().replace(/ /g,'');
             //call to service to get summoner by summoner name
-            getSummoner.getSummoner($scope.entry).then(function(summoner) {
-                $scope.summonerId = summoner.id;
-                var summonerId = summoner.id;
+            getSummoner.getSummoner(summonerName).then(function(response) {
+                if(response[summonerName]){
+                    summonerName = response[summonerName];
+                    var summonerId = summonerName.id;
+                    console.log(response);
+                    getUserTeams(summonerId);
+                }
+                else{
+                    $scope.error = response;
+                    $scope.isError = true;
+                }
 
-                getUserTeams(summonerId);
             });
         };
 
         //call to service to get teams by summoner ID
         var getUserTeams = function(summonerId) {
             $scope.gotTeams = true;
-            getTeams.getTeams($scope.summonerId).then(function(teams) {
-                $scope.teams = teams[summonerId];
+            getTeams.getTeams(summonerId).then(function(response) {
+                if(response[summonerId]){
+                    $scope.teams = response[summonerId];
+                }
+                else{
+                    $scope.error = response;
+                    $scope.isError = true;
+                }
             });
         };
 
@@ -152,8 +166,11 @@
         var processData = function(teamGames, selectedTeam, dateDiff){
 
             //a list of all possible stats that will be shown in a graph
-            var graphStats = ['Kill Participation', 'Kill Participation Averages'];
+            var graphStats = ['Kill Participation', 'Kill Participation Average'];
             $scope.graphStats = graphStats;
+
+            //make default graph option
+            $scope.selectedGraph = 'Kill Participation Average';
 
             var teamName = selectedTeam.name;
             //this is the main object that contains the stats i want to gather and organize for the whole team
@@ -212,37 +229,69 @@
             getAverage(currentMembers, teamStats, selectedTeam, 'killParticipation', DESIRED_GAMES);
 
             $scope.teamStats = teamStats;
-            $scope.gameNameList = gameNameList;
-            makeChart(teamStats, gameNameList);
             console.log(teamStats);
+            $scope.gameNameList = gameNameList;
+
+            $scope.makeChart('Kill Participation Average');
 
 
         };
 
-        var makeChart = function(teamStats, gameNameList){
-            var data = {
-                // A labels array that can contain any sort of values
-                // Our series array that contains series objects or in this case series data arrays
-            };
+
+        $scope.makeChart = function(graphName){
+            console.log('trying to make chart: '+graphName);
+            //necessary data variable to make chart
+            var data = {};
             data.series = [];
             data.labels = [];
 
-            angular.forEach(teamStats, function(member){
-                data.series.push(member.killParticipationAverage);
-                data.labels.push(member.summonerName);
-            });
+            //all graphs are made with different settings
+            switch(graphName) {
+                case 'Kill Participation Average':
+                    var chartId = 'killParticipationAverage';
+                    angular.forEach($scope.teamStats, function (member) {
+                        data.series.push(member[chartId]);
+                        data.labels.push(member.summonerName);
+                    });
+                    var options = {
+                        distributeSeries: true
+                    };
+                    new Chartist.Bar('.ct-chart', data, options);
+                    $scope.graph = chartId;
+                    break;
 
-            // Create a new line chart object where as first parameter we pass in a selector
-            // that is resolving to our chart container element. The Second parameter
-            // is the actual data object.
+                case 'Kill Participation':
+                    var chartId = 'killParticipation';
+                    angular.forEach($scope.teamStats, function (member) {
+                        data.series.push(member[chartId]);
+                        for(x = 1; x <= member[chartId].length; x++){
+                            if(data.labels.length < member[chartId].length){
+                                data.labels.push('Game '+x);
+                            }
+                        }
+                        options = {
+                            axisY: {
+                                onlyInteger: true,
+                                offset: 20
+                            },
+                            plugins: [
+                                Chartist.plugins.tooltip()
+                            ]
+                        };
+                    });
 
-            var options = {
-                distributeSeries: true
+                    new Chartist.Line('.ct-chart', data, options);
 
-            };
+                    $scope.graph = chartId;
+                    break;
 
-            new Chartist.Bar('.ct-chart', data, options);
+                default:
+                    break;
+            }
+
+
         };
+
 
         //averages whatever stat you send in
         var getAverage = function(currentMembers, teamStats, selectedTeam, statToAverage, DESIRED_GAMES){
@@ -278,6 +327,7 @@
 
         $scope.getGames = function(selectedTeam) {
 
+            $scope.selectedTeam = selectedTeam.name;
             $scope.teamClicked = true;
 
             var teamName = selectedTeam.name;

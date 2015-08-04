@@ -8,12 +8,10 @@
 
     app.service('getSummoner', ['$http', '$q', function($http, $q) {
         return {
-            getSummoner: function (entry) {
+            getSummoner: function (summonerName) {
                 var deferred = $q.defer();
-                $http.get('http://localhost:3000/summoner/'+entry).success(function (response) {
-                    var summonerName = entry.toLowerCase().replace(/ /g,'');
-                    var summoner = response[summonerName];
-                    return deferred.resolve(summoner);
+                $http.get('http://localhost:3000/summoner/'+summonerName).success(function (response) {
+                    return deferred.resolve(response);
                 });
                 return deferred.promise;
             }
