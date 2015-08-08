@@ -24,7 +24,6 @@
                 if(response[summonerName]){
                     summonerName = response[summonerName];
                     var summonerId = summonerName.id;
-                    console.log(response);
                     getUserTeams(summonerId);
                 }
                 else{
@@ -138,7 +137,6 @@
                     }
                 }
             }
-            //console.log('total team kills = ' + totalTeamKills);
             return totalTeamKills;
         };
 
@@ -153,10 +151,6 @@
                         var playerAssists = participant.stats.assists;
                         var killParticipation = ((((playerKills + playerAssists) / totalTeamKills) * 100).toFixed(1));
                         killParticipation = parseFloat(killParticipation);
-                        //console.log(playerName + ' had this many kills: ' + playerKills);
-                        //console.log(playerName + ' had this many assists: ' + playerAssists);
-                        //console.log('There were this many total team kills: ' + totalTeamKills);
-                        //console.log(playerName + ' kill participation: ' + killParticipation);
                         return killParticipation;
                     }
                 }
@@ -229,17 +223,18 @@
             getAverage(currentMembers, teamStats, selectedTeam, 'killParticipation', DESIRED_GAMES);
 
             $scope.teamStats = teamStats;
-            console.log(teamStats);
             $scope.gameNameList = gameNameList;
 
             $scope.makeChart('Kill Participation Average');
+
+            //add colors to the teamStats object so the legend can be dynamically generated
+            addColors(teamStats);
 
 
         };
 
 
         $scope.makeChart = function(graphName){
-            console.log('trying to make chart: '+graphName);
             //necessary data variable to make chart
             var data = {};
             data.series = [];
@@ -292,6 +287,32 @@
 
         };
 
+        //add a color to each member
+        var addColors = function(teamStats) {
+            var colors = [ '#A03550',
+                          '#27765A',
+                          '#AF603A',
+                          '#5C9A33',
+                          '#35357B',
+                          '#59922b',
+                          '#0544d3',
+                          '#6b0392',
+                          '#f05b4f',
+                          '#dda458',
+                          '#eacf7d',
+                          '#86797d',
+                          '#b2c326',
+                          '#6188e2',
+                          '#a748ca'];
+            var i = 0;
+
+            angular.forEach(teamStats, function(member){
+                member['color'] = colors[i];
+                i++;
+            });
+
+            return teamStats;
+        };
 
         //averages whatever stat you send in
         var getAverage = function(currentMembers, teamStats, selectedTeam, statToAverage, DESIRED_GAMES){
@@ -300,7 +321,6 @@
             var count = 0;
 
             angular.forEach(teamStats, function(member){
-                //console.log(member);
                 var thisMemberStat = member[statToAverage];
                 var totalStat= 0;
                 var playedGames = 0;
@@ -311,10 +331,6 @@
                         totalStat += thisMemberStat[i];
                     }
                 }
-                //MAKE THE NAME PART OF OBJECT????
-                //console.log(member);
-                //console.log(totalStat);
-                //console.log(playedGames);
                 member[averageName] = (totalStat / playedGames).toFixed(1);
                 member[averageName] = parseFloat(member[averageName]);
                 count++;
@@ -348,18 +364,15 @@
             var date = new Date().getTime();
             if (localStorage[teamName]){
                 var dateDiff = date - localStorage[teamName+'Date'];
-                console.log('It has been '+(dateDiff/60000).toFixed(0)+' minutes since a request was made for this team.');
             }
 
             //if there is a team store and the difference between this time and the time it was stored is greater than 30 mins...
             if (localStorage[teamName] && dateDiff <= STORAGE_TIME){
-                console.log('lets grab from localStorage');
                 var storedGames = JSON.parse(localStorage[teamName]);
 
                 processData(storedGames, selectedTeam, dateDiff);
             }
             else{
-                console.log('lets make a request');
                 var myPromise = getMatchDetails.getMatchDetails(gameIds, selectedTeam);
                 //runs once a response has been received for every matchDetails request
                 myPromise.then(function(teamGames){

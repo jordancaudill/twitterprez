@@ -1,5 +1,5 @@
-@import "variables.less";
-@import "typography.less";
+@import "variables.scss";
+@import "../bower_components/chartist/dist/scss/settings/_chartist-settings.scss";
 
 #pageContent, html{
   background-color: #453d3f;
@@ -21,36 +21,36 @@
   }
 
   #summonerForm{
-      margin-top: 50px;
-      font-family: "PT Serif", Helvetica, Arial, sans-serif;
-      font-size: 20px;
+    margin-top: 50px;
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+    font-size: 20px;
 
-      #summoner{
-          height: 40px;
-          width: 200px;
-          margin-left: auto;
-          margin-right: auto;
-          border-radius: 5px;
-          border-style: none;
-          background-color: #222222;
-          color: white;
+    #summoner{
+      height: 40px;
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 5px;
+      border-style: none;
+      background-color: #222222;
+      color: white;
 
 
 
-      }
-      #enterSummoner{
-        background-color: @brand;
-        height: 40px;
-        width: 40px;
-        text-align: center;
-        border-radius: 5px;
-        border-style: none;
-        color: white;
-      }
+    }
+    #enterSummoner{
+      background-color: $brand;
+      height: 40px;
+      width: 40px;
+      text-align: center;
+      border-radius: 5px;
+      border-style: none;
+      color: white;
+    }
 
-      #enterSummoner:hover{
-        background-color: @brand-dull;
-      }
+    #enterSummoner:hover{
+      background-color: $brand-dull;
+    }
   }
 
 
@@ -61,7 +61,7 @@
       font-size: 20px;
       height: 40px;
       width: 245px;
-      background-color: @brand;
+      background-color: $brand;
       color: white;
       text-align: center;
       border-radius: 5px;
@@ -69,7 +69,7 @@
     }
 
     button:hover{
-      background-color: @brand-dull;
+      background-color: $brand-dull;
     }
   }
 }
@@ -113,7 +113,7 @@
 }
 
 #back-btn {
-  background-color: @brand;
+  background-color: $brand;
   height: 40px;
   width: 60px;
   text-align: center;
@@ -126,3 +126,14 @@
   color: white;
   margin-bottom: 10px;
 }
+#legend {
+  .legend-color {
+    padding: 15px;
+  }
+  .legend-name {
+    color: white;
+
+  }
+
+}
+

@@ -4,6 +4,7 @@ $(window).on('resize', function () {
     $('#pageContent').css({
         'height': windowHeight
     });
+
 });
 
 $(document).ready(function () {

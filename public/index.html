@@ -4,7 +4,6 @@
         <meta charset="UTF-8">
         <title>Team Statter</title>
         <link rel="stylesheet" href="style/index.css">
-        <link rel="stylesheet" href="style/typography.css">
         <link rel="stylesheet" href="style/variables.css">
         <link rel="stylesheet" href="style/animate.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -44,6 +43,14 @@
                         <div id="chart-div">
                             <div class="ct-chart ct-perfect-fourth"></div>
                         </div>
+                        <table id="legend" class="table">
+                            <tr>
+                                <td class="legend-name" ng-repeat="member in teamStats">{{member.summonerName}}</td>
+                            </tr>
+                            <tr>
+                                <td class="legend-color" ng-style="{'background-color': member.color}" ng-repeat="member in teamStats"></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
