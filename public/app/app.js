@@ -9,20 +9,42 @@
 
         var RATE_LIMIT = 10;
 
-        $scope.master = function() {
-            //call to service to get summoner by summoner name
-            getSummoner.getSummoner($scope.entry).then(function(summoner) {
-                $scope.summonerId = summoner.id;
-                var summonerId = summoner.id;
+        //how many games I want to grab from a match history
+        var DESIRED_GAMES = 8;
 
-                getUserTeams(summonerId);
+        //how long I want to store data in local storage for
+        // first number is minutes * 60000 makes it milliseconds
+        var STORAGE_TIME = 30 * 60000;
+
+
+        $scope.master = function() {
+            var summonerName = $scope.entry.toLowerCase().replace(/ /g,'');
+            //call to service to get summoner by summoner name
+            getSummoner.getSummoner(summonerName).then(function(response) {
+                if(response[summonerName]){
+                    summonerName = response[summonerName];
+                    var summonerId = summonerName.id;
+                    getUserTeams(summonerId);
+                }
+                else{
+                    $scope.error = response;
+                    $scope.isError = true;
+                }
+
             });
         };
 
         //call to service to get teams by summoner ID
         var getUserTeams = function(summonerId) {
-            getTeams.getTeams($scope.summonerId).then(function(teams) {
-                $scope.teams = teams[summonerId];
+            $scope.gotTeams = true;
+            getTeams.getTeams(summonerId).then(function(response) {
+                if(response[summonerId]){
+                    $scope.teams = response[summonerId];
+                }
+                else{
+                    $scope.error = response;
+                    $scope.isError = true;
+                }
             });
         };
 
@@ -37,7 +59,6 @@
                 var member = selectedTeam.roster.memberList[i];
                 rosterIds[i] = member.playerId;
             }
-
 
             angular.forEach(games, function(game){
                 angular.forEach(game.participantIdentities, function(participant){
@@ -116,7 +137,6 @@
                     }
                 }
             }
-            //console.log('total team kills = ' + totalTeamKills);
             return totalTeamKills;
         };
 
@@ -131,16 +151,168 @@
                         var playerAssists = participant.stats.assists;
                         var killParticipation = ((((playerKills + playerAssists) / totalTeamKills) * 100).toFixed(1));
                         killParticipation = parseFloat(killParticipation);
-                        //console.log(playerName + ' had this many kills: ' + playerKills);
-                        //console.log(playerName + ' had this many assists: ' + playerAssists);
-                        //console.log('There were this many total team kills: ' + totalTeamKills);
-                        //console.log(playerName + ' kill participation: ' + killParticipation);
                         return killParticipation;
                     }
                 }
         };
 
+        //organizes all the data grabbed from matches into an easy to navigate object
+        var processData = function(teamGames, selectedTeam, dateDiff){
 
+            //a list of all possible stats that will be shown in a graph
+            var graphStats = ['Kill Participation', 'Kill Participation Average'];
+            $scope.graphStats = graphStats;
+
+            //make default graph option
+            $scope.selectedGraph = 'Kill Participation Average';
+
+            var teamName = selectedTeam.name;
+            //this is the main object that contains the stats i want to gather and organize for the whole team
+            var teamStats = {};
+            var games = [];
+            var count = 0;
+
+            angular.forEach(teamGames, function(teamGame){
+                if(teamGame['data']){
+                    games[count] = teamGame['data'];
+                    count++;
+                }
+                else{
+                    games[count] = teamGame;
+                    count++;
+                }
+            });
+
+            if (localStorage[teamName] && dateDiff > STORAGE_TIME){
+                localStorage.removeItem(teamName);
+                localStorage.removeItem(teamName+'Date');
+            }
+
+            if (!(localStorage[teamName]) || localStorage[teamName] && dateDiff > STORAGE_TIME){
+                var storageDate = new Date().getTime();
+                localStorage.setItem(teamName+'Date', storageDate);
+
+                //stringify games object to store in local Storage.
+                var gamesString = JSON.stringify(games);
+                localStorage.setItem(teamName, gamesString);
+            }
+
+            var currentMembers = getMemberNames(selectedTeam, games);
+            var gameNameList = [];
+
+            for(m = 0; m < currentMembers.memberNames.length; m++){
+                var memberName = currentMembers.memberNames[m];
+                teamStats[memberName] = {};
+                var memberStats = teamStats[memberName];
+                memberStats.killParticipation = [];
+                memberStats.summonerName = memberName;
+                memberStats.summonerId = currentMembers.memberIds[m];
+            }
+            for (i = 0; i < DESIRED_GAMES; i++){
+                gameNameList[i] = 'Game ' + (i + 1);
+                var allyIds = getAllies(currentMembers.memberIds, games[i]);
+                //calculate total Team Kills for this game
+                var totalTeamKills = getTotalTeamKills(games[i], allyIds);
+
+                angular.forEach(teamStats, function(memberObject){
+                    var thisMemberKP = memberObject.killParticipation;
+                    thisMemberKP[i] = getKillParticipation(games[i], memberObject, totalTeamKills);
+                });
+            }
+
+            getAverage(currentMembers, teamStats, selectedTeam, 'killParticipation', DESIRED_GAMES);
+
+            $scope.teamStats = teamStats;
+            $scope.gameNameList = gameNameList;
+
+            $scope.makeChart('Kill Participation Average');
+
+            //add colors to the teamStats object so the legend can be dynamically generated
+            addColors(teamStats);
+
+
+        };
+
+
+        $scope.makeChart = function(graphName){
+            //necessary data variable to make chart
+            var data = {};
+            data.series = [];
+            data.labels = [];
+
+            //all graphs are made with different settings
+            switch(graphName) {
+                case 'Kill Participation Average':
+                    var chartId = 'killParticipationAverage';
+                    angular.forEach($scope.teamStats, function (member) {
+                        data.series.push(member[chartId]);
+                        data.labels.push(member.summonerName);
+                    });
+                    var options = {
+                        distributeSeries: true
+                    };
+                    new Chartist.Bar('.ct-chart', data, options);
+                    $scope.graph = chartId;
+                    break;
+
+                case 'Kill Participation':
+                    var chartId = 'killParticipation';
+                    angular.forEach($scope.teamStats, function (member) {
+                        data.series.push(member[chartId]);
+                        for(x = 1; x <= member[chartId].length; x++){
+                            if(data.labels.length < member[chartId].length){
+                                data.labels.push('Game '+x);
+                            }
+                        }
+                        options = {
+                            axisY: {
+                                onlyInteger: true,
+                                offset: 20
+                            },
+                            plugins: [
+                                Chartist.plugins.tooltip()
+                            ]
+                        };
+                    });
+
+                    new Chartist.Line('.ct-chart', data, options);
+
+                    $scope.graph = chartId;
+                    break;
+
+                default:
+                    break;
+            }
+
+
+        };
+
+        //add a color to each member
+        var addColors = function(teamStats) {
+            var colors = [ '#A03550',
+                          '#27765A',
+                          '#AF603A',
+                          '#5C9A33',
+                          '#35357B',
+                          '#59922b',
+                          '#0544d3',
+                          '#6b0392',
+                          '#f05b4f',
+                          '#dda458',
+                          '#eacf7d',
+                          '#86797d',
+                          '#b2c326',
+                          '#6188e2',
+                          '#a748ca'];
+            var i = 0;
+
+            angular.forEach(teamStats, function(member){
+                member['color'] = colors[i];
+                i++;
+            });
+
+            return teamStats;
+        };
 
         //averages whatever stat you send in
         var getAverage = function(currentMembers, teamStats, selectedTeam, statToAverage, DESIRED_GAMES){
@@ -149,7 +321,6 @@
             var count = 0;
 
             angular.forEach(teamStats, function(member){
-                //console.log(member);
                 var thisMemberStat = member[statToAverage];
                 var totalStat= 0;
                 var playedGames = 0;
@@ -160,10 +331,6 @@
                         totalStat += thisMemberStat[i];
                     }
                 }
-                //MAKE THE NAME PART OF OBJECT????
-                //console.log(member);
-                //console.log(totalStat);
-                //console.log(playedGames);
                 member[averageName] = (totalStat / playedGames).toFixed(1);
                 member[averageName] = parseFloat(member[averageName]);
                 count++;
@@ -176,14 +343,14 @@
 
         $scope.getGames = function(selectedTeam) {
 
-            var DESIRED_GAMES = 8;
+            $scope.selectedTeam = selectedTeam.name;
+            $scope.teamClicked = true;
+
+            var teamName = selectedTeam.name;
 
             if (selectedTeam.matchHistory.length < DESIRED_GAMES){
                 DESIRED_GAMES = selectedTeam.matchHistory.length;
             }
-
-            //object containing all team stats
-            var teamStats = {};
 
             var gameIds = [];
 
@@ -194,56 +361,24 @@
                 gameIds[i] = match.gameId;
             }
 
-            //do if statement heres so u dont gotta f with promise?
-            var myPromise = getMatchDetails.getMatchDetails(gameIds, selectedTeam);
+            var date = new Date().getTime();
+            if (localStorage[teamName]){
+                var dateDiff = date - localStorage[teamName+'Date'];
+            }
 
+            //if there is a team store and the difference between this time and the time it was stored is greater than 30 mins...
+            if (localStorage[teamName] && dateDiff <= STORAGE_TIME){
+                var storedGames = JSON.parse(localStorage[teamName]);
 
-            //runs once a response has been received for every matchDetails request
-            myPromise.then(function(responseObjects){
-                var games = [];
-                var count = 0;
-
-                angular.forEach(responseObjects, function(responseObject){
-                    games[count] = responseObject.data;
-                    count++;
-                });
-
-                localStorage.setItem(selectedTeam, games);
-
-                var currentMembers = getMemberNames(selectedTeam, games);
-                var gameNameList = [];
-
-                for(m = 0; m < currentMembers.memberNames.length; m++){
-                    var memberName = currentMembers.memberNames[m];
-                    teamStats[memberName] = {};
-                    var memberStats = teamStats[memberName];
-                    memberStats.killParticipation = [];
-                    memberStats.summonerName = memberName;
-                    memberStats.summonerId = currentMembers.memberIds[m];
-                }
-                for (i = 0; i < DESIRED_GAMES; i++){
-                    gameNameList[i] = 'Game ' + (i + 1);
-                    var allyIds = getAllies(currentMembers.memberIds, games[i]);
-                    //calculate total Team Kills for this game
-                    var totalTeamKills = getTotalTeamKills(games[i], allyIds);
-
-                    angular.forEach(teamStats, function(memberObject){
-                        var thisMemberKP = memberObject.killParticipation;
-                        thisMemberKP[i] = getKillParticipation(games[i], memberObject, totalTeamKills);
-                    });
-                }
-
-                getAverage(currentMembers, teamStats, selectedTeam, 'killParticipation', DESIRED_GAMES);
-
-                $scope.teamStats = teamStats;
-                $scope.gameNameList = gameNameList;
-                console.log(teamStats);
-
-            }.bind(this));
-
-
-
-
+                processData(storedGames, selectedTeam, dateDiff);
+            }
+            else{
+                var myPromise = getMatchDetails.getMatchDetails(gameIds, selectedTeam);
+                //runs once a response has been received for every matchDetails request
+                myPromise.then(function(teamGames){
+                    processData(teamGames, selectedTeam, dateDiff);
+                }.bind(this));
+            }
         };
     }]);
 }(angular));

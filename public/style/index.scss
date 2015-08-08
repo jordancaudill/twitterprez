@@ -1,0 +1,139 @@
+@import "variables.scss";
+@import "../bower_components/chartist/dist/scss/settings/_chartist-settings.scss";
+
+#pageContent, html{
+  background-color: #453d3f;
+  text-align: center;
+
+  //this will eventually be a logo
+  h1{
+    color: #eeeeee;
+    font-size: 4em;
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+
+  }
+  p{
+    color: #eeeeee;
+    font-size: 1.2em;
+    text-align: center;
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+
+  }
+
+  #summonerForm{
+    margin-top: 50px;
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+
+    #summoner{
+      height: 40px;
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 5px;
+      border-style: none;
+      background-color: #222222;
+      color: white;
+
+
+
+    }
+    #enterSummoner{
+      background-color: $brand;
+      height: 40px;
+      width: 40px;
+      text-align: center;
+      border-radius: 5px;
+      border-style: none;
+      color: white;
+    }
+
+    #enterSummoner:hover{
+      background-color: $brand-dull;
+    }
+  }
+
+
+  .team {
+    button {
+      margin-top: 15px;
+      font-family: "PT Serif", Helvetica, Arial, sans-serif;
+      font-size: 20px;
+      height: 40px;
+      width: 245px;
+      background-color: $brand;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      border-style: none;
+    }
+
+    button:hover{
+      background-color: $brand-dull;
+    }
+  }
+}
+
+.chart-div {
+  max-width: 800px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.styled-select {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 268px;
+  height: 34px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: url(../img/arrow.png) no-repeat right #ddd;
+}
+
+.styled-select select {
+  background: transparent;
+  width: 268px;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1;
+
+  border-radius: 5px;
+  height: 34px;
+  -webkit-appearance: none;
+
+}
+
+#error {
+  color: orangered;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 15px;
+
+}
+
+#back-btn {
+  background-color: $brand;
+  height: 40px;
+  width: 60px;
+  text-align: center;
+  border-radius: 5px;
+  border-style: none;
+  color: white;
+}
+
+#teamName {
+  color: white;
+  margin-bottom: 10px;
+}
+#legend {
+  .legend-color {
+    padding: 15px;
+  }
+  .legend-name {
+    color: white;
+
+  }
+
+}
+
