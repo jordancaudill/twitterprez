@@ -5,12 +5,17 @@
     var naapi = 'https://na.api.pvp.net/api/lol/na';
     var apiKey = '?api_key=1fb7abdb-48e1-4526-b8f6-3cc8e15eea82';
 
+    var port = 3000;
+
+    //var host = 'localhost';
+    var host = 'teamstatter.com';
+
 
     app.service('getSummoner', ['$http', '$q', function($http, $q) {
         return {
             getSummoner: function (summonerName) {
                 var deferred = $q.defer();
-                $http.get('http://localhost:3000/summoner/'+summonerName).success(function (response) {
+                $http.get('http://'+host+':'+port+'/summoner/'+summonerName).success(function (response) {
                     return deferred.resolve(response);
                 });
                 return deferred.promise;
@@ -22,7 +27,7 @@
         return {
             getTeams: function (summonerId) {
                 var deferred = $q.defer();
-                $http.get('http://localhost:3000/teams/'+summonerId).success(function (response) {
+                $http.get('http://'+host+':'+port+'/teams/'+summonerId).success(function (response) {
                     return deferred.resolve(response);
                 });
                 return deferred.promise;
@@ -37,7 +42,7 @@
                 var promises = [];
                 angular.forEach(gameIds, function(gameId){
                     promises.push(
-                        $http.get('http://localhost:3000/match/'+gameId)
+                        $http.get('http://'+host+':'+port+'/match/'+gameId)
                     );
                 });
 
