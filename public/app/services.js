@@ -8,7 +8,7 @@
     var port = 3000;
 
     //var host = 'localhost';
-    var host = 'teamstatter.com';
+    var host = '52.25.168.9';
 
 
     app.service('getSummoner', ['$http', '$q', function($http, $q) {
