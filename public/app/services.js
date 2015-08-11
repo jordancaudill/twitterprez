@@ -8,14 +8,15 @@
     var port = 3000;
 
     //var host = 'localhost';
-    var host = '52.25.168.9';
+    //var host = '52.25.168.9';
+    var host = 'teamstatter.com';
 
 
     app.service('getSummoner', ['$http', '$q', function($http, $q) {
         return {
             getSummoner: function (summonerName) {
                 var deferred = $q.defer();
-                $http.get('http://'+host+':'+port+'/summoner/'+summonerName).success(function (response) {
+                $http.get('http://'+host+'/summoner/'+summonerName).success(function (response) {
                     return deferred.resolve(response);
                 });
                 return deferred.promise;
@@ -27,7 +28,7 @@
         return {
             getTeams: function (summonerId) {
                 var deferred = $q.defer();
-                $http.get('http://'+host+':'+port+'/teams/'+summonerId).success(function (response) {
+                $http.get('http://'+host+'/teams/'+summonerId).success(function (response) {
                     return deferred.resolve(response);
                 });
                 return deferred.promise;
@@ -42,7 +43,7 @@
                 var promises = [];
                 angular.forEach(gameIds, function(gameId){
                     promises.push(
-                        $http.get('http://'+host+':'+port+'/match/'+gameId)
+                        $http.get('http://'+host+'/match/'+gameId)
                     );
                 });
 
