@@ -49,10 +49,7 @@
                     <h4 id="teamName">{{selectedTeam}}</h4>
                     <div class="row">
                         <div class="col-xs-12 text-center tester">
-                            <div class="styled-select" ng-show="teamClicked">
-                                <select ng-model="selectedStat" ng-init="selectedStat = defaultStat" ng-change="makeChart(selectedStat, average, teamTotal)" id="stat" ng-selected="statNameList[0]" ng-options="statName for statName in statNameList">
-                                </select>
-                            </div>
+                            <select ng-show="teamClicked" ng-model="selectedStat" ng-init="selectedStat = defaultStat" ng-change="makeChart(selectedStat, average, teamTotal)" id="stat" ng-selected="statNameList[0]" ng-options="statName for statName in statNameList"></select>
                         </div>
                     </div>
 

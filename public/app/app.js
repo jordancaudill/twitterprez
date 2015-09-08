@@ -107,8 +107,6 @@
             });
         };
 
-
-
         //get the game information for the last (DESIRED_GAMES) in the user match history
         //make whatever chart is the default
         $scope.getMatches = function(selectedTeam) {
