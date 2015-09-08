@@ -17,6 +17,7 @@ app.use(timeout(5000));
 
 app.get('/summoner/:name', function (req, res){
     var name = req.params.name;
+    console.log('Request made for summoner: '+name);
     request(naapi+'/v1.4/summoner/by-name/'+name+apiKey, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log('request successful');
@@ -63,12 +64,14 @@ app.get('/teams/:summonerId', function (req, res){
     })
 });
 
-app.get('/match/:gameId', function (req, res){
-    var gameId = req.params.gameId;
+app.get('/match/:matchId', function (req, res){
+    var matchId = req.params.matchId;
 
 
-    request(naapi+'/v2.2/match/'+gameId+apiKey, function (error, response, body) {
+    request(naapi+'/v2.2/match/'+matchId+apiKey, function (error, response, body) {
+
         if (!error && response.statusCode == 200) {
+            console.log('match request successful');
             res.send(body);
         }
         else if(error){

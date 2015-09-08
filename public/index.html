@@ -8,62 +8,108 @@
         <link rel="stylesheet" href="style/animate.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="bower_components/chartist/dist/scss/chartist.css">
 
     </head>
     <body ng-app="league">
         <div id="pageContent" ng-controller="UserController">
-            <div class="container">
-                <p class="row">
-                        <h1 class="text-center">Team Statter</h1>
-                    <form ng-hide="teamClicked" id="summonerForm" ng-submit="master()">
-                        <div class="col-xs-12 text-center">
-                            <input placeholder="Summoner Name" type="text" class="text-center" id="summoner" ng-model="entry">
-                            <input id="enterSummoner" type="submit" value="Go">
-                        </div>
-                    </form>
-
-                    <div class="col-xs-12 text-center" ng-show="isError" id="error">
-                        {{error}}
-                    </div>
-
-                    <div ng-hide="teamClicked" class="col-xs-12 text-center team" ng-repeat="team in teams">
-                        <button ng-click="getGames(team)" class="team-btn">{{team.name}}</button>
-                    </div>
-                    <div ng-show="teamClicked">
-                        <button id="back-btn" ng-click="teamClicked = false">Back</button>
-                        <h3 id="teamName">{{selectedTeam}}</h3>
-                        <div class="styled-select" ng-show="teamClicked">
-                            <select ng-model="selectedGraph" ng-change="makeChart(selectedGraph)" id="stat">
-                                <option ng-repeat="graphStat in graphStats">{{graphStat}}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 text-center" ng-show="teamClicked">
-                        <div id="chart-div">
-                            <div class="ct-chart ct-perfect-fourth"></div>
-                        </div>
-                        <table id="legend" class="table">
-                            <tr>
-                                <td class="legend-name" ng-repeat="member in teamStats">{{member.summonerName}}</td>
-                            </tr>
-                            <tr>
-                                <td class="legend-color" ng-style="{'background-color': member.color}" ng-repeat="member in teamStats"></td>
-                            </tr>
-                        </table>
+            <header>
+                <div class="container">
+                    <div class="row">
+                        <h1 class="col-xs-12" id="logo">Team Statter</h1>
+                        <p class="col-xs-12" id="slogan" class="text-center">Analyze your ranked LoL team</p>
                     </div>
                 </div>
+
+            </header>
+            <div class="container">
+                <div class="row">
+
+                    <form ng-hide="teamClicked" id="summonerForm" ng-submit="searchSummoner(summoner)">
+                        <div class="col-xs-12 text-center">
+                            <input placeholder="Summoner Name" type="text" class="text-center" id="summoner" ng-model="summoner">
+                            <input id="enterSummoner" type="submit" value="Go" ng-click="isError = false">
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-12 text-center" ng-show="isError" id="error">
+                            {{error}}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div ng-hide="teamClicked" class="col-xs-12 text-center team" ng-repeat="team in teams">
+                        <button ng-click="getMatches(team)" class="team-btn">{{team.name}}</button>
+                    </div>
+                </div>
+
+
+                <div ng-show="teamClicked" class="text-center">
+                    <h4 id="teamName">{{selectedTeam}}</h4>
+                    <div class="row">
+                        <div class="col-xs-12 text-center tester">
+                            <div class="styled-select" ng-show="teamClicked">
+                                <select ng-model="selectedStat" ng-init="selectedStat = defaultStat" ng-change="makeChart(selectedStat, average, teamTotal)" id="stat" ng-selected="statNameList[0]" ng-options="statName for statName in statNameList">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <button id="back-btn" ng-click="teamClicked = false; resetCanvas();">Back</button>
+                        </div>
+                        <form class="col-xs-4 checkbox">
+                            <input type="checkbox" ng-model="average" ng-init="average = false" ng-change="makeChart(selectedStat, average, teamTotal)">
+                            <p>Average</p>
+                        </form>
+                        <form id="teamTotal" class="col-xs-4 checkbox">
+                            <input type="checkbox" ng-model="teamTotal" ng-init="teamTotal = false" ng-change="makeChart(selectedStat, average, teamTotal)">
+                            <p>Team Total</p>
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="row" id="chartContainer">
+                        <canvas ng-show="teamClicked" id="chart"></canvas>
+                </div>
+                <div ng-show="teamClicked" class="row">
+                    <div class="legend-color col-xs-6 col-sm-4 col-md-3" ng-style="{'background-color': member.color}" ng-repeat="member in team.members">{{member.summonerName}}</div>
+                </div>
+
+                <footer class="row">
+                    <div id="spacer" class="col-xs-12"></div>
+                    <div class="col-xs-6 text-center">
+                        <a href="http://www.jordancaudill.com">
+                            <p>Creator</p>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                        <button data-toggle="modal" data-target=".bs-example-modal-sm">Legal</button>
+                    </div>
+                </footer>
             </div>
 
+            </div>
         </div>
+
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <p>Team Statter isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</p>
+                </div>
+            </div>
+        </div>
+
 
         <script src="js/angular.min.js"></script>
         <script src="app/app.js"></script>
         <script src="app/services.js"></script>
-        <script src="bower_components/chartist/dist/chartist.min.js"></script>
-        <script src="bower_components/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.js"></script>
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="js/index.js"></script>
+        <script src="js/Chart.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     </body>
 </html>

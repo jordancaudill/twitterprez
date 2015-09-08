@@ -5,26 +5,85 @@
     var app = angular.module('league', []);
 
     //controller definition
-    app.controller('UserController', ['$scope', '$q', 'getSummoner', 'getTeams', 'getMatchDetails', function($scope, $q,  getSummoner, getTeams, getMatchDetails){
-
-        var RATE_LIMIT = 10;
+    app.controller('UserController', ['$scope', '$q', 'getSummoner', 'getTeams', 'getMatchDetails', 'convertToReadable', 'convertToCamelCase', function($scope, $q,  getSummoner, getTeams, getMatchDetails, convertToReadable, convertToCamelCase){
 
         //how many games I want to grab from a match history
         var DESIRED_GAMES = 8;
 
-        //how long I want to store data in local storage for
-        // first number is minutes * 60000 makes it milliseconds
-        var STORAGE_TIME = 30 * 60000;
+        //this list should have stat names that are exactly the same as the ones we grab from the league api
+        var statList = [
+            'kills',
+            'deaths',
+            'assists',
+            'goldEarned',
+            'wardsPlaced',
+            'wardsKilled',
+            'totalDamageDealtToChampions',
+            'killParticipation'
+        ];
 
+        var statNameList = [];
+        //convert the statlist from camelCase to readable text for the chart and dropdown box
+        for(var x = 0; x < statList.length; x++){
+            statNameList[x] = convertToReadable.convertToReadable(statList[x]);
+        }
+        $scope.statNameList = statNameList;
+        //the chart we want to display when the user first clicks a team
+        $scope.defaultStat = statNameList[0];
 
-        $scope.master = function() {
-            var summonerName = $scope.entry.toLowerCase().replace(/ /g,'');
+        // Redraws the chart if the width of the browser window changes between one of
+        // Bootstrap's predefined sizes (xs, sm, md, lg)
+        var checkWidth = function(){
+            $(document).ready(function (){
+                $scope.size1 = '';
+                var width = $(window).width();
+                if(width < 768){
+                    $scope.size1 = 'xs';
+                }
+                else if(width >= 768 && width < 992){
+                    $scope.size1 = 'sm';
+                }
+                else if(width >= 992 && width < 1200){
+                    $scope.size1 = 'md';
+                }
+                else if(width >= 1200){
+                    $scope.size1 = 'lg';
+                }
+
+            });
+            $(window).on('resize', function () {
+                var size2 = '';
+                var width = $(window).width();
+                if(width < 768){
+                    size2 = 'xs';
+                }
+                else if(width >= 768 && width < 992){
+                    size2 = 'sm';
+                }
+                else if(width >= 992 && width < 1200){
+                    size2 = 'md';
+                }
+                else if(width >= 1200){
+                    size2 = 'lg';
+                }
+                if(size2 != $scope.size1){
+                    $scope.size1 = size2;
+                    $scope.makeChart($scope.selectedStat, $scope.average, $scope.teamTotal);
+                }
+            });
+
+            return true;
+        };
+
+        //keep track of browser widths and redraw charts if necessary
+        checkWidth();
+
+        $scope.searchSummoner = function(summoner) {
+            var summonerName = summoner.toLowerCase().replace(/ /g,'');
             //call to service to get summoner by summoner name
-            getSummoner.getSummoner(summonerName).then(function(response) {
-                if(response[summonerName]){
-                    summonerName = response[summonerName];
-                    var summonerId = summonerName.id;
-                    getUserTeams(summonerId);
+            getSummoner.getSummoner(summonerName).then(function(summonerId) {
+                if(summonerId){
+                    getUserTeams(summonerId, summonerName);
                 }
                 else{
                     $scope.error = response;
@@ -35,11 +94,11 @@
         };
 
         //call to service to get teams by summoner ID
-        var getUserTeams = function(summonerId) {
+        var getUserTeams = function(summonerId, summonerName) {
             $scope.gotTeams = true;
-            getTeams.getTeams(summonerId).then(function(response) {
-                if(response[summonerId]){
-                    $scope.teams = response[summonerId];
+            getTeams.getTeams(summonerId, summonerName).then(function(teams) {
+                if(teams){
+                    $scope.teams = teams;
                 }
                 else{
                     $scope.error = response;
@@ -48,11 +107,74 @@
             });
         };
 
+
+
+        //get the game information for the last (DESIRED_GAMES) in the user match history
+        //make whatever chart is the default
+        $scope.getMatches = function(selectedTeam) {
+
+
+            $scope.selectedTeam = selectedTeam.name;
+            $scope.teamClicked = true;
+
+            var teamName = selectedTeam.name;
+
+            //if the team has less matches played than the amount I want to grab, we want to grab all the matches
+            if (selectedTeam.matchHistory.length < DESIRED_GAMES){
+                DESIRED_GAMES = selectedTeam.matchHistory.length;
+            }
+
+            //array that holds the ids for each game in the match history
+            var matchIds = [];
+
+            //gathers the match Ids from match history
+            for (i = 0; i < DESIRED_GAMES; i++) {
+                var match = selectedTeam.matchHistory[i];
+                matchIds[i] = match.gameId;
+            }
+
+
+            var myPromise = getMatchDetails.getMatchDetails(matchIds, teamName);
+            //runs once a response has been received for every matchDetails request
+            myPromise.then(function(matches){
+                processData(matches, selectedTeam);
+            }.bind(this));
+
+        };
+
+        //organizes all the data grabbed from matches into an easy to navigate object
+        var processData = function(matches, selectedTeam){
+            //console.log(matches);
+
+            //HERE we want to go through each match, and throw out any that aren't on summoners rift or < 10 players
+            //this way, we can be only looking at ranked 5v5s
+
+            //this is the main object that contains the stats i want to gather and organize for the whole team
+            var team = {};
+
+            //get all team members that have played in matches from the match history
+            team['members'] = getMembers(selectedTeam, matches);
+
+            //add colors to the team object so the legend can be dynamically generated
+            team = addColors(team);
+
+
+
+            //put all the stats into the object
+            team = getStats(team, matches, statList);
+
+            //console.log(team);
+
+            $scope.team = team;
+
+
+            $scope.makeChart($scope.defaultStat, $scope.average, $scope.teamTotal);
+
+        };
+
         //gets the team member ids of the players CURRENTLY on the team
-        var getMemberNames = function(selectedTeam, games) {
-            var currentMembers = {};
-            currentMembers['memberNames'] = [];
-            currentMembers['memberIds'] = [];
+        var getMembers = function(selectedTeam, matches) {
+            var members = {};
             var rosterIds = [];
 
             for (i = 0; i < selectedTeam.roster.memberList.length; i++) {
@@ -60,325 +182,293 @@
                 rosterIds[i] = member.playerId;
             }
 
-            angular.forEach(games, function(game){
-                angular.forEach(game.participantIdentities, function(participant){
+            angular.forEach(matches, function(match){
+                angular.forEach(match.participantIdentities, function(participant){
                     angular.forEach(rosterIds, function(aRosterId){
-                        if (participant.player.summonerId == aRosterId && $.inArray(participant.player.summonerName, currentMembers.memberNames) == -1){
-                            currentMembers.memberNames.push(participant.player.summonerName);
-                            currentMembers.memberIds.push(participant.player.summonerId);
+                        if (participant.player.summonerId == aRosterId){
+                            members[participant.player.summonerName] = {};
+                            members[participant.player.summonerName]['summonerName'] = participant.player.summonerName;
+                            members[participant.player.summonerName]['summonerId'] = participant.player.summonerId;
                         }
                     });
                 });
             });
-            return currentMembers;
+            return members;
         };
 
+        $scope.makeChart = function(statName, average, teamTotal){
 
-        /*
-         *  Gets the user and his allies for a single game.
-         *  Necessary because a player may have since left the team
-         *  after this game.
-         *
-         *  should be cleaned up...
-         *
-         *  Returns an array of summonerIds
-         */
-        var getAllies = function(memberIds, game) {
-            var allies = [];
-            var teamFound = false;
-            for(p = 0; p < memberIds.length; p++){
-                var aMemberId = memberIds[p];
-                if (!teamFound){
-                    for (k = 0; k < game.participantIdentities.length; k++) {
-                        var participantIdentity = game.participantIdentities[k];
-                        if (participantIdentity.player.summonerId == aMemberId && k + 1 <= (game.participantIdentities.length) / 2) {
-                            var playerTeam = 1;
-                            teamFound = true;
-                        }
-                        else if (participantIdentity.player.summonerId == aMemberId && k + 1 > (game.participantIdentities.length) / 2) {
-                            var playerTeam = 2;
-                            teamFound = true;
-                        }
-                    }
+            statName = convertToCamelCase.convertToCamelCase(statName);
+
+
+            //need to reset the canvas
+            $scope.resetCanvas();
+            var ctx = document.getElementById("chart").getContext("2d");
+
+
+
+
+
+            //average determines what type of chart to make as well as where to get data
+            //teamTotal determines where to get data
+
+            //a line chart with each members stats over all the games
+            if(!average && !teamTotal){
+                var data = {};
+                data.datasets = [];
+                data.labels = [];
+
+                for(var i = 0; i < DESIRED_GAMES; i++)
+                {
+                    data.labels[i] = 'Game ' + (i + 1);
                 }
 
-            }
+                angular.forEach($scope.team.members, function (member) {
+                    var playerData = {};
+                    playerData['label'] = member.summonerName;
+                    playerData['strokeColor'] = member.color;
+                    playerData['pointColor'] = member.color;
+                    playerData['pointHightlightFill'] = member.color;
+                    playerData['data'] = member.stats[statName].perMatch;
+                    data.datasets.push(playerData);
+                });
 
-            // if the player is on team 1, gets the summoner Ids of everyone on the first half of the participantidentities list
-            if (playerTeam == 1){
-                for (t = 0; t < (game.participantIdentities.length / 2); t++) {
-                    var participantIdentity = game.participantIdentities[t];
-                    allies[t] = participantIdentity.player.summonerId;
-                }
-            }
-
-            // if the player is on team 1, gets the summoner Ids of everyone on the second half of the participantidentities list
-            else if (playerTeam == 2){
-                var j = 0;
-                for (r = (game.participantIdentities.length / 2); r < game.participantIdentities.length; r++) {
-                    var participantIdentity = game.participantIdentities[r];
-                    allies[j] = participantIdentity.player.summonerId;
-                    j++;
-                }
-            }
-
-            return allies;
-        };
-
-        //gets the total kills of the allied team for the game/match
-        var getTotalTeamKills = function(game, teamMemberIds) {
-            var totalTeamKills = 0;
-            for (k = 0; k < game.participantIdentities.length; k++) {
-                var participantIdentity = game.participantIdentities[k];
-                var participant = game.participants[k];
-                for (j = 0; j < teamMemberIds.length; j++) {
-                    if (participantIdentity.player.summonerId == teamMemberIds[j]) {
-                        totalTeamKills = totalTeamKills + participant.stats.kills;
-                    }
-                }
-            }
-            return totalTeamKills;
-        };
-
-        //get the kill participation for a single player in a single game
-        var getKillParticipation = function(game, memberObject, totalTeamKills) {
-                for (k = 0; k < game.participantIdentities.length; k++) {
-                    var participantIdentity = game.participantIdentities[k];
-                    if (participantIdentity.player.summonerName == memberObject.summonerName){
-                        var participant = game.participants[k];
-                        var playerName = participantIdentity.player.summonerName;
-                        var playerKills = participant.stats.kills;
-                        var playerAssists = participant.stats.assists;
-                        var killParticipation = ((((playerKills + playerAssists) / totalTeamKills) * 100).toFixed(1));
-                        killParticipation = parseFloat(killParticipation);
-                        return killParticipation;
-                    }
-                }
-        };
-
-        //organizes all the data grabbed from matches into an easy to navigate object
-        var processData = function(teamGames, selectedTeam, dateDiff){
-
-            //a list of all possible stats that will be shown in a graph
-            var graphStats = ['Kill Participation', 'Kill Participation Average'];
-            $scope.graphStats = graphStats;
-
-            //make default graph option
-            $scope.selectedGraph = 'Kill Participation Average';
-
-            var teamName = selectedTeam.name;
-            //this is the main object that contains the stats i want to gather and organize for the whole team
-            var teamStats = {};
-            var games = [];
-            var count = 0;
-
-            angular.forEach(teamGames, function(teamGame){
-                if(teamGame['data']){
-                    games[count] = teamGame['data'];
-                    count++;
-                }
-                else{
-                    games[count] = teamGame;
-                    count++;
-                }
-            });
-
-            if (localStorage[teamName] && dateDiff > STORAGE_TIME){
-                localStorage.removeItem(teamName);
-                localStorage.removeItem(teamName+'Date');
-            }
-
-            if (!(localStorage[teamName]) || localStorage[teamName] && dateDiff > STORAGE_TIME){
-                var storageDate = new Date().getTime();
-                localStorage.setItem(teamName+'Date', storageDate);
-
-                //stringify games object to store in local Storage.
-                var gamesString = JSON.stringify(games);
-                localStorage.setItem(teamName, gamesString);
-            }
-
-            var currentMembers = getMemberNames(selectedTeam, games);
-            var gameNameList = [];
-
-            for(m = 0; m < currentMembers.memberNames.length; m++){
-                var memberName = currentMembers.memberNames[m];
-                teamStats[memberName] = {};
-                var memberStats = teamStats[memberName];
-                memberStats.killParticipation = [];
-                memberStats.summonerName = memberName;
-                memberStats.summonerId = currentMembers.memberIds[m];
-            }
-            for (i = 0; i < DESIRED_GAMES; i++){
-                gameNameList[i] = 'Game ' + (i + 1);
-                var allyIds = getAllies(currentMembers.memberIds, games[i]);
-                //calculate total Team Kills for this game
-                var totalTeamKills = getTotalTeamKills(games[i], allyIds);
-
-                angular.forEach(teamStats, function(memberObject){
-                    var thisMemberKP = memberObject.killParticipation;
-                    thisMemberKP[i] = getKillParticipation(games[i], memberObject, totalTeamKills);
+                new Chart(ctx).Line(data, {
+                    //define chart options here
+                    datasetFill : false,
+                    bezierCurve : false,
+                    scaleGridLineColor : "#666666",
+                    datasetStrokeWidth : 3,
+                    animationEasing: "easeOutQuint"
                 });
             }
 
-            getAverage(currentMembers, teamStats, selectedTeam, 'killParticipation', DESIRED_GAMES);
+            //a pie chart showing the average for a stat for each member
+            else if(average && !teamTotal){
+                var data = [];
+                angular.forEach($scope.team.members, function (member) {
+                    var playerData = {};
+                    playerData['label'] = member.summonerName;
+                    playerData['color'] = member.color;
+                    playerData['value'] = member.stats[statName].average;
+                    data.push(playerData);
+                });
+                new Chart(ctx).Pie(data, {
+                    //define chart options here
+                });
+            }
 
-            $scope.teamStats = teamStats;
-            $scope.gameNameList = gameNameList;
+            //a line chart showing the team total of a stat for each game
+            else if(!average && teamTotal){
+                var data = {};
+                data.datasets = [];
+                data.labels = [];
 
-            $scope.makeChart('Kill Participation Average');
+                for(var i = 0; i < DESIRED_GAMES; i++)
+                {
+                    data.labels[i] = 'Game ' + (i + 1);
+                }
 
-            //add colors to the teamStats object so the legend can be dynamically generated
-            addColors(teamStats);
+                var playerData = {};
+                playerData['label'] = 'some team';
+                playerData['strokeColor'] = '#a748ca';
+                playerData['pointColor'] = '#a748ca';
+                playerData['pointHightlightFill'] = '#a748ca';
+                playerData['data'] = $scope.team.stats[statName].perMatch;
+                data.datasets.push(playerData);
+
+                new Chart(ctx).Line(data, {
+                    //define chart options here
+                    datasetFill : false,
+                    bezierCurve : false,
+                    scaleGridLineColor : "#666666",
+                    datasetStrokeWidth : 3,
+                    animationEasing: "easeOutQuint"
+                });
+            }
+
+            //a bar chart (basically just a number) for the team total average of a stat
+            else if(average && teamTotal){
+                var data = {};
+                data.datasets = [];
+                data.labels = [];
+                data.labels.push('Average');
+
+                var playerData = {};
+                playerData['label'] = 'some team';
+                playerData['strokeColor'] = '#a748ca';
+                playerData['fillColor'] = '#a748ca';
+                playerData['data'] = [];
+                playerData.data.push($scope.team.stats[statName].average);
+                data.datasets.push(playerData);
+
+                new Chart(ctx).Bar(data, {
+                    //define chart options here
+                });
+            }
 
 
         };
 
-
-        $scope.makeChart = function(graphName){
-            //necessary data variable to make chart
-            var data = {};
-            data.series = [];
-            data.labels = [];
-
-            //all graphs are made with different settings
-            switch(graphName) {
-                case 'Kill Participation Average':
-                    var chartId = 'killParticipationAverage';
-                    angular.forEach($scope.teamStats, function (member) {
-                        data.series.push(member[chartId]);
-                        data.labels.push(member.summonerName);
-                    });
-                    var options = {
-                        distributeSeries: true
-                    };
-                    new Chartist.Bar('.ct-chart', data, options);
-                    $scope.graph = chartId;
-                    break;
-
-                case 'Kill Participation':
-                    var chartId = 'killParticipation';
-                    angular.forEach($scope.teamStats, function (member) {
-                        data.series.push(member[chartId]);
-                        for(x = 1; x <= member[chartId].length; x++){
-                            if(data.labels.length < member[chartId].length){
-                                data.labels.push('Game '+x);
-                            }
-                        }
-                        options = {
-                            axisY: {
-                                onlyInteger: true,
-                                offset: 20
-                            },
-                            plugins: [
-                                Chartist.plugins.tooltip()
-                            ]
-                        };
-                    });
-
-                    new Chartist.Line('.ct-chart', data, options);
-
-                    $scope.graph = chartId;
-                    break;
-
-                default:
-                    break;
+        //reset the canvas so we can have a new chart
+        $scope.resetCanvas = function () {
+            if($('#chart')){
+                $('#chart').remove();
             }
-
-
+            if($scope.teamClicked){
+                $('#chartContainer').append('<canvas ng-show="teamClicked" id="chart"></canvas>');
+            }
         };
 
         //add a color to each member
-        var addColors = function(teamStats) {
+        var addColors = function(team) {
             var colors = [ '#A03550',
-                          '#27765A',
-                          '#AF603A',
-                          '#5C9A33',
-                          '#35357B',
-                          '#59922b',
-                          '#0544d3',
-                          '#6b0392',
-                          '#f05b4f',
-                          '#dda458',
-                          '#eacf7d',
-                          '#86797d',
-                          '#b2c326',
-                          '#6188e2',
-                          '#a748ca'];
-            var i = 0;
+                           '#27765A',
+                           '#AF603A',
+                           '#5C9A33',
+                           '#35357B',
+                           '#36C9BB',
+                           '#0544d3',
+                           '#6b0392',
+                           '#f05b4f',
+                           '#dda458',
+                           '#eacf7d',
+                           '#86797d',
+                           '#b2c326',
+                           '#6188e2',
+                           '#a748ca'];
 
-            angular.forEach(teamStats, function(member){
+            var i = 0;
+            angular.forEach(team.members, function(member){
                 member['color'] = colors[i];
                 i++;
             });
 
-            return teamStats;
+            return team;
+        };
+
+        //get the ultimate super jumbo awesome stats put into the team object. returns a team object with stats
+        var getStats = function(team, matches, statList){
+
+            //create stats for the entire team total
+            team['stats'] = {};
+
+            //create stats for each member
+            angular.forEach(team.members, function(member){
+                member['stats'] = {};
+            });
+
+
+            angular.forEach(statList, function(statName){
+                team.stats[statName] = {};
+                team.stats[statName]['perMatch'] = [];
+
+                angular.forEach(team.members, function(member) {
+                    member.stats[statName] = {};
+                    member.stats[statName]['perMatch'] = [];
+                });
+
+                angular.forEach(matches, function(match){
+                    //variable to hold the total for a single match, which will then be pushed to team.stats[statName].perMatch
+                    var statTotal = 0;
+
+                    angular.forEach(team.members, function(member){
+
+
+                        var foundMember = false;
+
+                        for(var k = 0; k < match.participantIdentities.length; k ++){
+                            var participantIdentity = match.participantIdentities[k];
+                            var participant = match.participants[k];
+                            if (participantIdentity.player.summonerId == member.summonerId) {
+                                member.stats[statName].perMatch.push(participant.stats[statName]);
+                                foundMember = true;
+                                statTotal += participant.stats[statName];
+                            }
+                        }
+                        if (foundMember == false){
+                            member.stats[statName].perMatch.push(null);
+                        }
+
+                        //get the average for the stat from all games
+                        member.stats[statName]['average'] = getAverage(member.stats[statName].perMatch);
+                    });
+                    team.stats[statName].perMatch.push(statTotal);
+
+                });
+
+                team.stats[statName]['average'] = getAverage(team.stats[statName].perMatch);
+
+            });
+
+            team = getKillParticipation(team);
+
+            //return the team object with all the new data!
+            return team;
+        };
+
+        //calculate the kill participation for the entire team and every member of the team individually
+        var getKillParticipation = function(team){
+            team.stats['killParticipation'] = {};
+            team.stats.killParticipation['perMatch'] = [];
+
+            angular.forEach(team.members, function(member) {
+
+                member.stats['killParticipation'] = {};
+                member.stats.killParticipation['perMatch'] = [];
+
+                for(var x = 0; x < member.stats.kills.perMatch.length; x++){
+
+                    if(team.stats.killParticipation.perMatch[x] == null) {
+                        team.stats.killParticipation.perMatch[x] = 0;
+                    }
+
+                    var kills = member.stats.kills.perMatch[x];
+                    var assists = member.stats.assists.perMatch[x];
+                    var totalTeamKills = team.stats.kills.perMatch[x];
+
+                    var killParticipation = (((kills + assists) / totalTeamKills) * 100).toFixed(2);
+                    killParticipation = parseFloat(killParticipation);
+
+
+                    team.stats.killParticipation.perMatch[x] += killParticipation;
+
+
+                    //if the member did not play in that game, kill participation should be null.
+                    if(kills == null){
+                        killParticipation = null;
+                    }
+
+                    member.stats.killParticipation.perMatch[x] = killParticipation;
+                }
+                member.stats.killParticipation['average'] = getAverage(member.stats.killParticipation.perMatch);
+            });
+
+
+
+            team.stats.killParticipation['average'] = getAverage(team.stats.killParticipation.perMatch);
+
+            //return a team object than contains an average property and an array of kill
+            return team;
         };
 
         //averages whatever stat you send in
-        var getAverage = function(currentMembers, teamStats, selectedTeam, statToAverage, DESIRED_GAMES){
+        var getAverage = function(statPerMatch){
 
-            var averageName = statToAverage.concat('Average');
-            var count = 0;
+            var total = 0;
+            var dividend = 0;
 
-            angular.forEach(teamStats, function(member){
-                var thisMemberStat = member[statToAverage];
-                var totalStat= 0;
-                var playedGames = 0;
-                for (i = 0; i < DESIRED_GAMES; i++) {
-                    //only add that game to the list if it exists
-                    if (thisMemberStat[i] != undefined) {
-                        playedGames++;
-                        totalStat += thisMemberStat[i];
-                    }
+            angular.forEach(statPerMatch, function(value){
+                if(value){
+                    total += value;
+                    dividend++;
                 }
-                member[averageName] = (totalStat / playedGames).toFixed(1);
-                member[averageName] = parseFloat(member[averageName]);
-                count++;
             });
 
-            //it will be statToAverage + Averages
-            //$scope[averageName] = averages;
 
+            //return a number that is the average for the given stat
+            return parseFloat((total / dividend).toFixed(2));
         };
 
-        $scope.getGames = function(selectedTeam) {
-
-            $scope.selectedTeam = selectedTeam.name;
-            $scope.teamClicked = true;
-
-            var teamName = selectedTeam.name;
-
-            if (selectedTeam.matchHistory.length < DESIRED_GAMES){
-                DESIRED_GAMES = selectedTeam.matchHistory.length;
-            }
-
-            var gameIds = [];
-
-            //gathers the game Ids from match history
-            //currently using only 8 games to avoid hitting rate limit
-            for (i = 0; i < DESIRED_GAMES; i++) {
-                var match = selectedTeam.matchHistory[i];
-                gameIds[i] = match.gameId;
-            }
-
-            var date = new Date().getTime();
-            if (localStorage[teamName]){
-                var dateDiff = date - localStorage[teamName+'Date'];
-            }
-
-            //if there is a team store and the difference between this time and the time it was stored is greater than 30 mins...
-            if (localStorage[teamName] && dateDiff <= STORAGE_TIME){
-                var storedGames = JSON.parse(localStorage[teamName]);
-
-                processData(storedGames, selectedTeam, dateDiff);
-            }
-            else{
-                var myPromise = getMatchDetails.getMatchDetails(gameIds, selectedTeam);
-                //runs once a response has been received for every matchDetails request
-                myPromise.then(function(teamGames){
-                    processData(teamGames, selectedTeam, dateDiff);
-                }.bind(this));
-            }
-        };
     }]);
 }(angular));

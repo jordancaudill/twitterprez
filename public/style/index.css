@@ -2,17 +2,23 @@
 #pageContent, html {
   background-color: #453d3f;
   text-align: center; }
-  #pageContent h1, html h1 {
-    color: #eeeeee;
-    font-size: 4em;
-    font-family: "PT Serif", Helvetica, Arial, sans-serif; }
-  #pageContent p, html p {
-    color: #eeeeee;
-    font-size: 1.2em;
-    text-align: center;
-    font-family: "PT Serif", Helvetica, Arial, sans-serif; }
+  #pageContent header, html header {
+    background-color: #78132C;
+    height: 50px; }
+    #pageContent header #logo, html header #logo {
+      margin-top: 5px;
+      color: white;
+      font-size: 1.5em;
+      font-family: "PT Serif", Helvetica, Arial, sans-serif;
+      text-align: left;
+      margin-bottom: 0px; }
+    #pageContent header #slogan, html header #slogan {
+      font-family: "PT Serif", Helvetica, Arial, sans-serif;
+      color: white;
+      font-size: 1em;
+      text-align: left; }
   #pageContent #summonerForm, html #summonerForm {
-    margin-top: 50px;
+    margin-top: 20px;
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
     font-size: 20px; }
     #pageContent #summonerForm #summoner, html #summonerForm #summoner {
@@ -34,6 +40,27 @@
       color: white; }
     #pageContent #summonerForm #enterSummoner:hover, html #summonerForm #enterSummoner:hover {
       background-color: #78132C; }
+  #pageContent footer, html footer {
+    padding-top: 10px;
+    height: 25px;
+    background-color: #453d3f; }
+    #pageContent footer a, html footer a {
+      background-color: #d17905;
+      width: 100px; }
+      #pageContent footer a p, html footer a p {
+        font-family: "PT Serif", Helvetica, Arial, sans-serif;
+        color: #dddddd; }
+    #pageContent footer a:hover p, html footer a:hover p {
+      color: #78132C; }
+    #pageContent footer button, html footer button {
+      font-family: "PT Serif", Helvetica, Arial, sans-serif;
+      color: #dddddd;
+      background-color: #453d3f;
+      text-align: center;
+      width: 100px;
+      border-style: none; }
+    #pageContent footer button:hover, html footer button:hover {
+      color: #78132C; }
   #pageContent .team button, html .team button {
     margin-top: 15px;
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
@@ -48,29 +75,51 @@
   #pageContent .team button:hover, html .team button:hover {
     background-color: #78132C; }
 
-.chart-div {
-  max-width: 800px;
-  margin-right: auto;
-  margin-left: auto; }
-
 .styled-select {
+  background: url(../img/arrow.png) no-repeat right #A03550;
   margin-left: auto;
   margin-right: auto;
-  max-width: 268px;
-  height: 34px;
+  width: 260px;
+  height: 30px;
   overflow: hidden;
-  border-radius: 5px;
-  background: url(../img/arrow.png) no-repeat right #ddd; }
+  border-radius: 5px; }
 
 .styled-select select {
   background: transparent;
-  width: 268px;
+  width: 288px;
   padding: 5px;
-  font-size: 16px;
-  line-height: 1;
-  border-radius: 5px;
+  font-size: 14px;
+  line-height: 1.5;
+  border: 0;
+  border-radius: 0;
   height: 34px;
-  -webkit-appearance: none; }
+  -webkit-appearance: none;
+  color: white;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif; }
+
+#chartContainer #chart {
+  height: 360px;
+  width: 280px; }
+@media screen and (min-width: 768px) {
+  #chartContainer #chart {
+    width: 400px;
+    height: 300px; } }
+@media screen and (min-width: 992px) {
+  #chartContainer #chart {
+    width: 600px;
+    height: 450px; } }
+@media screen and (min-width: 1200px) {
+  #chartContainer #chart {
+    width: 800px;
+    height: 600px; } }
+
+.checkbox p {
+  display: inline;
+  color: white;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif; }
+
+#teamTotal {
+  margin-top: 10px; }
 
 #error {
   color: orangered;
@@ -81,20 +130,33 @@
 
 #back-btn {
   background-color: #A03550;
-  height: 40px;
+  height: 30px;
   width: 60px;
   text-align: center;
   border-radius: 5px;
   border-style: none;
-  color: white; }
+  color: white;
+  margin-top: 5px; }
+
+#back-btn:hover {
+  background-color: #78132C; }
 
 #teamName {
   color: white;
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif; }
 
-#legend .legend-color {
-  padding: 15px; }
-#legend .legend-name {
-  color: white; }
+.legend-color {
+  padding: 5px;
+  font-size: .8em;
+  color: white;
+  font-family: "PT Serif", Helvetica, Arial, sans-serif; }
+
+.modal-content {
+  padding: 10px 10px 10px 10px;
+  margin: 115px 10px 10px 10px; }
+  .modal-content p {
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+    line-height: 1.2em; }
 
 /*# sourceMappingURL=index.css.map */
