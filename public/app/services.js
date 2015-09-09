@@ -11,7 +11,7 @@
 
     app.service('getSummoner', ['$http', '$q', function($http, $q) {
         return {
-            getSummoner: function (summonerName) {
+            getSummoner: function (summonerName, region) {
                 var def = $q.defer();
 
                 //grab from localstorage if the summonerId was stored less than 30 mins ago
@@ -21,7 +21,7 @@
                 }
 
                 else {
-                    $http.get('http://'+host+'/summoner/'+summonerName).success(function (response) {
+                    $http.get('http://'+host+'/summoner/'+region+'/'+summonerName).success(function (response) {
 
                         var summoner = {};
                         summoner.storageTime = new Date().getTime();
@@ -39,9 +39,8 @@
 
     app.service('getTeams', ['$http', '$q', function($http, $q) {
         return {
-            getTeams: function (summonerId, summonerName) {
+            getTeams: function (summonerId, summonerName, region ) {
                 var def = $q.defer();
-
 
                 //grab from localstorage if the teams were stored less than 30 mins ago
                 if(JSON.parse(localStorage[summonerName]).teams && ((new Date().getTime() - (JSON.parse(localStorage[summonerName]).storageTime)) <= STORAGE_TIME)){
@@ -49,7 +48,7 @@
                     def.resolve(teams);
                 }
                 else {
-                    $http.get('http://'+host+'/teams/'+summonerId).success(function (response) {
+                    $http.get('http://'+host+'/teams/'+region+'/'+summonerId).success(function (response) {
                         var summoner = JSON.parse(localStorage[summonerName]);
                         summoner.teams = response[summonerId];
                         summoner = JSON.stringify(summoner);
@@ -66,7 +65,7 @@
 
     app.service('getMatchDetails', ['$http', '$q', function($http, $q) {
         return {
-            getMatchDetails: function (matchIds, teamName) {
+            getMatchDetails: function (matchIds, teamName, region) {
                 var def = $q.defer();
                 var promises = [];
 
@@ -83,7 +82,7 @@
 
                     angular.forEach(matchIds, function(matchId){
                         promises.push(
-                            $http.get('http://'+host+'/match/'+matchId)
+                            $http.get('http://'+host+'/match/'+region+'/'+matchId)
                         );
                     });
 

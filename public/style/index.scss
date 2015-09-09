@@ -31,6 +31,18 @@
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
     font-size: 20px;
 
+    #region {
+      background: $brand;
+      width: 60px;
+      height: 40px;
+      font-size: 14px;
+      line-height: 1.5;
+      border: 0;
+      border-radius: 5px;
+      color:white;
+      font-family: "PT Serif", Helvetica, Arial, sans-serif;
+    }
+
     #summoner{
       height: 40px;
       width: 200px;

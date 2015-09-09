@@ -10,6 +10,19 @@
         //how many games I want to grab from a match history
         var DESIRED_GAMES = 8;
 
+        $scope.regions = [
+            'NA',
+            'EUW',
+            'KR',
+            'BR',
+            'EUNE',
+            'LAN',
+            'LAS',
+            'OCE',
+            'RU',
+            'TR'
+        ];
+
         //this list should have stat names that are exactly the same as the ones we grab from the league api
         var statList = [
             'kills',
@@ -78,12 +91,12 @@
         //keep track of browser widths and redraw charts if necessary
         checkWidth();
 
-        $scope.searchSummoner = function(summoner) {
+        $scope.searchSummoner = function(summoner, region) {
             var summonerName = summoner.toLowerCase().replace(/ /g,'');
             //call to service to get summoner by summoner name
-            getSummoner.getSummoner(summonerName).then(function(summonerId) {
+            getSummoner.getSummoner(summonerName, region).then(function(summonerId) {
                 if(summonerId){
-                    getUserTeams(summonerId, summonerName);
+                    getUserTeams(summonerId, summonerName, region);
                 }
                 else{
                     $scope.error = response;
@@ -94,9 +107,9 @@
         };
 
         //call to service to get teams by summoner ID
-        var getUserTeams = function(summonerId, summonerName) {
+        var getUserTeams = function(summonerId, summonerName, region) {
             $scope.gotTeams = true;
-            getTeams.getTeams(summonerId, summonerName).then(function(teams) {
+            getTeams.getTeams(summonerId, summonerName, region).then(function(teams) {
                 if(teams){
                     $scope.teams = teams;
                 }
@@ -109,7 +122,7 @@
 
         //get the game information for the last (DESIRED_GAMES) in the user match history
         //make whatever chart is the default
-        $scope.getMatches = function(selectedTeam) {
+        $scope.getMatches = function(selectedTeam, region) {
 
 
             $scope.selectedTeam = selectedTeam.name;
@@ -132,7 +145,7 @@
             }
 
 
-            var myPromise = getMatchDetails.getMatchDetails(matchIds, teamName);
+            var myPromise = getMatchDetails.getMatchDetails(matchIds, teamName, region);
             //runs once a response has been received for every matchDetails request
             myPromise.then(function(matches){
                 processData(matches, selectedTeam);
@@ -142,10 +155,18 @@
 
         //organizes all the data grabbed from matches into an easy to navigate object
         var processData = function(matches, selectedTeam){
-            //console.log(matches);
 
-            //HERE we want to go through each match, and throw out any that aren't on summoners rift or < 10 players
-            //this way, we can be only looking at ranked 5v5s
+
+            //go through each match, and if it isn't a 5v5 match, remove it from the matches array
+            var x = 0;
+            angular.forEach(matches, function(match){
+               if(match.queueType != 'RANKED_TEAM_5x5'){
+                   matches.splice(x, 1);
+                   DESIRED_GAMES = matches.length;
+               }
+                x++;
+            });
+
 
             //this is the main object that contains the stats i want to gather and organize for the whole team
             var team = {};
@@ -156,14 +177,13 @@
             //add colors to the team object so the legend can be dynamically generated
             team = addColors(team);
 
-
-
             //put all the stats into the object
             team = getStats(team, matches, statList);
 
             //console.log(team);
 
             $scope.team = team;
+
 
 
             $scope.makeChart($scope.defaultStat, $scope.average, $scope.teamTotal);
