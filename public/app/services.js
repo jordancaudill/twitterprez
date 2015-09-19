@@ -2,8 +2,8 @@
 
     var app = angular.module('league');
 
-    //var host = 'localhost:3000';
-    var host = 'teamstatter.com';
+    var host = 'localhost:3000';
+    //var host = 'teamstatter.com';
 
     //how long I want to store data in local storage for
     //first number is minutes * 60000 makes it milliseconds
@@ -16,20 +16,26 @@
 
                 //grab from localstorage if the summonerId was stored less than 30 mins ago
                 if(localStorage[summonerName] && ((new Date().getTime() - (JSON.parse(localStorage[summonerName]).storageTime)) <= STORAGE_TIME)){
-                    var summonerId = JSON.parse(localStorage[summonerName]).summonerId;
-                    def.resolve(summonerId);
+                    var response = [];
+                    response[summonerName] = JSON.parse(localStorage[summonerName]);
+                    def.resolve(response);
                 }
 
                 else {
                     $http.get('http://'+host+'/summoner/'+region+'/'+summonerName).success(function (response) {
 
-                        var summoner = {};
-                        summoner.storageTime = new Date().getTime();
-                        summoner.summonerId = response[summonerName].id;
-                        summoner = JSON.stringify(summoner);
-                        localStorage.setItem(summonerName, summoner);
 
-                        return def.resolve(response[summonerName].id);
+                        //request was successful
+                        if (response[summonerName]) {
+                            var summoner = {};
+                            summoner.storageTime = new Date().getTime();
+                            summoner.id = response[summonerName].id;
+                            summoner = JSON.stringify(summoner);
+                            localStorage.setItem(summonerName, summoner);
+
+                        }
+                        return def.resolve(response);
+
                     });
                 }
                 return def.promise;
@@ -86,18 +92,19 @@
                         );
                     });
 
-                    $q.all(promises).then(function(matches){
-                        for (i = 0; i < matches.length; i++){
-                            matches[i] = matches[i]['data'];
+                    $q.all(promises).then(function(response){
+                        if (response[response.length - 1].data.matchType) {
+                            for (i = 0; i < response.length; i++){
+                                response[i] = response[i]['data'];
+                            }
+                            var matchStorage = {};
+                            matchStorage.storageTime = new Date().getTime();
+                            matchStorage.matches = response;
+                            matchStorage = JSON.stringify(matchStorage);
+                            localStorage.setItem(teamName, matchStorage);
                         }
-                        var matchStorage = {};
-                        matchStorage.storageTime = new Date().getTime();
-                        matchStorage.matches = matches;
-                        matchStorage = JSON.stringify(matchStorage);
 
-                        localStorage.setItem(teamName, matchStorage);
-
-                        return def.resolve(matches);
+                        return def.resolve(response);
                     });
                 }
 

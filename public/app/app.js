@@ -92,11 +92,12 @@
         checkWidth();
 
         $scope.searchSummoner = function(summoner, region) {
+            $scope.isError = false;
             var summonerName = summoner.toLowerCase().replace(/ /g,'');
             //call to service to get summoner by summoner name
-            getSummoner.getSummoner(summonerName, region).then(function(summonerId) {
-                if(summonerId){
-                    getUserTeams(summonerId, summonerName, region);
+            getSummoner.getSummoner(summonerName, region).then(function(response) {
+                if(response[summonerName]){
+                    getUserTeams(response[summonerName].id, summonerName, region);
                 }
                 else{
                     $scope.error = response;
@@ -109,13 +110,12 @@
         //call to service to get teams by summoner ID
         var getUserTeams = function(summonerId, summonerName, region) {
             $scope.gotTeams = true;
+            $scope.isError = false;
             getTeams.getTeams(summonerId, summonerName, region).then(function(teams) {
                 if(teams){
                     $scope.teams = teams;
                 }
                 else{
-                    $scope.error = response;
-                    $scope.isError = true;
                 }
             });
         };
@@ -123,6 +123,7 @@
         //get the game information for the last (DESIRED_GAMES) in the user match history
         //make whatever chart is the default
         $scope.getMatches = function(selectedTeam, region) {
+            $scope.isError = false;
 
 
             $scope.selectedTeam = selectedTeam.name;
@@ -147,8 +148,18 @@
 
             var myPromise = getMatchDetails.getMatchDetails(matchIds, teamName, region);
             //runs once a response has been received for every matchDetails request
-            myPromise.then(function(matches){
-                processData(matches, selectedTeam);
+            myPromise.then(function(response){
+                $scope.isError = false;
+                //if getting the matches is successful
+                if (response[response.length - 1].data.matchType) {
+                    processData(response, selectedTeam);
+                }
+                //currently have it set so that it will display error if every desired game is not gotten
+                else{
+                    $scope.error = response[response.length - 1].data;
+                    $scope.isError = true;
+
+                }
             }.bind(this));
 
         };
@@ -179,8 +190,6 @@
 
             //put all the stats into the object
             team = getStats(team, matches, statList);
-
-            //console.log(team);
 
             $scope.team = team;
 

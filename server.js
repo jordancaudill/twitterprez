@@ -32,9 +32,17 @@ app.get('/summoner/:region/:name', function (req, res){
             console.log('timeout');
             res.send('Request has timed out.');
         }
-        else if(response.statusCode = 404){
+        else if(response.statusCode == 404){
             console.log('404 Not Found');
             res.send('Could not find Summoner');
+        }
+        else if(response.statusCode == 429){
+            console.log('rate limit exceeded');
+            res.send('Team Statter is receiving a lot of requests right now. Please try again in 10 seconds.');
+        }
+        else if(response.statusCode == 503){
+            console.log('API Offline');
+            res.send('Sorry, the League of Legends API is offline right now.');
         }
         else {
             console.log('unknown error');
@@ -59,9 +67,17 @@ app.get('/teams/:region/:summonerId', function (req, res){
         else if(req.timedout){
             res.send('Request has timed out.');
         }
-        else if(response.statusCode = 404){
+        else if(response.statusCode == 404){
             console.log('404 Not Found: teams');
             res.send('Could not find teams');
+        }
+        else if(response.statusCode == 429){
+            console.log('rate limit exceeded');
+            res.send('Team Statter is receiving a lot of requests right now. Please try again in 10 seconds.');
+        }
+        else if(response.statusCode == 503){
+            console.log('API Offline');
+            res.send('Sorry, the League of Legends API is offline right now.');
         }
         else {
             res.send('Unknown error occurred. Please report this to Jordan.')
@@ -87,9 +103,17 @@ app.get('/match/:region/:matchId', function (req, res){
         else if(req.timedout){
             res.send('Request has timed out.');
         }
-        else if(response.statusCode = 404){
+        else if(response.statusCode == 404){
             console.log('404 Not Found');
             res.send('Could not find games');
+        }
+        else if(response.statusCode == 429){
+            console.log('rate limit exceeded');
+            res.send('Team Statter is receiving a lot of requests right now. Please try again in 10 seconds.');
+        }
+        else if(response.statusCode == 503){
+            console.log('API Offline');
+            res.send('Sorry, the League of Legends API is offline right now.');
         }
         else {
             res.send('Unknown error occurred. Please report this to Jordan.')
