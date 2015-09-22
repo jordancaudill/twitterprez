@@ -8,7 +8,7 @@
     app.controller('UserController', ['$scope', '$q', 'getSummoner', 'getTeams', 'getMatchDetails', 'convertToReadable', 'convertToCamelCase', function($scope, $q,  getSummoner, getTeams, getMatchDetails, convertToReadable, convertToCamelCase){
 
         //how many games I want to grab from a match history
-        var DESIRED_GAMES = 8;
+        var DESIRED_GAMES = 5;
 
         $scope.regions = [
             'NA',
@@ -151,7 +151,7 @@
             myPromise.then(function(response){
                 $scope.isError = false;
                 //if getting the matches is successful
-                if (response[response.length - 1].data.matchType) {
+                if (response[response.length - 1].matchType) {
                     processData(response, selectedTeam);
                 }
                 //currently have it set so that it will display error if every desired game is not gotten
