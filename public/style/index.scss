@@ -1,13 +1,13 @@
 @import "variables.scss";
 
 body{
-  background-image: url(../img/background2.jpg);
   text-align: center;
+  background: url(../img/background4.jpg) no-repeat center center fixed;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-repeat: no-repeat;
+
 
   header {
     margin-top: 10%;
@@ -42,7 +42,10 @@ body{
     font-size: 20px;
 
     #region {
-      background: $brand;
+      background: -webkit-linear-gradient($brand, $brand-dark); /* For Safari 5.1 to 6.0 */
+      background: -o-linear-gradient($brand, $brand-dark); /* For Opera 11.1 to 12.0 */
+      background: -moz-linear-gradient($brand, $brand-dark); /* For Firefox 3.6 to 15 */
+      background: linear-gradient($brand, $brand-dark); /* Standard syntax */
       width: 60px;
       height: 40px;
       font-size: 14px;
@@ -51,6 +54,10 @@ body{
       border-radius: 5px;
       color:white;
       font-family: "PT Serif", Helvetica, Arial, sans-serif;
+    }
+
+    #region:hover {
+      color: $brand-highlight;
     }
 
     #summoner{
@@ -71,7 +78,10 @@ body{
 
       }
     #enterSummoner{
-      background-color: $brand;
+      background: -webkit-linear-gradient($brand, $brand-dark); /* For Safari 5.1 to 6.0 */
+      background: -o-linear-gradient($brand, $brand-dark); /* For Opera 11.1 to 12.0 */
+      background: -moz-linear-gradient($brand, $brand-dark); /* For Firefox 3.6 to 15 */
+      background: linear-gradient($brand, $brand-dark); /* Standard syntax */
       height: 40px;
       width: 40px;
       text-align: center;
@@ -81,7 +91,7 @@ body{
     }
 
     #enterSummoner:hover{
-      background-color: $brand-dull;
+      color: $brand-highlight;
     }
   }
 
@@ -103,7 +113,7 @@ body{
 
       #creator:hover {
         p{
-          color: $brand-dull;
+          color: $brand-highlight;
         }
       }
 
@@ -122,7 +132,7 @@ body{
     }
 
     #legal:hover {
-      color: $brand-dull;
+      color: $brand-highlight;
     }
 
   }
@@ -135,7 +145,10 @@ body{
       font-size: 20px;
       height: 40px;
       width: 245px;
-      background-color: $brand;
+      background: -webkit-linear-gradient($brand, $brand-dark); /* For Safari 5.1 to 6.0 */
+      background: -o-linear-gradient($brand, $brand-dark); /* For Opera 11.1 to 12.0 */
+      background: -moz-linear-gradient($brand, $brand-dark); /* For Firefox 3.6 to 15 */
+      background: linear-gradient($brand, $brand-dark); /* Standard syntax */
       color: white;
       text-align: center;
       border-radius: 5px;
@@ -143,14 +156,17 @@ body{
     }
 
     button:hover{
-      background-color: $brand-dull;
+      color: $brand-highlight;
     }
   }
 }
 
 
 #stat {
-  background: $brand;
+  background: -webkit-linear-gradient($brand, $brand-dark); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient($brand, $brand-dark); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient($brand, $brand-dark); /* For Firefox 3.6 to 15 */
+  background: linear-gradient($brand, $brand-dark); /* Standard syntax */
   width: 220px;
   padding: 5px;
   margin-top: 10px;
@@ -163,7 +179,14 @@ body{
   font-family: "PT Serif", Helvetica, Arial, sans-serif;
 }
 
+#stat:hover {
+  color: $brand-highlight;
+}
+
 #chartContainer {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
   #chart {
     height: 360px;
     width: 280px;
@@ -192,14 +215,57 @@ body{
 }
 
 .checkbox {
-
-  input{
+  text-align: left;
+  @media screen and (min-width: 768px) {
+    margin-left: 0;
   }
-
-  p{
-    display:inline;
-    color: white;
-    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  .squaredOne {
+    width: 28px;
+    height: 28px;
+    position: relative;
+    margin: 5px auto;
+    background: #333333;
+    box-shadow: inset 0px 1px 1px #666666, 0px 1px 3px rgba(0,0,0,0.5);
+    border-radius: 5px;
+    label {
+      p {
+        color: white;
+        font-family: "PT Serif", Helvetica, Arial, sans-serif;
+        margin-left: 10px;
+      }
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      cursor: pointer;
+      background: linear-gradient(top, #222 0%, #45484d 100%);
+      box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,1);
+      &:after {
+        content: '';
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        background: $brand;
+        background: -webkit-linear-gradient($brand, $brand-dark); /* For Safari 5.1 to 6.0 */
+        background: -o-linear-gradient($brand, $brand-dark); /* For Opera 11.1 to 12.0 */
+        background: -moz-linear-gradient($brand, $brand-dark); /* For Firefox 3.6 to 15 */
+        background: linear-gradient($brand, $brand-dark); /* Standard syntax */
+        box-shadow: inset 0px 1px 1px #666666, 0px 1px 3px rgba(0,0,0,0.5);
+        opacity: 0;
+      }
+      &:hover::after {
+        opacity: 0.3;
+      }
+    }
+    input[type=checkbox] {
+      visibility: hidden;
+      &:checked + label:after {
+        opacity: 1;
+      }
+    }
 
   }
 }
@@ -213,35 +279,63 @@ body{
 
 }
 
-#back-btn {
-  background-color: $brand;
-  height: 30px;
-  width: 50px;
-  text-align: center;
-  border-radius: 5px;
-  border-style: none;
-  color: white;
-  margin-top: 5px;
+#back-btn-cont{
+  #back-btn {
+    background: -webkit-linear-gradient($brand, $brand-dark); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient($brand, $brand-dark); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient($brand, $brand-dark); /* For Firefox 3.6 to 15 */
+    background: linear-gradient($brand, $brand-dark); /* Standard syntax */
+
+    height: 34px;
+    width: 50px;
+    text-align: center;
+    border-radius: 5px;
+    border-style: none;
+    color: white;
+    margin-top: 10px;
+  }
+
+  #back-btn:hover {
+    color: $brand-highlight;
+  }
+
 }
-#back-btn:hover {
-  background-color: $brand-dull;
-}
+
 
 #teamName {
   color: white;
   margin-bottom: 10px;
   font-family: "PT Serif", Helvetica, Arial, sans-serif;
 
+  @media screen and (min-width: 768px) {
+    font-size: 3em;
+  }
+
 }
 
-.legend-color {
+.teamMember {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
   padding: 5px;
-  font-size: .8em;
-  color:white;
+  font-size: .9em;
+  width: 130px;
+  height: 30px;
+  color: white;
   font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  border-color: #222222;
+  border-width: 2px;
+  border-style: solid;
 
+  @media screen and (min-width: 768px) {
+    width: 160px;
+    height: 40px;
+    font-size: 1.1em;
+    padding-top: 8px;
+  }
 }
-
 
 
 

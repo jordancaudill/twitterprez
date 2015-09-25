@@ -163,7 +163,6 @@
 
         //organizes all the data grabbed from matches into an easy to navigate object
         var processData = function(matches, selectedTeam){
-            console.log(matches);
 
             //go through each match, and if it isn't a 5v5 match, remove it from the matches array
             var x = 0;
@@ -218,7 +217,6 @@
 
 
 
-            console.log(team);
             $scope.team = team;
 
             $scope.makeChart($scope.defaultStat, $scope.average, $scope.teamTotal);
@@ -283,8 +281,6 @@
             $scope.resetCanvas();
             var ctx = document.getElementById("chart").getContext("2d");
 
-            console.log(statName);
-
 
             //a line chart with each members stats over all the games
             if(!average){
@@ -294,7 +290,7 @@
 
                 for(var i = 0; i < DESIRED_GAMES; i++)
                 {
-                    data.labels[i] = 'Game ' + (i + 1);
+                    data.labels[i] = 'Match ' + (i + 1);
                 }
 
                 angular.forEach($scope.team.members, function (member) {
@@ -302,18 +298,11 @@
                     playerData['label'] = member.summonerName;
                     playerData['strokeColor'] = member.color;
                     playerData['pointColor'] = member.color;
-                    playerData['pointHightlightFill'] = member.color;
+                    playerData['pointStrokeColor'] = member.darkColor;
+                    playerData['pointHighlightFill'] = member.darkColor;
                     playerData['data'] = member.stats[statName].perMatch;
                     data.datasets.push(playerData);
                 });
-                //var teamData = {};
-                //teamData['label'] = 'Team';
-                //teamData['strokeColor'] = '#ffffff';
-                //teamData['pointColor'] = '#ffffff';
-                //teamData['pointHightlightFill'] = '#ffffff';
-                //teamData['data'] = $scope.team.stats[statName].perMatch;
-                //data.datasets.push(teamData);
-
 
 
                 new Chart(ctx).Line(data, {
@@ -321,9 +310,15 @@
                     datasetFill : false,
                     bezierCurve : false,
                     scaleGridLineColor : "#666666",
-                    datasetStrokeWidth : 3,
-                    animationEasing: "easeOutQuint"
-                });
+                    scaleFontColor: "#cccccc",
+                    tooltipFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
+                    scaleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
+                    tooltipTitleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
+                    pointDotRadius: 7,
+                    pointDotStrokeWidth: 3,
+                    datasetStrokeWidth: 6
+
+            });
             }
             //a pie chart showing the average for a stat for each member
             else if(average){
@@ -332,11 +327,18 @@
                     var playerData = {};
                     playerData['label'] = member.summonerName;
                     playerData['color'] = member.color;
+                    playerData['highlight'] = member.darkColor;
                     playerData['value'] = member.stats[statName].average;
                     data.push(playerData);
                 });
                 new Chart(ctx).Pie(data, {
                     //define chart options here
+                    animationEasing: "easeOutQuint",
+                    animateScale: true,
+                    tooltipFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
+                    tooltipTitleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
+                    scaleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'"
+
                 });
             }
 
@@ -372,9 +374,29 @@
                            '#6188e2',
                            '#a748ca'];
 
+            //these darkColors corresponds with colors
+            var darkColors = [ '#7E1630',
+                                '#115D42',
+                                '#893D18',
+                                '#3D7916',
+                                '#1D1D61',
+                                '#16B9A8',
+                                '#04329D',
+                                '#6b0392',
+                                '#580276',
+                                '#C18433',
+                                '#C1A449',
+                                '#625559',
+                                '#8E9D12',
+                                '#406DD4',
+                                '#932AB8'];
+
+
+
             var i = 0;
             angular.forEach(team.members, function(member){
                 member['color'] = colors[i];
+                member['darkColor'] = darkColors[i];
                 i++;
             });
 
@@ -500,18 +522,18 @@
                                 var csMinAt30 = csMinAtEnd / ((csTimeline.thirtyToEnd / 100) + 1);
                                 var csMinAt20 = csMinAt30 / ((csTimeline.twentyToThirty / 100) + 1);
                                 var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
-                                var csAt10 = csMinAt10 * 10;
+                                var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
                             }
                             else if (csTimeline.twentyToThirty){
                                 var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
                                 var csMinAt20 = csMinAtEnd / ((csTimeline.twentyToThirty / 100) + 1);
                                 var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
-                                var csAt10 = csMinAt10 * 10;
+                                var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
                             }
                             else if (csTimeline.tenToTwenty){
                                 var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
                                 var csMinAt10 = csMinAtEnd / ((csTimeline.tenToTwenty / 100) + 1);
-                                var csAt10 = csMinAt10 * 10;
+                                var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
                             }
                             member.stats.minionsKilledAt10Min.perMatch.push(csAt10);
                             statTotal += csAt10;
@@ -547,12 +569,13 @@
                 member.stats.minionsKilledPerMin['perMatch'] = [];
 
                 for(var x = 0; x < member.stats.minionsKilled.perMatch.length; x++){
-                    member.stats.minionsKilledPerMin.perMatch.push(member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                    var minionsKilledPerMin = parseFloat((member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                    member.stats.minionsKilledPerMin.perMatch.push(minionsKilledPerMin);
                     if(!team.stats.minionsKilledPerMin.perMatch[x]){
-                        team.stats.minionsKilledPerMin.perMatch.push(member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                        team.stats.minionsKilledPerMin.perMatch.push(minionsKilledPerMin);
                     }
                     else{
-                        team.stats.minionsKilledPerMin.perMatch[x] += (member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                        team.stats.minionsKilledPerMin.perMatch[x] += (minionsKilledPerMin);
 
                     }
 
@@ -575,12 +598,13 @@
                 member.stats.wardsKilledPerMin['perMatch'] = [];
 
                 for(var x = 0; x < member.stats.wardsKilled.perMatch.length; x++){
-                    member.stats.wardsKilledPerMin.perMatch.push(member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                    var wardsKilledPerMin = parseFloat((member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                    member.stats.wardsKilledPerMin.perMatch.push(wardsKilledPerMin);
                     if(!team.stats.wardsKilledPerMin.perMatch[x]){
-                        team.stats.wardsKilledPerMin.perMatch.push(member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                        team.stats.wardsKilledPerMin.perMatch.push(wardsKilledPerMin);
                     }
                     else{
-                        team.stats.wardsKilledPerMin.perMatch[x] += (member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                        team.stats.wardsKilledPerMin.perMatch[x] += (wardsKilledPerMin);
 
                     }
 
@@ -603,13 +627,13 @@
                 member.stats.wardsPlacedPerMin['perMatch'] = [];
 
                 for(var x = 0; x < member.stats.wardsPlaced.perMatch.length; x++){
-                    member.stats.wardsPlacedPerMin.perMatch.push(member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]);
+                    var wardsplacedPerMin = parseFloat((member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                    member.stats.wardsPlacedPerMin.perMatch.push(wardsplacedPerMin);
                     if(!team.stats.wardsPlacedPerMin.perMatch[x]){
-                        team.stats.wardsPlacedPerMin.perMatch.push(member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]);
+                        team.stats.wardsPlacedPerMin.perMatch.push(wardsplacedPerMin);
                     }
                     else{
-                        team.stats.wardsPlacedPerMin.perMatch[x] += (member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]);
-
+                        team.stats.wardsPlacedPerMin.perMatch[x] += (wardsplacedPerMin);
                     }
 
                 }
@@ -636,7 +660,7 @@
 
 
             //return a number that is the average for the given stat
-            return parseFloat((total / dividend)) || 0;
+            return parseFloat((total / dividend)).toFixed(2) || 0;
         };
 
     }]);

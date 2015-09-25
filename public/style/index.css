@@ -1,12 +1,11 @@
 /* Colors */
 body {
-  background-image: url(../img/background2.jpg);
   text-align: center;
+  background: url(../img/background4.jpg) no-repeat center center fixed;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
-  -o-background-size: cover;
-  background-repeat: no-repeat; }
+  -o-background-size: cover; }
   body header {
     margin-top: 10%; }
     body header #logo {
@@ -32,7 +31,14 @@ body {
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
     font-size: 20px; }
     body #summonerForm #region {
-      background: #A03550;
+      background: -webkit-linear-gradient(#A03550, #490012);
+      /* For Safari 5.1 to 6.0 */
+      background: -o-linear-gradient(#A03550, #490012);
+      /* For Opera 11.1 to 12.0 */
+      background: -moz-linear-gradient(#A03550, #490012);
+      /* For Firefox 3.6 to 15 */
+      background: linear-gradient(#A03550, #490012);
+      /* Standard syntax */
       width: 60px;
       height: 40px;
       font-size: 14px;
@@ -41,6 +47,8 @@ body {
       border-radius: 5px;
       color: white;
       font-family: "PT Serif", Helvetica, Arial, sans-serif; }
+    body #summonerForm #region:hover {
+      color: #ECA0B3; }
     body #summonerForm #summoner {
       height: 40px;
       width: 160px;
@@ -56,7 +64,14 @@ body {
           width: 200px;
           font-size: 1em; } }
     body #summonerForm #enterSummoner {
-      background-color: #A03550;
+      background: -webkit-linear-gradient(#A03550, #490012);
+      /* For Safari 5.1 to 6.0 */
+      background: -o-linear-gradient(#A03550, #490012);
+      /* For Opera 11.1 to 12.0 */
+      background: -moz-linear-gradient(#A03550, #490012);
+      /* For Firefox 3.6 to 15 */
+      background: linear-gradient(#A03550, #490012);
+      /* Standard syntax */
       height: 40px;
       width: 40px;
       text-align: center;
@@ -64,7 +79,7 @@ body {
       border-style: none;
       color: white; }
     body #summonerForm #enterSummoner:hover {
-      background-color: #78132C; }
+      color: #ECA0B3; }
   body footer #creator {
     width: 100px;
     left: 30%;
@@ -75,7 +90,7 @@ body {
       color: #dddddd;
       text-align: left; }
   body footer #creator:hover p {
-    color: #78132C; }
+    color: #ECA0B3; }
   body footer #legal {
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
     color: #dddddd;
@@ -87,23 +102,37 @@ body {
     margin-bottom: 10px;
     text-align: right; }
   body footer #legal:hover {
-    color: #78132C; }
+    color: #ECA0B3; }
   body .team button {
     margin-top: 15px;
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
     font-size: 20px;
     height: 40px;
     width: 245px;
-    background-color: #A03550;
+    background: -webkit-linear-gradient(#A03550, #490012);
+    /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#A03550, #490012);
+    /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#A03550, #490012);
+    /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#A03550, #490012);
+    /* Standard syntax */
     color: white;
     text-align: center;
     border-radius: 5px;
     border-style: none; }
   body .team button:hover {
-    background-color: #78132C; }
+    color: #ECA0B3; }
 
 #stat {
-  background: #A03550;
+  background: -webkit-linear-gradient(#A03550, #490012);
+  /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#A03550, #490012);
+  /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#A03550, #490012);
+  /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#A03550, #490012);
+  /* Standard syntax */
   width: 220px;
   padding: 5px;
   margin-top: 10px;
@@ -115,26 +144,79 @@ body {
   color: white;
   font-family: "PT Serif", Helvetica, Arial, sans-serif; }
 
-#chartContainer #chart {
-  height: 360px;
-  width: 280px; }
-@media screen and (min-width: 768px) {
-  #chartContainer #chart {
-    width: 400px;
-    height: 300px; } }
-@media screen and (min-width: 992px) {
-  #chartContainer #chart {
-    width: 600px;
-    height: 450px; } }
-@media screen and (min-width: 1200px) {
-  #chartContainer #chart {
-    width: 800px;
-    height: 600px; } }
+#stat:hover {
+  color: #ECA0B3; }
 
-.checkbox p {
-  display: inline;
-  color: white;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif; }
+#chartContainer {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px; }
+  #chartContainer #chart {
+    height: 360px;
+    width: 280px; }
+  @media screen and (min-width: 768px) {
+    #chartContainer #chart {
+      width: 400px;
+      height: 300px; } }
+  @media screen and (min-width: 992px) {
+    #chartContainer #chart {
+      width: 600px;
+      height: 450px; } }
+  @media screen and (min-width: 1200px) {
+    #chartContainer #chart {
+      width: 800px;
+      height: 600px; } }
+
+.checkbox {
+  text-align: left; }
+  @media screen and (min-width: 768px) {
+    .checkbox {
+      margin-left: 0; } }
+  .checkbox .squaredOne {
+    width: 28px;
+    height: 28px;
+    position: relative;
+    margin: 5px auto;
+    background: #333333;
+    box-shadow: inset 0px 1px 1px #666666, 0px 1px 3px rgba(0, 0, 0, 0.5);
+    border-radius: 5px; }
+    .checkbox .squaredOne label {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      cursor: pointer;
+      background: linear-gradient(top, #222 0%, #45484d 100%);
+      box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px white; }
+      .checkbox .squaredOne label p {
+        color: white;
+        font-family: "PT Serif", Helvetica, Arial, sans-serif;
+        margin-left: 10px; }
+      .checkbox .squaredOne label:after {
+        content: '';
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        background: #A03550;
+        background: -webkit-linear-gradient(#A03550, #490012);
+        /* For Safari 5.1 to 6.0 */
+        background: -o-linear-gradient(#A03550, #490012);
+        /* For Opera 11.1 to 12.0 */
+        background: -moz-linear-gradient(#A03550, #490012);
+        /* For Firefox 3.6 to 15 */
+        background: linear-gradient(#A03550, #490012);
+        /* Standard syntax */
+        box-shadow: inset 0px 1px 1px #666666, 0px 1px 3px rgba(0, 0, 0, 0.5);
+        opacity: 0; }
+      .checkbox .squaredOne label:hover::after {
+        opacity: 0.3; }
+    .checkbox .squaredOne input[type=checkbox] {
+      visibility: hidden; }
+      .checkbox .squaredOne input[type=checkbox]:checked + label:after {
+        opacity: 1; }
 
 #error {
   color: orangered;
@@ -143,29 +225,54 @@ body {
   text-align: center;
   margin-top: 15px; }
 
-#back-btn {
-  background-color: #A03550;
-  height: 30px;
+#back-btn-cont #back-btn {
+  background: -webkit-linear-gradient(#A03550, #490012);
+  /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#A03550, #490012);
+  /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#A03550, #490012);
+  /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#A03550, #490012);
+  /* Standard syntax */
+  height: 34px;
   width: 50px;
   text-align: center;
   border-radius: 5px;
   border-style: none;
   color: white;
-  margin-top: 5px; }
-
-#back-btn:hover {
-  background-color: #78132C; }
+  margin-top: 10px; }
+#back-btn-cont #back-btn:hover {
+  color: #ECA0B3; }
 
 #teamName {
   color: white;
   margin-bottom: 10px;
   font-family: "PT Serif", Helvetica, Arial, sans-serif; }
+  @media screen and (min-width: 768px) {
+    #teamName {
+      font-size: 3em; } }
 
-.legend-color {
+.teamMember {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
   padding: 5px;
-  font-size: .8em;
+  font-size: .9em;
+  width: 130px;
+  height: 30px;
   color: white;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif; }
+  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  border-color: #222222;
+  border-width: 2px;
+  border-style: solid; }
+  @media screen and (min-width: 768px) {
+    .teamMember {
+      width: 160px;
+      height: 40px;
+      font-size: 1.1em;
+      padding-top: 8px; } }
 
 .modal-content {
   padding: 10px 10px 10px 10px;
