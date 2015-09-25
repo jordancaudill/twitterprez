@@ -88,6 +88,7 @@
         checkWidth();
 
         $scope.searchSummoner = function(summoner, region) {
+            $scope.searched = true;
             $scope.isError = false;
             var summonerName = summoner.toLowerCase().replace(/ /g,'');
             //call to service to get summoner by summoner name

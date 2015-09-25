@@ -1,33 +1,43 @@
 @import "variables.scss";
 
-#pageContent, html{
-  background-color: #453d3f;
+body{
+  background-image: url(../img/background2.jpg);
   text-align: center;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-repeat: no-repeat;
 
-  header{
-    background-color: $brand-dull;
-    height: 50px;
+  header {
+    margin-top: 10%;
 
-    #logo{
+    #logo {
       margin-top: 5px;
       color: white;
-      font-size: 1.5em;
-      font-family: "PT Serif", Helvetica, Arial, sans-serif;
-      text-align: left;
+      font-size: 3em;
+      @media screen and (min-width: 768px) {
+        font-size: 4em;
+      }
+        font-family: "PT Serif", Helvetica, Arial, sans-serif;
+      text-align: center;
       margin-bottom: 0px;
 
     }
     #slogan {
       font-family: "PT Serif", Helvetica, Arial, sans-serif;
-      color:white;
+      color: white;
       font-size: 1em;
-      text-align: left;
+      @media screen and (min-width: 768px) {
+        font-size: 1.2em;
+      }
+        text-align: center;
     }
   }
 
 
   #summonerForm{
-    margin-top: 20px;
+    margin-top: 5px;
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
     font-size: 20px;
 
@@ -45,13 +55,18 @@
 
     #summoner{
       height: 40px;
-      width: 200px;
+      width: 160px;
       margin-left: auto;
       margin-right: auto;
       border-radius: 5px;
       border-style: none;
       background-color: #222222;
       color: white;
+      font-size: .9em;
+      @media screen and (min-width: 768px) {
+        width: 200px;
+        font-size: 1em;
+      }
 
 
       }
@@ -72,38 +87,41 @@
 
 
   footer {
-    padding-top: 10px;
-    height: 25px;
-    background-color: #453d3f;
 
-
-
-      a{
-        background-color: #d17905;
+      #creator{
         width: 100px;
+        left: 30%;
+        position: fixed;
+        bottom: 0;
+
         p{
           font-family: "PT Serif", Helvetica, Arial, sans-serif;
           color: #dddddd;
+          text-align: left;
         }
       }
 
-      a:hover {
+      #creator:hover {
         p{
           color: $brand-dull;
         }
       }
 
 
-    button{
+    #legal{
       font-family: "PT Serif", Helvetica, Arial, sans-serif;
       color: #dddddd;
-      background-color: #453d3f;
-      text-align: center;
       width: 100px;
       border-style: none;
+      position: fixed;
+      bottom: 0;
+      right: 30%;
+      margin-bottom: 10px;
+      text-align: right;
+
     }
 
-    button:hover {
+    #legal:hover {
       color: $brand-dull;
     }
 
@@ -133,8 +151,9 @@
 
 #stat {
   background: $brand;
-  width: 260px;
+  width: 220px;
   padding: 5px;
+  margin-top: 10px;
   font-size: 14px;
   line-height: 1.5;
   border: 0;
@@ -184,11 +203,6 @@
 
   }
 }
-#teamTotal{
-  margin-top: 10px;
-}
-
-
 
 #error {
   color: orangered;
@@ -202,7 +216,7 @@
 #back-btn {
   background-color: $brand;
   height: 30px;
-  width: 60px;
+  width: 50px;
   text-align: center;
   border-radius: 5px;
   border-style: none;

@@ -1,27 +1,37 @@
 /* Colors */
-#pageContent, html {
-  background-color: #453d3f;
-  text-align: center; }
-  #pageContent header, html header {
-    background-color: #78132C;
-    height: 50px; }
-    #pageContent header #logo, html header #logo {
+body {
+  background-image: url(../img/background2.jpg);
+  text-align: center;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-repeat: no-repeat; }
+  body header {
+    margin-top: 10%; }
+    body header #logo {
       margin-top: 5px;
       color: white;
-      font-size: 1.5em;
+      font-size: 3em;
       font-family: "PT Serif", Helvetica, Arial, sans-serif;
-      text-align: left;
+      text-align: center;
       margin-bottom: 0px; }
-    #pageContent header #slogan, html header #slogan {
+      @media screen and (min-width: 768px) {
+        body header #logo {
+          font-size: 4em; } }
+    body header #slogan {
       font-family: "PT Serif", Helvetica, Arial, sans-serif;
       color: white;
       font-size: 1em;
-      text-align: left; }
-  #pageContent #summonerForm, html #summonerForm {
-    margin-top: 20px;
+      text-align: center; }
+      @media screen and (min-width: 768px) {
+        body header #slogan {
+          font-size: 1.2em; } }
+  body #summonerForm {
+    margin-top: 5px;
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
     font-size: 20px; }
-    #pageContent #summonerForm #region, html #summonerForm #region {
+    body #summonerForm #region {
       background: #A03550;
       width: 60px;
       height: 40px;
@@ -31,16 +41,21 @@
       border-radius: 5px;
       color: white;
       font-family: "PT Serif", Helvetica, Arial, sans-serif; }
-    #pageContent #summonerForm #summoner, html #summonerForm #summoner {
+    body #summonerForm #summoner {
       height: 40px;
-      width: 200px;
+      width: 160px;
       margin-left: auto;
       margin-right: auto;
       border-radius: 5px;
       border-style: none;
       background-color: #222222;
-      color: white; }
-    #pageContent #summonerForm #enterSummoner, html #summonerForm #enterSummoner {
+      color: white;
+      font-size: .9em; }
+      @media screen and (min-width: 768px) {
+        body #summonerForm #summoner {
+          width: 200px;
+          font-size: 1em; } }
+    body #summonerForm #enterSummoner {
       background-color: #A03550;
       height: 40px;
       width: 40px;
@@ -48,30 +63,32 @@
       border-radius: 5px;
       border-style: none;
       color: white; }
-    #pageContent #summonerForm #enterSummoner:hover, html #summonerForm #enterSummoner:hover {
+    body #summonerForm #enterSummoner:hover {
       background-color: #78132C; }
-  #pageContent footer, html footer {
-    padding-top: 10px;
-    height: 25px;
-    background-color: #453d3f; }
-    #pageContent footer a, html footer a {
-      background-color: #d17905;
-      width: 100px; }
-      #pageContent footer a p, html footer a p {
-        font-family: "PT Serif", Helvetica, Arial, sans-serif;
-        color: #dddddd; }
-    #pageContent footer a:hover p, html footer a:hover p {
-      color: #78132C; }
-    #pageContent footer button, html footer button {
+  body footer #creator {
+    width: 100px;
+    left: 30%;
+    position: fixed;
+    bottom: 0; }
+    body footer #creator p {
       font-family: "PT Serif", Helvetica, Arial, sans-serif;
       color: #dddddd;
-      background-color: #453d3f;
-      text-align: center;
-      width: 100px;
-      border-style: none; }
-    #pageContent footer button:hover, html footer button:hover {
-      color: #78132C; }
-  #pageContent .team button, html .team button {
+      text-align: left; }
+  body footer #creator:hover p {
+    color: #78132C; }
+  body footer #legal {
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+    color: #dddddd;
+    width: 100px;
+    border-style: none;
+    position: fixed;
+    bottom: 0;
+    right: 30%;
+    margin-bottom: 10px;
+    text-align: right; }
+  body footer #legal:hover {
+    color: #78132C; }
+  body .team button {
     margin-top: 15px;
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
     font-size: 20px;
@@ -82,13 +99,14 @@
     text-align: center;
     border-radius: 5px;
     border-style: none; }
-  #pageContent .team button:hover, html .team button:hover {
+  body .team button:hover {
     background-color: #78132C; }
 
 #stat {
   background: #A03550;
-  width: 260px;
+  width: 220px;
   padding: 5px;
+  margin-top: 10px;
   font-size: 14px;
   line-height: 1.5;
   border: 0;
@@ -118,9 +136,6 @@
   color: white;
   font-family: "PT Serif", Helvetica, Arial, sans-serif; }
 
-#teamTotal {
-  margin-top: 10px; }
-
 #error {
   color: orangered;
   font-family: "PT Serif", Helvetica, Arial, sans-serif;
@@ -131,7 +146,7 @@
 #back-btn {
   background-color: #A03550;
   height: 30px;
-  width: 60px;
+  width: 50px;
   text-align: center;
   border-radius: 5px;
   border-style: none;
