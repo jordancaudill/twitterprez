@@ -23,23 +23,19 @@
             'TR'
         ];
 
-        //this list should have stat names that are exactly the same as the ones we grab from the league api
-        var statList = [
-            'kills',
-            'deaths',
-            'assists',
-            'goldEarned',
-            'wardsPlaced',
-            'wardsKilled',
-            'totalDamageDealtToChampions',
-            'killParticipation'
+
+        //the stats i want to display to the user
+        var statNameList = [
+            'Kill Participation',
+            'Deaths',
+            'Assists',
+            'Wards Placed per Minute',
+            'Wards Killed per Minute',
+            'Total Damage Dealt To Champions',
+            'CS per Minute',
+            'CS @ 10 Minutes'
         ];
 
-        var statNameList = [];
-        //convert the statlist from camelCase to readable text for the chart and dropdown box
-        for(var x = 0; x < statList.length; x++){
-            statNameList[x] = convertToReadable.convertToReadable(statList[x]);
-        }
         $scope.statNameList = statNameList;
         //the chart we want to display when the user first clicks a team
         $scope.defaultStat = statNameList[0];
@@ -166,7 +162,7 @@
 
         //organizes all the data grabbed from matches into an easy to navigate object
         var processData = function(matches, selectedTeam){
-
+            console.log(matches);
 
             //go through each match, and if it isn't a 5v5 match, remove it from the matches array
             var x = 0;
@@ -188,12 +184,41 @@
             //add colors to the team object so the legend can be dynamically generated
             team = addColors(team);
 
+            //create stats for the entire team total
+            team['stats'] = {};
+
+            //get the match durations
+            team.stats['matchDurations'] = [];
+            angular.forEach(matches, function(match){
+                team.stats.matchDurations.push(match.matchDuration / 60);
+            });
+
+
+            //create stats object for each member
+            angular.forEach(team.members, function(member){
+                member['stats'] = {};
+            });
+
+
             //put all the stats into the object
-            team = getStats(team, matches, statList);
+            team = getStat(team, matches, 'deaths');
+            team = getStat(team, matches, 'assists');
+            team = getStat(team, matches, 'totalDamageDealtToChampions');
+            team = getStat(team, matches, 'kills');
+            team = getStat(team, matches, 'wardsPlaced');
+            team = getStat(team, matches, 'wardsKilled');
+            team = getStat(team, matches, 'minionsKilled');
 
+            team = getKillParticipation(team);
+            team = getMinionsKilledPerMin(team);
+            team = getWardsKilledPerMin(team);
+            team = getWardsPlacedPerMin(team);
+            team = getMinionsKilledAt10Min(team, matches);
+
+
+
+            console.log(team);
             $scope.team = team;
-
-
 
             $scope.makeChart($scope.defaultStat, $scope.average, $scope.teamTotal);
 
@@ -223,24 +248,45 @@
             return members;
         };
 
-        $scope.makeChart = function(statName, average, teamTotal){
+        $scope.makeChart = function(statName, average){
 
-            statName = convertToCamelCase.convertToCamelCase(statName);
-
-
+            switch(statName){
+                case 'Kill Participation':
+                    statName = 'killParticipation';
+                    break;
+                case 'Deaths':
+                    statName = 'deaths';
+                    break;
+                case 'Assists':
+                    statName = 'assists';
+                    break;
+                case 'Wards Placed per Minute':
+                    statName = 'wardsPlacedPerMin';
+                    break;
+                case 'Wards Killed per Minute':
+                    statName = 'wardsKilledPerMin';
+                    break;
+                case 'Total Damage Dealt To Champions':
+                    statName = 'totalDamageDealtToChampions';
+                    break;
+                case 'CS per Minute':
+                    statName = 'minionsKilledPerMin';
+                    break;
+                case 'CS @ 10 Minutes':
+                    statName = 'minionsKilledAt10Min';
+                    break;
+                default:
+                    break;
+            }
             //need to reset the canvas
             $scope.resetCanvas();
             var ctx = document.getElementById("chart").getContext("2d");
 
+            console.log(statName);
 
-
-
-
-            //average determines what type of chart to make as well as where to get data
-            //teamTotal determines where to get data
 
             //a line chart with each members stats over all the games
-            if(!average && !teamTotal){
+            if(!average){
                 var data = {};
                 data.datasets = [];
                 data.labels = [];
@@ -259,6 +305,15 @@
                     playerData['data'] = member.stats[statName].perMatch;
                     data.datasets.push(playerData);
                 });
+                //var teamData = {};
+                //teamData['label'] = 'Team';
+                //teamData['strokeColor'] = '#ffffff';
+                //teamData['pointColor'] = '#ffffff';
+                //teamData['pointHightlightFill'] = '#ffffff';
+                //teamData['data'] = $scope.team.stats[statName].perMatch;
+                //data.datasets.push(teamData);
+
+
 
                 new Chart(ctx).Line(data, {
                     //define chart options here
@@ -269,9 +324,8 @@
                     animationEasing: "easeOutQuint"
                 });
             }
-
             //a pie chart showing the average for a stat for each member
-            else if(average && !teamTotal){
+            else if(average){
                 var data = [];
                 angular.forEach($scope.team.members, function (member) {
                     var playerData = {};
@@ -285,54 +339,6 @@
                 });
             }
 
-            //a line chart showing the team total of a stat for each game
-            else if(!average && teamTotal){
-                var data = {};
-                data.datasets = [];
-                data.labels = [];
-
-                for(var i = 0; i < DESIRED_GAMES; i++)
-                {
-                    data.labels[i] = 'Game ' + (i + 1);
-                }
-
-                var playerData = {};
-                playerData['label'] = 'some team';
-                playerData['strokeColor'] = '#a748ca';
-                playerData['pointColor'] = '#a748ca';
-                playerData['pointHightlightFill'] = '#a748ca';
-                playerData['data'] = $scope.team.stats[statName].perMatch;
-                data.datasets.push(playerData);
-
-                new Chart(ctx).Line(data, {
-                    //define chart options here
-                    datasetFill : false,
-                    bezierCurve : false,
-                    scaleGridLineColor : "#666666",
-                    datasetStrokeWidth : 3,
-                    animationEasing: "easeOutQuint"
-                });
-            }
-
-            //a bar chart (basically just a number) for the team total average of a stat
-            else if(average && teamTotal){
-                var data = {};
-                data.datasets = [];
-                data.labels = [];
-                data.labels.push('Average');
-
-                var playerData = {};
-                playerData['label'] = 'some team';
-                playerData['strokeColor'] = '#a748ca';
-                playerData['fillColor'] = '#a748ca';
-                playerData['data'] = [];
-                playerData.data.push($scope.team.stats[statName].average);
-                data.datasets.push(playerData);
-
-                new Chart(ctx).Bar(data, {
-                    //define chart options here
-                });
-            }
 
 
         };
@@ -374,19 +380,9 @@
             return team;
         };
 
-        //get the ultimate super jumbo awesome stats put into the team object. returns a team object with stats
-        var getStats = function(team, matches, statList){
+        //get a stat directly from the match objects
+        var getStat = function(team, matches, statName){
 
-            //create stats for the entire team total
-            team['stats'] = {};
-
-            //create stats for each member
-            angular.forEach(team.members, function(member){
-                member['stats'] = {};
-            });
-
-
-            angular.forEach(statList, function(statName){
                 team.stats[statName] = {};
                 team.stats[statName]['perMatch'] = [];
 
@@ -400,7 +396,6 @@
                     var statTotal = 0;
 
                     angular.forEach(team.members, function(member){
-
 
                         var foundMember = false;
 
@@ -426,9 +421,7 @@
 
                 team.stats[statName]['average'] = getAverage(team.stats[statName].perMatch);
 
-            });
 
-            team = getKillParticipation(team);
 
             //return the team object with all the new data!
             return team;
@@ -479,6 +472,154 @@
             return team;
         };
 
+        var getMinionsKilledAt10Min = function(team, matches){
+            team.stats['minionsKilledAt10Min'] = {};
+            team.stats.minionsKilledAt10Min['perMatch'] = [];
+
+            angular.forEach(team.members, function(member) {
+                member.stats['minionsKilledAt10Min'] = {};
+                member.stats.minionsKilledAt10Min['perMatch'] = [];
+            });
+
+            angular.forEach(matches, function(match){
+                //variable to hold the total for a single match, which will then be pushed to team.stats[statName].perMatch
+                var statTotal = 0;
+
+                angular.forEach(team.members, function(member){
+
+                    var foundMember = false;
+
+                    for(var k = 0; k < match.participantIdentities.length; k ++){
+                        var participantIdentity = match.participantIdentities[k];
+                        var participant = match.participants[k];
+                        if (participantIdentity.player.summonerId == member.summonerId) {
+                            var csTimeline = participant.timeline.creepsPerMinDeltas;
+                            if(csTimeline.thirtyToEnd){
+                                var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
+                                var csMinAt30 = csMinAtEnd / ((csTimeline.thirtyToEnd / 100) + 1);
+                                var csMinAt20 = csMinAt30 / ((csTimeline.twentyToThirty / 100) + 1);
+                                var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
+                                var csAt10 = csMinAt10 * 10;
+                            }
+                            else if (csTimeline.twentyToThirty){
+                                var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
+                                var csMinAt20 = csMinAtEnd / ((csTimeline.twentyToThirty / 100) + 1);
+                                var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
+                                var csAt10 = csMinAt10 * 10;
+                            }
+                            else if (csTimeline.tenToTwenty){
+                                var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
+                                var csMinAt10 = csMinAtEnd / ((csTimeline.tenToTwenty / 100) + 1);
+                                var csAt10 = csMinAt10 * 10;
+                            }
+                            member.stats.minionsKilledAt10Min.perMatch.push(csAt10);
+                            statTotal += csAt10;
+                            foundMember = true;
+                        }
+                    }
+                    if (foundMember == false){
+                        member.stats.minionsKilledAt10Min.perMatch.push(null);
+                    }
+
+                    //get the average for the stat from all games
+                    member.stats.minionsKilledAt10Min['average'] = getAverage(member.stats.minionsKilledAt10Min.perMatch);
+                });
+                team.stats.minionsKilledAt10Min.perMatch.push(statTotal);
+
+            });
+
+            team.stats.minionsKilledAt10Min['average'] = getAverage(team.stats.minionsKilledAt10Min.perMatch);
+
+
+
+            //return the team object with all the new data!
+            return team;
+        };
+
+        var getMinionsKilledPerMin= function(team){
+            team.stats['minionsKilledPerMin'] = {};
+            team.stats.minionsKilledPerMin['perMatch'] = [];
+
+            angular.forEach(team.members, function(member) {
+
+                member.stats['minionsKilledPerMin'] = {};
+                member.stats.minionsKilledPerMin['perMatch'] = [];
+
+                for(var x = 0; x < member.stats.minionsKilled.perMatch.length; x++){
+                    member.stats.minionsKilledPerMin.perMatch.push(member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                    if(!team.stats.minionsKilledPerMin.perMatch[x]){
+                        team.stats.minionsKilledPerMin.perMatch.push(member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                    }
+                    else{
+                        team.stats.minionsKilledPerMin.perMatch[x] += (member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]);
+
+                    }
+
+                }
+                member.stats.minionsKilledPerMin['average'] = getAverage(member.stats.minionsKilledPerMin.perMatch);
+            });
+
+            team.stats.minionsKilledPerMin['average'] = getAverage(team.stats.minionsKilledPerMin.perMatch);
+
+            return team;
+        };
+
+        var getWardsKilledPerMin= function(team){
+            team.stats['wardsKilledPerMin'] = {};
+            team.stats.wardsKilledPerMin['perMatch'] = [];
+
+            angular.forEach(team.members, function(member) {
+
+                member.stats['wardsKilledPerMin'] = {};
+                member.stats.wardsKilledPerMin['perMatch'] = [];
+
+                for(var x = 0; x < member.stats.wardsKilled.perMatch.length; x++){
+                    member.stats.wardsKilledPerMin.perMatch.push(member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                    if(!team.stats.wardsKilledPerMin.perMatch[x]){
+                        team.stats.wardsKilledPerMin.perMatch.push(member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]);
+                    }
+                    else{
+                        team.stats.wardsKilledPerMin.perMatch[x] += (member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]);
+
+                    }
+
+                }
+                member.stats.wardsKilledPerMin['average'] = getAverage(member.stats.wardsKilledPerMin.perMatch);
+            });
+
+            team.stats.wardsKilledPerMin['average'] = getAverage(team.stats.wardsKilledPerMin.perMatch);
+
+            return team;
+        };
+
+        var getWardsPlacedPerMin= function(team){
+            team.stats['wardsPlacedPerMin'] = {};
+            team.stats.wardsPlacedPerMin['perMatch'] = [];
+
+            angular.forEach(team.members, function(member) {
+
+                member.stats['wardsPlacedPerMin'] = {};
+                member.stats.wardsPlacedPerMin['perMatch'] = [];
+
+                for(var x = 0; x < member.stats.wardsPlaced.perMatch.length; x++){
+                    member.stats.wardsPlacedPerMin.perMatch.push(member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]);
+                    if(!team.stats.wardsPlacedPerMin.perMatch[x]){
+                        team.stats.wardsPlacedPerMin.perMatch.push(member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]);
+                    }
+                    else{
+                        team.stats.wardsPlacedPerMin.perMatch[x] += (member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]);
+
+                    }
+
+                }
+                member.stats.wardsPlacedPerMin['average'] = getAverage(member.stats.wardsPlacedPerMin.perMatch);
+            });
+
+            team.stats.wardsPlacedPerMin['average'] = getAverage(team.stats.wardsPlacedPerMin.perMatch);
+
+            return team;
+        };
+
         //averages whatever stat you send in
         var getAverage = function(statPerMatch){
 
@@ -486,7 +627,7 @@
             var dividend = 0;
 
             angular.forEach(statPerMatch, function(value){
-                if(value){
+                if(value || value === 0){
                     total += value;
                     dividend++;
                 }
@@ -494,7 +635,7 @@
 
 
             //return a number that is the average for the given stat
-            return parseFloat((total / dividend).toFixed(2));
+            return parseFloat((total / dividend)) || 0;
         };
 
     }]);
