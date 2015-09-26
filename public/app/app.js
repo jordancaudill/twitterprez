@@ -309,7 +309,7 @@
                     //define chart options here
                     datasetFill : false,
                     bezierCurve : false,
-                    scaleGridLineColor : "#888888",
+                    scaleGridLineColor : "#666666",
                     scaleFontSize: 16,
                     tooltipFontSize: 16,
                     scaleFontColor: "#cccccc",

@@ -1,7 +1,7 @@
 /* Colors */
 body {
   text-align: center;
-  background: url(../img/background5.jpg) no-repeat center center fixed;
+  background: url(../img/background6.jpg) no-repeat center center fixed;
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -31,7 +31,6 @@ body {
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
     font-size: 20px; }
     body #summonerForm #region {
-      -webkit-appearance: none;
       background: -webkit-linear-gradient(#A03550, #490012);
       /* For Safari 5.1 to 6.0 */
       background: -o-linear-gradient(#A03550, #490012);
