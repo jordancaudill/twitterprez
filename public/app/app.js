@@ -309,7 +309,9 @@
                     //define chart options here
                     datasetFill : false,
                     bezierCurve : false,
-                    scaleGridLineColor : "#666666",
+                    scaleGridLineColor : "#888888",
+                    scaleFontSize: 16,
+                    tooltipFontSize: 16,
                     scaleFontColor: "#cccccc",
                     tooltipFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
                     scaleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
@@ -335,6 +337,9 @@
                     //define chart options here
                     animationEasing: "easeOutQuint",
                     animateScale: true,
+                    scaleFontSize: 16,
+                    tooltipFontSize: 16,
+                    segmentStrokeColor: "#dddddd",
                     tooltipFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
                     tooltipTitleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
                     scaleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'"
