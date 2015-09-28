@@ -291,6 +291,9 @@
                 for(var i = 0; i < DESIRED_GAMES; i++)
                 {
                     data.labels[i] = 'Match ' + (i + 1);
+                    if(i == 0){
+                        data.labels[i] = 'Match ' + (i + 1) + ' (latest)';
+                    }
                 }
 
                 angular.forEach($scope.team.members, function (member) {
@@ -322,27 +325,34 @@
 
             });
             }
-            //a pie chart showing the average for a stat for each member
+            //a bar chart showing the average for a stat for each member
             else if(average){
-                var data = [];
+                var data = {};
+                data['labels'] = ['Averages'];
+                data.datasets = [];
                 angular.forEach($scope.team.members, function (member) {
+                    var datasets = data.datasets;
                     var playerData = {};
                     playerData['label'] = member.summonerName;
-                    playerData['color'] = member.color;
-                    playerData['highlight'] = member.darkColor;
-                    playerData['value'] = member.stats[statName].average;
-                    data.push(playerData);
+                    playerData['fillColor'] = member.color;
+                    playerData['strokeColor'] = member.darkColor;
+                    playerData['data'] = [];
+                    playerData.data.push(member.stats[statName].average);
+                    datasets.push(playerData);
                 });
-                new Chart(ctx).Pie(data, {
+                new Chart(ctx).Bar(data, {
                     //define chart options here
                     animationEasing: "easeOutQuint",
-                    animateScale: true,
                     scaleFontSize: 16,
+                    scaleBeginAtZero: false,
+                    scaleGridLineColor : "#666666",
+                    barValueSpacing: 0,
+                    barStrokeWidth: 3,
                     tooltipFontSize: 16,
-                    segmentStrokeColor: "#dddddd",
+                    scaleFontColor: "#cccccc",
+                    scaleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
                     tooltipFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
-                    tooltipTitleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
-                    scaleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'"
+                    tooltipTitleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'"
 
                 });
             }

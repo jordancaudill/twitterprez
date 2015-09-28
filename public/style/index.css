@@ -18,14 +18,14 @@ body {
       @media screen and (min-width: 768px) {
         body header #logo {
           font-size: 4em; } }
-    body header #slogan {
+    body header .slogan {
       font-family: "PT Serif", Helvetica, Arial, sans-serif;
       color: white;
       font-size: 1em;
       text-align: center; }
       @media screen and (min-width: 768px) {
-        body header #slogan {
-          font-size: 1.2em; } }
+        body header .slogan {
+          font-size: 1.1em; } }
   body #summonerForm {
     margin-top: 5px;
     font-family: "PT Serif", Helvetica, Arial, sans-serif;
