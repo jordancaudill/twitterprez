@@ -574,16 +574,19 @@
                 member.stats.minionsKilledPerMin['perMatch'] = [];
 
                 for(var x = 0; x < member.stats.minionsKilled.perMatch.length; x++){
-                    var minionsKilledPerMin = parseFloat((member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                    if(member.stats.minionsKilled.perMatch[x] == null){
+                        var minionsKilledPerMin = null;
+                    }
+                    else {
+                        var minionsKilledPerMin = parseFloat((member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                    }
                     member.stats.minionsKilledPerMin.perMatch.push(minionsKilledPerMin);
                     if(!team.stats.minionsKilledPerMin.perMatch[x]){
                         team.stats.minionsKilledPerMin.perMatch.push(minionsKilledPerMin);
                     }
                     else{
                         team.stats.minionsKilledPerMin.perMatch[x] += (minionsKilledPerMin);
-
                     }
-
                 }
                 member.stats.minionsKilledPerMin['average'] = getAverage(member.stats.minionsKilledPerMin.perMatch);
             });
@@ -603,7 +606,12 @@
                 member.stats.wardsKilledPerMin['perMatch'] = [];
 
                 for(var x = 0; x < member.stats.wardsKilled.perMatch.length; x++){
-                    var wardsKilledPerMin = parseFloat((member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                    if(member.stats.wardsKilled.perMatch[x] == null){
+                        var wardsKilledPerMin = null;
+                    }
+                    else {
+                        var wardsKilledPerMin = parseFloat((member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                    }
                     member.stats.wardsKilledPerMin.perMatch.push(wardsKilledPerMin);
                     if(!team.stats.wardsKilledPerMin.perMatch[x]){
                         team.stats.wardsKilledPerMin.perMatch.push(wardsKilledPerMin);
@@ -632,7 +640,13 @@
                 member.stats.wardsPlacedPerMin['perMatch'] = [];
 
                 for(var x = 0; x < member.stats.wardsPlaced.perMatch.length; x++){
-                    var wardsplacedPerMin = parseFloat((member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                    if(member.stats.wardsPlaced.perMatch[x] == null){
+                        var wardsplacedPerMin = null;
+                    }
+                    else {
+                        var wardsplacedPerMin = parseFloat((member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                    }
+
                     member.stats.wardsPlacedPerMin.perMatch.push(wardsplacedPerMin);
                     if(!team.stats.wardsPlacedPerMin.perMatch[x]){
                         team.stats.wardsPlacedPerMin.perMatch.push(wardsplacedPerMin);
