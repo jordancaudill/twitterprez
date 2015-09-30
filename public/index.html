@@ -40,7 +40,6 @@
                             {{error}}
                     </div>
                 </div>
-
                 <div class="row">
                     <div ng-hide="teamClicked" class="col-xs-12 text-center team" ng-repeat="team in teams">
                         <button ng-click="getMatches(team, selectedRegion)" class="team-btn">{{team.name}}</button>
@@ -58,7 +57,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-4">
-                            <select ng-show="teamClicked" ng-model="selectedStat" ng-init="selectedStat = defaultStat" ng-change="makeChart(selectedStat, average, teamTotal)" id="stat" ng-selected="statNameList[0]" ng-options="statName for statName in statNameList"></select>
+                            <select ng-show="teamClicked" ng-model="selectedStat" ng-init="selectedStat = defaultStat" ng-change="makeChart(selectedStat, average, teamTotal)" id="stat" ng-selected="statNameList[0]"  ng-options="statName for statName in statNameList"></select>
                         </div>
                         <form class="col-xs-12 col-sm-4">
                             <div align="left" class="checkbox">

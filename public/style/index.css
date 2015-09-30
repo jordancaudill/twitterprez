@@ -169,16 +169,16 @@ body {
     width: 280px; }
   @media screen and (min-width: 768px) {
     #chartContainer #chart {
-      width: 400px;
-      height: 300px; } }
+      width: 600px;
+      height: 400px; } }
   @media screen and (min-width: 992px) {
     #chartContainer #chart {
-      width: 600px;
+      width: 700px;
       height: 450px; } }
   @media screen and (min-width: 1200px) {
     #chartContainer #chart {
       width: 800px;
-      height: 600px; } }
+      height: 540px; } }
 
 .checkbox {
   text-align: left; }

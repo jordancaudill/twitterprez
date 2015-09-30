@@ -94,6 +94,7 @@
             //call to service to get summoner by summoner name
             getSummoner.getSummoner(summonerName, region).then(function(response) {
                 if(response[summonerName]){
+                    $scope.summonerId = response[summonerName].id;
                     getUserTeams(response[summonerName].id, summonerName, region);
                 }
                 else{
@@ -122,9 +123,7 @@
         $scope.getMatches = function(selectedTeam, region) {
             $scope.isError = false;
 
-
             $scope.selectedTeam = selectedTeam.name;
-            $scope.teamClicked = true;
 
             var teamName = selectedTeam.name;
 
@@ -135,12 +134,26 @@
 
             //array that holds the ids for each game in the match history
             var matchIds = [];
+            $scope.opposingTeamNames = [];
 
             //gathers the match Ids from match history
-            for (i = 0; i < DESIRED_GAMES; i++) {
+            for (var i = 0; i < selectedTeam.matchHistory.length; i++) {
                 var match = selectedTeam.matchHistory[i];
-                matchIds[i] = match.gameId;
+                //if it's played on summoner's rift and we haven't hit the max amount of DESIRED_GAMES
+                if(match.mapId == 11 && matchIds.length < DESIRED_GAMES){
+                    $scope.opposingTeamNames.push(match.opposingTeamName);
+                    matchIds.push(match.gameId);
+                }
+
             }
+
+            //if there are no matches played on summoners rift
+            if(matchIds.length == 0){
+                $scope.error = selectedTeam.name + ' has not played any Ranked 5v5 matches recently.';
+                $scope.isError = true;
+                $scope.teamClicked = false;
+            }
+
 
 
             var myPromise = getMatchDetails.getMatchDetails(matchIds, teamName, region);
@@ -155,7 +168,7 @@
                 else{
                     $scope.error = response[response.length - 1].data;
                     $scope.isError = true;
-
+                    $scope.teamClicked = false;
                 }
             }.bind(this));
 
@@ -163,6 +176,8 @@
 
         //organizes all the data grabbed from matches into an easy to navigate object
         var processData = function(matches, selectedTeam){
+
+            $scope.selectedStat = $scope.defaultStat;
 
             //go through each match, and if it isn't a 5v5 match, remove it from the matches array
             var x = 0;
@@ -181,6 +196,7 @@
             //get all team members that have played in matches from the match history
             team['members'] = getMembers(selectedTeam, matches);
 
+
             //add colors to the team object so the legend can be dynamically generated
             team = addColors(team);
 
@@ -193,6 +209,7 @@
                 team.stats.matchDurations.push(match.matchDuration / 60);
             });
 
+            console.log(selectedTeam);
 
             //create stats object for each member
             angular.forEach(team.members, function(member){
@@ -215,34 +232,55 @@
             team = getWardsPlacedPerMin(team);
             team = getMinionsKilledAt10Min(team, matches);
 
-
-
             $scope.team = team;
+            console.log(team);
+            console.log(matches);
 
-            $scope.makeChart($scope.defaultStat, $scope.average, $scope.teamTotal);
-
+            //if there are members on the team
+                $scope.teamClicked = true;
+                $scope.makeChart($scope.defaultStat, $scope.average, $scope.teamTotal);
+            ////if the team has no members a.k.a. no 5v5 games played
+            //else {
+            //    $scope.error = selectedTeam.name + ' has not played any Ranked 5v5 matches recently.';
+            //    $scope.isError = true;
+            //    $scope.teamClicked = false;
+            //}
         };
 
         //gets the team member ids of the players CURRENTLY on the team
         var getMembers = function(selectedTeam, matches) {
             var members = {};
-            var rosterIds = [];
-
-            for (i = 0; i < selectedTeam.roster.memberList.length; i++) {
-                var member = selectedTeam.roster.memberList[i];
-                rosterIds[i] = member.playerId;
-            }
+            var memberCount = 0;
+            var roster = selectedTeam.roster.memberList;
 
             angular.forEach(matches, function(match){
-                angular.forEach(match.participantIdentities, function(participant){
-                    angular.forEach(rosterIds, function(aRosterId){
-                        if (participant.player.summonerId == aRosterId){
-                            members[participant.player.summonerName] = {};
-                            members[participant.player.summonerName]['summonerName'] = participant.player.summonerName;
-                            members[participant.player.summonerName]['summonerId'] = participant.player.summonerId;
-                        }
-                    });
-                });
+                if(match.queueType == 'RANKED_TEAM_5x5'){
+                    for(var x = 0; x < match.participantIdentities.length; x++){
+                        var participant = match.participantIdentities[x];
+                        angular.forEach(roster, function(rosterMember){
+                            if (participant.player.summonerId == rosterMember.playerId && x <= 4){
+                                for(var p = 0; p <= 4; p++){
+                                    var member = match.participantIdentities[p];
+                                    if(!members[member.player.summonerName]){
+                                        members[member.player.summonerName] = {};
+                                        members[member.player.summonerName]['summonerName'] = member.player.summonerName;
+                                        members[member.player.summonerName]['summonerId'] = member.player.summonerId;
+                                    }
+                                }
+                            }
+                            else if (participant.player.summonerId == rosterMember.playerId && x >= 5){
+                                for(var k = 5; k >= 9 ; k++){
+                                    var member = match.participantIdentities[k];
+                                    if(!members[member.player.summonerName]){
+                                        members[member.player.summonerName] = {};
+                                        members[member.player.summonerName]['summonerName'] = member.player.summonerName;
+                                        members[member.player.summonerName]['summonerId'] = member.player.summonerId;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
             });
             return members;
         };
@@ -288,12 +326,9 @@
                 data.datasets = [];
                 data.labels = [];
 
-                for(var i = 0; i < DESIRED_GAMES; i++)
+                for(var i = 0; i < $scope.opposingTeamNames.length; i++)
                 {
-                    data.labels[i] = 'Match ' + (i + 1);
-                    if(i == 0){
-                        data.labels[i] = 'Match ' + (i + 1) + ' (latest)';
-                    }
+                    data.labels[i] = $scope.opposingTeamNames[i];
                 }
 
                 angular.forEach($scope.team.members, function (member) {
@@ -313,7 +348,7 @@
                     datasetFill : false,
                     bezierCurve : false,
                     scaleGridLineColor : "#666666",
-                    scaleFontSize: 16,
+                    scaleFontSize: 14,
                     tooltipFontSize: 16,
                     scaleFontColor: "#cccccc",
                     tooltipFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
@@ -395,16 +430,16 @@
                                 '#893D18',
                                 '#3D7916',
                                 '#1D1D61',
-                                '#16B9A8',
+                                '#009888',
                                 '#04329D',
-                                '#6b0392',
-                                '#580276',
-                                '#C18433',
-                                '#C1A449',
-                                '#625559',
-                                '#8E9D12',
-                                '#406DD4',
-                                '#932AB8'];
+                                '#410158',
+                                '#AE1D12',
+                                '#996117',
+                                '#9C7F25',
+                                '#31272A',
+                                '#697600',
+                                '#2051C1',
+                                '#7B07A5'];
 
 
 

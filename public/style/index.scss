@@ -211,14 +211,14 @@ body{
 
   @media screen and (min-width: 768px) {
     #chart{
-      width: 400px;
-      height: 300px;
+      width: 600px;
+      height: 400px;
     }
   }
 
   @media screen and (min-width: 992px) {
     #chart{
-      width: 600px;
+      width: 700px;
       height: 450px;
     }
   }
@@ -226,7 +226,7 @@ body{
   @media screen and (min-width: 1200px) {
     #chart{
       width: 800px;
-      height: 600px;
+      height: 540px;
     }
   }
 }
