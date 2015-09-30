@@ -209,7 +209,6 @@
                 team.stats.matchDurations.push(match.matchDuration / 60);
             });
 
-            console.log(selectedTeam);
 
             //create stats object for each member
             angular.forEach(team.members, function(member){
@@ -233,8 +232,6 @@
             team = getMinionsKilledAt10Min(team, matches);
 
             $scope.team = team;
-            console.log(team);
-            console.log(matches);
 
             //if there are members on the team
                 $scope.teamClicked = true;
