@@ -105,44 +105,16 @@ body{
 
 
   footer {
-
-      #creator{
-        width: 100px;
-        left: 30%;
-        position: fixed;
-        bottom: 0;
-
-        p{
-          font-family: "PT Serif", Helvetica, Arial, sans-serif;
-          color: #dddddd;
-          text-align: left;
-        }
-      }
-
-      #creator:hover {
-        p{
-          color: $brand-highlight;
-        }
-      }
-
-
-    #legal{
-      font-family: "PT Serif", Helvetica, Arial, sans-serif;
-      color: #dddddd;
-      width: 100px;
-      border-style: none;
-      position: fixed;
-      bottom: 0;
-      right: 30%;
-      margin-bottom: 10px;
-      text-align: right;
-
+    position:fixed;
+    bottom:0;
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+    color: white;
+    #creator, #creator, #docs{
+      color: $brand;
     }
-
-    #legal:hover {
+    #creator:hover, #legal:hover, #docs:hover {
       color: $brand-highlight;
     }
-
   }
 
 
