@@ -86,29 +86,19 @@ body {
       color: white; }
     body #summonerForm #enterSummoner:hover {
       color: #ECA0B3; }
-  body footer #creator {
-    width: 100px;
-    left: 30%;
+  body footer p {
     position: fixed;
-    bottom: 0; }
-    body footer #creator p {
-      font-family: "PT Serif", Helvetica, Arial, sans-serif;
-      color: #dddddd;
-      text-align: left; }
-  body footer #creator:hover p {
-    color: #ECA0B3; }
-  body footer #legal {
-    font-family: "PT Serif", Helvetica, Arial, sans-serif;
-    color: #dddddd;
-    width: 100px;
-    border-style: none;
-    position: fixed;
+    right: 15px;
     bottom: 0;
-    right: 30%;
-    margin-bottom: 10px;
-    text-align: right; }
-  body footer #legal:hover {
-    color: #ECA0B3; }
+    text-align: center;
+    font-family: "PT Serif", Helvetica, Arial, sans-serif;
+    color: #bbbbbb; }
+    body footer p #creator, body footer p #legal, body footer p #docs {
+      color: #A03550; }
+    body footer p #legal {
+      color: #A03550; }
+    body footer p #creator:hover, body footer p #legal:hover, body footer p #docs:hover {
+      color: #ECA0B3; }
   body .team button {
     margin-top: 15px;
     font-family: "PT Serif", Helvetica, Arial, sans-serif;

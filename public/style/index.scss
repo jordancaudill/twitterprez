@@ -105,15 +105,22 @@ body{
 
 
   footer {
-    position:fixed;
-    bottom:0;
-    font-family: "PT Serif", Helvetica, Arial, sans-serif;
-    color: white;
-    #creator, #creator, #docs{
-      color: $brand;
-    }
-    #creator:hover, #legal:hover, #docs:hover {
-      color: $brand-highlight;
+    p {
+      position:fixed;
+      right: 15px;
+      bottom:0;
+      text-align: center;
+      font-family: "PT Serif", Helvetica, Arial, sans-serif;
+      color: #bbbbbb;
+      #creator, #legal, #docs{
+        color: $brand;
+      }
+      #legal{
+        color: $brand;
+      }
+      #creator:hover, #legal:hover, #docs:hover {
+        color: $brand-highlight;
+      }
     }
   }
 
