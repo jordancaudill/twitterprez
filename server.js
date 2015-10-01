@@ -1,6 +1,5 @@
 var express = require('express');
 var request = require('request');
-var timeout = require('connect-timeout');
 var q = require('q');
 var app = express();
 
@@ -19,7 +18,6 @@ app.listen(port, function () {
     console.log('Jordans server is running on localhost: ' + port);
 });
 app.use(express.static('public'));
-app.use(timeout(5000));
 
 app.get('/summoner/:region/:name', function (req, res){
     var name = req.params.name;
@@ -34,10 +32,6 @@ app.get('/summoner/:region/:name', function (req, res){
         else if(error){
             console.log('error caught');
             res.send(error);
-        }
-        else if(req.timedout){
-            console.log('timeout');
-            res.send('Request has timed out.');
         }
         else if(response.statusCode == 404){
             console.log('404 Not Found');
@@ -71,9 +65,6 @@ app.get('/teams/:region/:summonerId', function (req, res){
         else if(error){
             res.send(error);
         }
-        else if(req.timedout){
-            res.send('Request has timed out.');
-        }
         else if(response.statusCode == 404){
             console.log('404 Not Found: teams');
             res.send('Could not find teams');
@@ -106,9 +97,6 @@ app.get('/match/:region/:matchId', function (req, res){
         }
         else if(error){
             res.send(error);
-        }
-        else if(req.timedout){
-            res.send('Request has timed out.');
         }
         else if(response.statusCode == 404){
             console.log('404 Not Found');
