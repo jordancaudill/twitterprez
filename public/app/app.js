@@ -156,24 +156,27 @@
                 $scope.isError = true;
                 $scope.teamClicked = false;
             }
+            else{
+                var myPromise = getMatchDetails.getMatchDetails(matchIds, teamName, region);
+                //runs once a response has been received for every matchDetails request
+                myPromise.then(function(response){
+                    $scope.isError = false;
+                    //if getting the matches is successful
+                    if (response[response.length - 1].matchType) {
+                        processData(response, selectedTeam);
+                    }
+                    //currently have it set so that it will display error if every desired game is not gotten
+                    else{
+                        $scope.error = response[response.length - 1].data;
+                        $scope.isError = true;
+                        $scope.teamClicked = false;
+                    }
+                }.bind(this));
+
+            }
 
 
 
-            var myPromise = getMatchDetails.getMatchDetails(matchIds, teamName, region);
-            //runs once a response has been received for every matchDetails request
-            myPromise.then(function(response){
-                $scope.isError = false;
-                //if getting the matches is successful
-                if (response[response.length - 1].matchType) {
-                    processData(response, selectedTeam);
-                }
-                //currently have it set so that it will display error if every desired game is not gotten
-                else{
-                    $scope.error = response[response.length - 1].data;
-                    $scope.isError = true;
-                    $scope.teamClicked = false;
-                }
-            }.bind(this));
 
         };
 
