@@ -100,6 +100,7 @@
                 else{
                     $scope.error = response;
                     $scope.isError = true;
+                    $scope.searched = false;
                 }
 
             });

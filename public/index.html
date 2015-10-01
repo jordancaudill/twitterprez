@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div ng-hide="teamClicked" class="col-xs-12 text-center team" ng-repeat="team in teams">
+                    <div ng-show="searched" ng-hide="teamClicked" class="col-xs-12 text-center team" ng-repeat="team in teams">
                         <button ng-click="getMatches(team, selectedRegion)" class="team-btn">{{team.name}}</button>
                     </div>
                 </div>
