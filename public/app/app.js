@@ -32,8 +32,8 @@
             'Wards Placed per Minute',
             'Wards Killed per Minute',
             'Total Damage Dealt To Champions',
-            'CS per Minute',
-            'CS @ 10 Minutes'
+            'CS per Minute'
+            //'CS @ 10 Minutes'
         ];
 
         $scope.statNameList = statNameList;
@@ -77,7 +77,9 @@
                 }
                 if(size2 != $scope.size1){
                     $scope.size1 = size2;
-                    $scope.makeChart($scope.selectedStat, $scope.average, $scope.teamTotal);
+                    if($scope.teamClicked){
+                        $scope.makeChart($scope.selectedStat, $scope.average, $scope.teamTotal);
+                    }
                 }
             });
 
@@ -230,7 +232,7 @@
             team = getMinionsKilledPerMin(team);
             team = getWardsKilledPerMin(team);
             team = getWardsPlacedPerMin(team);
-            team = getMinionsKilledAt10Min(team, matches);
+            //team = getMinionsKilledAt10Min(team, matches);
 
             $scope.team = team;
 
@@ -307,9 +309,9 @@
                 case 'CS per Minute':
                     statName = 'minionsKilledPerMin';
                     break;
-                case 'CS @ 10 Minutes':
-                    statName = 'minionsKilledAt10Min';
-                    break;
+                //case 'CS @ 10 Minutes':
+                //    statName = 'minionsKilledAt10Min';
+                //    break;
                 default:
                     break;
             }
@@ -543,69 +545,69 @@
             return team;
         };
 
-        var getMinionsKilledAt10Min = function(team, matches){
-            team.stats['minionsKilledAt10Min'] = {};
-            team.stats.minionsKilledAt10Min['perMatch'] = [];
-
-            angular.forEach(team.members, function(member) {
-                member.stats['minionsKilledAt10Min'] = {};
-                member.stats.minionsKilledAt10Min['perMatch'] = [];
-            });
-
-            angular.forEach(matches, function(match){
-                //variable to hold the total for a single match, which will then be pushed to team.stats[statName].perMatch
-                var statTotal = 0;
-
-                angular.forEach(team.members, function(member){
-
-                    var foundMember = false;
-
-                    for(var k = 0; k < match.participantIdentities.length; k ++){
-                        var participantIdentity = match.participantIdentities[k];
-                        var participant = match.participants[k];
-                        if (participantIdentity.player.summonerId == member.summonerId) {
-                            var csTimeline = participant.timeline.creepsPerMinDeltas;
-                            if(csTimeline.thirtyToEnd){
-                                var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
-                                var csMinAt30 = csMinAtEnd / ((csTimeline.thirtyToEnd / 100) + 1);
-                                var csMinAt20 = csMinAt30 / ((csTimeline.twentyToThirty / 100) + 1);
-                                var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
-                                var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
-                            }
-                            else if (csTimeline.twentyToThirty){
-                                var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
-                                var csMinAt20 = csMinAtEnd / ((csTimeline.twentyToThirty / 100) + 1);
-                                var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
-                                var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
-                            }
-                            else if (csTimeline.tenToTwenty){
-                                var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
-                                var csMinAt10 = csMinAtEnd / ((csTimeline.tenToTwenty / 100) + 1);
-                                var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
-                            }
-                            member.stats.minionsKilledAt10Min.perMatch.push(csAt10);
-                            statTotal += csAt10;
-                            foundMember = true;
-                        }
-                    }
-                    if (foundMember == false){
-                        member.stats.minionsKilledAt10Min.perMatch.push(null);
-                    }
-
-                    //get the average for the stat from all games
-                    member.stats.minionsKilledAt10Min['average'] = getAverage(member.stats.minionsKilledAt10Min.perMatch);
-                });
-                team.stats.minionsKilledAt10Min.perMatch.push(statTotal);
-
-            });
-
-            team.stats.minionsKilledAt10Min['average'] = getAverage(team.stats.minionsKilledAt10Min.perMatch);
-
-
-
-            //return the team object with all the new data!
-            return team;
-        };
+        //var getMinionsKilledAt10Min = function(team, matches){
+        //    team.stats['minionsKilledAt10Min'] = {};
+        //    team.stats.minionsKilledAt10Min['perMatch'] = [];
+        //
+        //    angular.forEach(team.members, function(member) {
+        //        member.stats['minionsKilledAt10Min'] = {};
+        //        member.stats.minionsKilledAt10Min['perMatch'] = [];
+        //    });
+        //
+        //    angular.forEach(matches, function(match){
+        //        //variable to hold the total for a single match, which will then be pushed to team.stats[statName].perMatch
+        //        var statTotal = 0;
+        //
+        //        angular.forEach(team.members, function(member){
+        //
+        //            var foundMember = false;
+        //
+        //            for(var k = 0; k < match.participantIdentities.length; k ++){
+        //                var participantIdentity = match.participantIdentities[k];
+        //                var participant = match.participants[k];
+        //                if (participantIdentity.player.summonerId == member.summonerId) {
+        //                    var csTimeline = participant.timeline.creepsPerMinDeltas;
+        //                    if(csTimeline.thirtyToEnd){
+        //                        var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
+        //                        var csMinAt30 = csMinAtEnd / ((csTimeline.thirtyToEnd / 100) + 1);
+        //                        var csMinAt20 = csMinAt30 / ((csTimeline.twentyToThirty / 100) + 1);
+        //                        var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
+        //                        var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
+        //                    }
+        //                    else if (csTimeline.twentyToThirty){
+        //                        var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
+        //                        var csMinAt20 = csMinAtEnd / ((csTimeline.twentyToThirty / 100) + 1);
+        //                        var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
+        //                        var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
+        //                    }
+        //                    else if (csTimeline.tenToTwenty){
+        //                        var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
+        //                        var csMinAt10 = csMinAtEnd / ((csTimeline.tenToTwenty / 100) + 1);
+        //                        var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
+        //                    }
+        //                    member.stats.minionsKilledAt10Min.perMatch.push(csAt10);
+        //                    statTotal += csAt10;
+        //                    foundMember = true;
+        //                }
+        //            }
+        //            if (foundMember == false){
+        //                member.stats.minionsKilledAt10Min.perMatch.push(null);
+        //            }
+        //
+        //            //get the average for the stat from all games
+        //            member.stats.minionsKilledAt10Min['average'] = getAverage(member.stats.minionsKilledAt10Min.perMatch);
+        //        });
+        //        team.stats.minionsKilledAt10Min.perMatch.push(statTotal);
+        //
+        //    });
+        //
+        //    team.stats.minionsKilledAt10Min['average'] = getAverage(team.stats.minionsKilledAt10Min.perMatch);
+        //
+        //
+        //
+        //    //return the team object with all the new data!
+        //    return team;
+        //};
 
         var getMinionsKilledPerMin= function(team){
             team.stats['minionsKilledPerMin'] = {};
