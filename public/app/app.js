@@ -5,7 +5,7 @@
     var app = angular.module('league', []);
 
     //controller definition
-    app.controller('UserController', ['$scope', '$q', 'getSummoner', 'getTeams', 'getMatchDetails', 'convertToReadable', 'convertToCamelCase', function($scope, $q,  getSummoner, getTeams, getMatchDetails, convertToReadable, convertToCamelCase){
+    app.controller('UserController', ['$scope', '$q', 'getSummoner', 'getTeams', 'getMatchDetails', 'convertToReadable', 'convertToCamelCase', '$interval', function($scope, $q,  getSummoner, getTeams, getMatchDetails, convertToReadable, convertToCamelCase, $interval){
 
         //how many games I want to grab from a match history
         var DESIRED_GAMES = 5;
@@ -93,19 +93,34 @@
             $scope.searched = true;
             $scope.isError = false;
             var summonerName = summoner.toLowerCase().replace(/ /g,'');
-            //call to service to get summoner by summoner name
-            getSummoner.getSummoner(summonerName, region).then(function(response) {
-                if(response[summonerName]){
-                    $scope.summonerId = response[summonerName].id;
-                    getUserTeams(response[summonerName].id, summonerName, region);
-                }
-                else{
-                    $scope.error = response;
-                    $scope.isError = true;
-                    $scope.searched = false;
-                }
 
-            });
+
+            var j = 0;
+            var stop = 500;
+
+            $interval(function(){
+                if(j != stop){
+                    //call to service to get summoner by summoner name
+                    getSummoner.getSummoner(summonerName, region).then(function(response) {
+                        if(response[summonerName]){
+                            $scope.summonerId = response[summonerName].id;
+                            //getUserTeams(response[summonerName].id, summonerName, region);
+                            //console.log('request successful');
+                            console.log(response);
+                        }
+                        else{
+                            console.log('request unsuccessful');
+                            console.log(response);
+                            $scope.error = response;
+                            $scope.isError = true;
+                            $scope.searched = false;
+                        }
+
+                    });
+                    j++;
+                }
+            }, 3000);
+
         };
 
         //call to service to get teams by summoner ID

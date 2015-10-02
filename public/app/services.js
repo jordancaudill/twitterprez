@@ -26,14 +26,14 @@
 
 
                         //request was successful
-                        if (response[summonerName]) {
-                            var summoner = {};
-                            summoner.storageTime = new Date().getTime();
-                            summoner.id = response[summonerName].id;
-                            summoner = JSON.stringify(summoner);
-                            localStorage.setItem(summonerName, summoner);
-
-                        }
+                        //if (response[summonerName]) {
+                        //    var summoner = {};
+                        //    summoner.storageTime = new Date().getTime();
+                        //    summoner.id = response[summonerName].id;
+                        //    summoner = JSON.stringify(summoner);
+                        //    localStorage.setItem(summonerName, summoner);
+                        //
+                        //}
                         return def.resolve(response);
 
                     });

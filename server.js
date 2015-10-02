@@ -7,12 +7,12 @@ var port = 3000;
 
 var apiKey = '?api_key=1fb7abdb-48e1-4526-b8f6-3cc8e15eea82';
 
-app.all("/*", function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
-    res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
-    return next();
-});
+//app.all("/*", function (req, res, next) {
+//    res.header("Access-Control-Allow-Origin", "*");
+//    res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+//    res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+//    return next();
+//});
 
 app.listen(port, function () {
     console.log('Jordans server is running on localhost: ' + port);
@@ -29,25 +29,29 @@ app.get('/summoner/:region/:name', function (req, res){
             console.log('request successful');
             res.send(body);
         }
-        else if(error){
-            console.log('error caught');
-            res.send(error);
-        }
-        else if(response.statusCode == 404){
-            console.log('404 Not Found');
-            res.send('Could not find Summoner');
-        }
-        else if(response.statusCode == 429){
-            console.log('rate limit exceeded');
-            res.send('Team Statter is receiving a lot of requests right now. Please try again in 10 seconds.');
-        }
-        else if(response.statusCode == 503){
-            console.log('API Offline');
-            res.send('Sorry, the League of Legends API is offline right now.');
-        }
+        //else if(error){
+        //    console.log('error caught');
+        //    res.send(error);
+        //}
+        //else if(req.timedout){
+        //    console.log('timeout');
+        //    res.send('Request has timed out.');
+        //}
+        //else if(response.statusCode == 404){
+        //    console.log('404 Not Found');
+        //    res.send('Could not find Summoner');
+        //}
+        //else if(response.statusCode == 429){
+        //    console.log('rate limit exceeded');
+        //    res.send('Team Statter is receiving a lot of requests right now. Please try again in 10 seconds.');
+        //}
+        //else if(response.statusCode == 503){
+        //    console.log('API Offline');
+        //    res.send('Sorry, the League of Legends API is offline right now.');
+        //}
         else {
             console.log('unknown error');
-            res.send('Unknown error occurred. Please report this to Jordan.')
+            res.send(body)
         }
     })
 });
