@@ -95,45 +95,50 @@
             var summonerName = summoner.toLowerCase().replace(/ /g,'');
 
 
-            var j = 0;
-            var stop = 500;
 
-            $interval(function(){
-                if(j != stop){
-                    //call to service to get summoner by summoner name
-                    getSummoner.getSummoner(summonerName, region).then(function(response) {
-                        if(response[summonerName]){
-                            $scope.summonerId = response[summonerName].id;
-                            //getUserTeams(response[summonerName].id, summonerName, region);
-                            //console.log('request successful');
-                            console.log(response);
-                        }
-                        else{
-                            console.log('request unsuccessful');
-                            console.log(response);
-                            $scope.error = response;
-                            $scope.isError = true;
-                            $scope.searched = false;
-                        }
-
-                    });
-                    j++;
+            //call to service to get summoner by summoner name
+            getSummoner.getSummoner(summonerName, region).then(function(response) {
+                if(response[summonerName]){
+                    $scope.summonerId = response[summonerName].id;
+                    console.log('request successful');
+                    console.log(response);
+                    getUserTeams(response[summonerName].id, summonerName, region);
                 }
-            }, 3000);
+                else{
+                    console.log('request unsuccessful');
+                    console.log(response);
+                    $scope.error = response;
+                    $scope.isError = true;
+                    $scope.searched = false;
+                }
+
+            });
+
 
         };
 
         //call to service to get teams by summoner ID
         var getUserTeams = function(summonerId, summonerName, region) {
-            $scope.gotTeams = true;
-            $scope.isError = false;
-            getTeams.getTeams(summonerId, summonerName, region).then(function(teams) {
-                if(teams){
-                    $scope.teams = teams;
+
+            var j = 0;
+            var stop = 300;
+            $interval(function(){
+                if(j != stop){
+                    console.log(j);
+                    j++;
+                    $scope.gotTeams = true;
+                    $scope.isError = false;
+                    getTeams.getTeams(summonerId, summonerName, region).then(function(teams) {
+                        console.log(teams);
+                        if(teams){
+                            $scope.teams = teams;
+                        }
+                        else{
+                        }
+                    });
                 }
-                else{
-                }
-            });
+            }, 3000);
+
         };
 
         //get the game information for the last (DESIRED_GAMES) in the user match history

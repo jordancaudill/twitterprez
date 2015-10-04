@@ -26,14 +26,14 @@
 
 
                         //request was successful
-                        //if (response[summonerName]) {
-                        //    var summoner = {};
-                        //    summoner.storageTime = new Date().getTime();
-                        //    summoner.id = response[summonerName].id;
-                        //    summoner = JSON.stringify(summoner);
-                        //    localStorage.setItem(summonerName, summoner);
-                        //
-                        //}
+                        if (response[summonerName]) {
+                            var summoner = {};
+                            summoner.storageTime = new Date().getTime();
+                            summoner.id = response[summonerName].id;
+                            summoner = JSON.stringify(summoner);
+                            localStorage.setItem(summonerName, summoner);
+
+                        }
                         return def.resolve(response);
 
                     });
@@ -55,10 +55,10 @@
                 }
                 else {
                     $http.get('http://'+host+'/teams/'+region+'/'+summonerId).success(function (response) {
-                        var summoner = JSON.parse(localStorage[summonerName]);
-                        summoner.teams = response[summonerId];
-                        summoner = JSON.stringify(summoner);
-                        localStorage.setItem(summonerName, summoner);
+                        //var summoner = JSON.parse(localStorage[summonerName]);
+                        //summoner.teams = response[summonerId];
+                        //summoner = JSON.stringify(summoner);
+                        //localStorage.setItem(summonerName, summoner);
 
 
                         return def.resolve(response[summonerId]);
