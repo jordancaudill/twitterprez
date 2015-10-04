@@ -100,13 +100,9 @@
             getSummoner.getSummoner(summonerName, region).then(function(response) {
                 if(response[summonerName]){
                     $scope.summonerId = response[summonerName].id;
-                    console.log('request successful');
-                    console.log(response);
                     getUserTeams(response[summonerName].id, summonerName, region);
                 }
                 else{
-                    console.log('request unsuccessful');
-                    console.log(response);
                     $scope.error = response;
                     $scope.isError = true;
                     $scope.searched = false;
@@ -120,24 +116,19 @@
         //call to service to get teams by summoner ID
         var getUserTeams = function(summonerId, summonerName, region) {
 
-            var j = 0;
-            var stop = 300;
-            $interval(function(){
-                if(j != stop){
-                    console.log(j);
-                    j++;
-                    $scope.gotTeams = true;
-                    $scope.isError = false;
-                    getTeams.getTeams(summonerId, summonerName, region).then(function(teams) {
-                        console.log(teams);
-                        if(teams){
-                            $scope.teams = teams;
-                        }
-                        else{
-                        }
-                    });
+            $scope.gotTeams = true;
+            $scope.isError = false;
+            getTeams.getTeams(summonerId, summonerName, region).then(function(teams) {
+                if(teams){
+                    $scope.teams = teams;
                 }
-            }, 3000);
+                else{
+                    $scope.error = response;
+                    $scope.isError = true;
+                    $scope.searched = false;
+
+                }
+            });
 
         };
 
