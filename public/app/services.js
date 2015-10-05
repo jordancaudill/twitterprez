@@ -15,7 +15,7 @@
                 var def = $q.defer();
 
                 //grab from localstorage if the summonerId was stored less than 30 mins ago
-                if(localStorage[summonerName] && ((new Date().getTime() - (JSON.parse(localStorage[summonerName]).storageTime)) <= STORAGE_TIME)){
+                if(localStorage[summonerName] && JSON.parse(localStorage[summonerName]).region == region && ((new Date().getTime() - (JSON.parse(localStorage[summonerName]).storageTime)) <= STORAGE_TIME)){
                     var response = [];
                     response[summonerName] = JSON.parse(localStorage[summonerName]);
                     def.resolve(response);
@@ -30,6 +30,7 @@
                             var summoner = {};
                             summoner.storageTime = new Date().getTime();
                             summoner.id = response[summonerName].id;
+                            summoner.region = region;
                             summoner = JSON.stringify(summoner);
                             localStorage.setItem(summonerName, summoner);
 

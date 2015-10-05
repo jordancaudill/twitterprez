@@ -120,12 +120,12 @@
 
             $scope.gotTeams = true;
             $scope.isError = false;
-            getTeams.getTeams(summonerId, summonerName, region).then(function(teams) {
-                if(teams){
-                    $scope.teams = teams;
+            getTeams.getTeams(summonerId, summonerName, region).then(function(response) {
+                if(response){
+                    $scope.teams = response;
                 }
                 else{
-                    $scope.error = response;
+                    $scope.error = 'Could not find teams.';
                     $scope.isError = true;
                     $scope.searched = false;
 

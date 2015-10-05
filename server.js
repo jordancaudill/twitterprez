@@ -7,13 +7,6 @@ var port = 3000;
 
 var apiKey = '?api_key=1fb7abdb-48e1-4526-b8f6-3cc8e15eea82';
 
-//app.all("/*", function (req, res, next) {
-//    res.header("Access-Control-Allow-Origin", "*");
-//    res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
-//    res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
-//    return next();
-//});
-
 app.listen(port, function () {
     console.log('Jordans server is running on localhost: ' + port);
 });
@@ -62,21 +55,21 @@ app.get('/teams/:region/:summonerId', function (req, res){
             console.log('request for team successful');
             res.send(body);
         }
-        //else if(error){
-        //    res.send(error);
-        //}
-        //else if(response.statusCode == 404){
-        //    console.log('404 Not Found: teams');
-        //    res.send('Could not find teams');
-        //}
-        //else if(response.statusCode == 429){
-        //    console.log('rate limit exceeded');
-        //    res.send('Team Statter is receiving a lot of requests right now. Please try again in 10 seconds.');
-        //}
-        //else if(response.statusCode == 503){
-        //    console.log('API Offline');
-        //    res.send('Sorry, the League of Legends API is offline right now.');
-        //}
+        else if(error){
+            res.send(error);
+        }
+        else if(response.statusCode == 404){
+            console.log('404 Not Found: teams');
+            res.send('Could not find teams');
+        }
+        else if(response.statusCode == 429){
+            console.log('rate limit exceeded');
+            res.send('Team Statter is receiving a lot of requests right now. Please try again in 10 seconds.');
+        }
+        else if(response.statusCode == 503){
+            console.log('API Offline');
+            res.send('Sorry, the League of Legends API is offline right now.');
+        }
         else {
             res.send(body)
         }
