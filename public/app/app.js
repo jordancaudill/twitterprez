@@ -10,6 +10,8 @@
         //how many games I want to grab from a match history
         var DESIRED_GAMES = 5;
 
+        $scope.selectedRegion = 'NA';
+
         $scope.regions = [
             'NA',
             'EUW',

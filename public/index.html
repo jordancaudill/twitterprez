@@ -28,7 +28,7 @@
 
                     <form ng-hide="teamClicked" id="summonerForm" ng-submit="searchSummoner(summoner, selectedRegion)">
                         <div class="col-xs-12 text-center">
-                            <select ng-hide="teamClicked" id="region" ng-model="selectedRegion" ng-init="selectedRegion = regions[0]" ng-options="region for region in regions"></select>
+                            <!--<select ng-hide="teamClicked" id="region" ng-model="selectedRegion" ng-init="selectedRegion = regions[0]" ng-options="region for region in regions"></select>-->
                             <input placeholder="Summoner Name" type="text" class="text-center" id="summoner" ng-model="summoner">
                             <input id="enterSummoner" type="submit" value="Go" ng-click="isError = false">
                         </div>
