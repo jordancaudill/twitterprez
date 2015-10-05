@@ -143,28 +143,31 @@
 
             var teamName = selectedTeam.name;
 
-            //if the team has less matches played than the amount I want to grab, we want to grab all the matches
-            if (selectedTeam.matchHistory.length < DESIRED_GAMES){
-                DESIRED_GAMES = selectedTeam.matchHistory.length;
-            }
+            if(selectedTeam.matchHistory){
+                //if the team has less matches played than the amount I want to grab, we want to grab all the matches
+                if (selectedTeam.matchHistory.length < DESIRED_GAMES){
+                    DESIRED_GAMES = selectedTeam.matchHistory.length;
+                }
 
-            //array that holds the ids for each game in the match history
-            var matchIds = [];
-            $scope.opposingTeamNames = [];
+                //array that holds the ids for each game in the match history
+                var matchIds = [];
+                $scope.opposingTeamNames = [];
 
-            //gathers the match Ids from match history
-            for (var i = 0; i < selectedTeam.matchHistory.length; i++) {
-                var match = selectedTeam.matchHistory[i];
-                //if it's played on summoner's rift and we haven't hit the max amount of DESIRED_GAMES
-                if(match.mapId == 11 && matchIds.length < DESIRED_GAMES){
-                    $scope.opposingTeamNames.push(match.opposingTeamName);
-                    matchIds.push(match.gameId);
+                //gathers the match Ids from match history
+                for (var i = 0; i < selectedTeam.matchHistory.length; i++) {
+                    var match = selectedTeam.matchHistory[i];
+                    //if it's played on summoner's rift and we haven't hit the max amount of DESIRED_GAMES
+                    if(match.mapId == 11 && matchIds.length < DESIRED_GAMES){
+                        $scope.opposingTeamNames.push(match.opposingTeamName);
+                        matchIds.push(match.gameId);
+                    }
+
                 }
 
             }
 
             //if there are no matches played on summoners rift
-            if(matchIds.length == 0){
+            if(!matchIds || matchIds.length == 0 ){
                 $scope.error = selectedTeam.name + ' has not played any Ranked 5v5 matches recently.';
                 $scope.isError = true;
                 $scope.teamClicked = false;
