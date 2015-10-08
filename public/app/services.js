@@ -3,7 +3,7 @@
     var app = angular.module('league');
 
     //var host = 'localhost:3000';
-    var host = 'teamstatter.com';
+    var host = 'www.teamstatter.com';
 
     //how long I want to store data in local storage for
     //first number is minutes * 60000 makes it milliseconds
