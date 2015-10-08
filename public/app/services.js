@@ -2,9 +2,6 @@
 
     var app = angular.module('league');
 
-    //var host = 'localhost:3000';
-    var host = 'www.teamstatter.com';
-
     //how long I want to store data in local storage for
     //first number is minutes * 60000 makes it milliseconds
     var STORAGE_TIME = 30 * 60000;
@@ -22,7 +19,9 @@
                 }
 
                 else {
-                    console.log($location);
+                    var host = $location.$$host;
+                    //var host = 'localhost:3000';
+
                     $http.get('http://'+host+'/summoner/'+region+'/'+summonerName).success(function (response) {
 
                         //request was successful
@@ -44,7 +43,7 @@
         }
     }]);
 
-    app.service('getTeams', ['$http', '$q', function($http, $q) {
+    app.service('getTeams', ['$http', '$q', '$location', function($http, $q, $location) {
         return {
             getTeams: function (summonerId, summonerName, region ) {
                 var def = $q.defer();
@@ -55,6 +54,9 @@
                     def.resolve(teams);
                 }
                 else {
+                    var host = $location.$$host;
+                    //var host = 'localhost:3000';
+
                     $http.get('http://'+host+'/teams/'+region+'/'+summonerId).success(function (response) {
                         var summoner = JSON.parse(localStorage[summonerName]);
                         summoner.teams = response[summonerId];
@@ -70,7 +72,7 @@
         }
     }]);
 
-    app.service('getMatchDetails', ['$http', '$q', function($http, $q) {
+    app.service('getMatchDetails', ['$http', '$q', '$location', function($http, $q, $location) {
         return {
             getMatchDetails: function (matchIds, teamName, region) {
                 var def = $q.defer();
@@ -86,6 +88,8 @@
                 }
 
                 else{
+                    var host = $location.$$host;
+                    //var host = 'localhost:3000';
 
                     angular.forEach(matchIds, function(matchId){
                         promises.push(
