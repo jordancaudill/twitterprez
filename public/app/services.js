@@ -9,7 +9,7 @@
     //first number is minutes * 60000 makes it milliseconds
     var STORAGE_TIME = 30 * 60000;
 
-    app.service('getSummoner', ['$http', '$q', function($http, $q) {
+    app.service('getSummoner', ['$http', '$q', '$location', function($http, $q, $location) {
         return {
             getSummoner: function (summonerName, region) {
                 var def = $q.defer();
@@ -22,8 +22,8 @@
                 }
 
                 else {
+                    console.log($location);
                     $http.get('http://'+host+'/summoner/'+region+'/'+summonerName).success(function (response) {
-
 
                         //request was successful
                         if (response[summonerName]) {
