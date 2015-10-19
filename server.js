@@ -5,7 +5,7 @@ var app = express();
 
 var port = 3000;
 
-var apiKey = '?api_key=1fb7abdb-48e1-4526-b8f6-3cc8e15eea82';
+var apiKey = '?api_key=9cc31274-f7d2-418a-af17-7bc443549cb5';
 
 app.listen(port, function () {
     console.log('Jordans server is running on localhost: ' + port);

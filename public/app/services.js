@@ -19,8 +19,7 @@
                 }
 
                 else {
-                    var host = $location.$$host;
-                    //var host = 'localhost:3000';
+                    var host = $location.$$host+':'+$location.$$port;
 
                     $http.get('http://'+host+'/summoner/'+region+'/'+summonerName).success(function (response) {
 
@@ -54,8 +53,7 @@
                     def.resolve(teams);
                 }
                 else {
-                    var host = $location.$$host;
-                    //var host = 'localhost:3000';
+                    var host = $location.$$host+':'+$location.$$port;
 
                     $http.get('http://'+host+'/teams/'+region+'/'+summonerId).success(function (response) {
                         var summoner = JSON.parse(localStorage[summonerName]);
@@ -88,8 +86,7 @@
                 }
 
                 else{
-                    var host = $location.$$host;
-                    //var host = 'localhost:3000';
+                    var host = $location.$$host+':'+$location.$$port;
 
                     angular.forEach(matchIds, function(matchId){
                         promises.push(

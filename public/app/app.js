@@ -8,7 +8,7 @@
     app.controller('UserController', ['$scope', '$q', 'getSummoner', 'getTeams', 'getMatchDetails', 'convertToReadable', 'convertToCamelCase', '$interval', function($scope, $q,  getSummoner, getTeams, getMatchDetails, convertToReadable, convertToCamelCase, $interval){
 
         //how many games I want to grab from a match history
-        var DESIRED_GAMES = 5;
+        var DESIRED_GAMES = 7;
 
         $scope.selectedRegion = 'NA';
 
