@@ -13,7 +13,7 @@
 
                 //grab from localstorage if the summonerId was stored less than 30 mins ago
                 if(localStorage[summonerName] && JSON.parse(localStorage[summonerName]).region == region && ((new Date().getTime() - (JSON.parse(localStorage[summonerName]).storageTime)) <= STORAGE_TIME)){
-                    var response = [];
+                    var response = {};
                     response[summonerName] = JSON.parse(localStorage[summonerName]);
                     def.resolve(response);
                 }
@@ -25,9 +25,8 @@
 
                         //request was successful
                         if (response[summonerName]) {
-                            var summoner = {};
+                            var summoner = response[summonerName];
                             summoner.storageTime = new Date().getTime();
-                            summoner.id = response[summonerName].id;
                             summoner.region = region;
                             summoner = JSON.stringify(summoner);
                             localStorage.setItem(summonerName, summoner);
@@ -115,24 +114,36 @@
         }
     }]);
 
-    app.service('convertToCamelCase', ['$http', '$q', function($http, $q) {
-        return {
-            convertToCamelCase: function (string) {
-                string = string.replace(/\s+/g, '');
-                string = string.charAt(0).toLowerCase() + string.substring(1);
-                return string;
-            }
-        }
-    }]);
+    //for sharing data between controllers
+    app.service('shareData', function() {
+        this.DESIRED_GAMES = 10;
 
-    app.service('convertToReadable', ['$http', '$q', function($http, $q) {
-        return {
-            convertToReadable: function (string) {
-                string = string.replace(/([a-z])([A-Z])/g, '$1 $2');
-                string = string.charAt(0).toUpperCase() + string.substring(1);
-                return string;
-            }
-        }
-    }]);
-
+        this.getDesiredGames = function(){
+            return this.DESIRED_GAMES;
+        };
+        this.setSummoner = function(summoner) {
+            this.summoner = summoner;
+        };
+        this.getSummoner = function() {
+            return this.summoner;
+        };
+        this.setMatches = function(matches) {
+            this.matches = matches;
+        };
+        this.getMatches = function() {
+            return this.matches;
+        };
+        this.setTeam = function(selectedTeam){
+            this.team = selectedTeam;
+        };
+        this.getTeam = function(){
+            return this.team;
+        };
+        this.setOpposingTeamNames = function(opposingTeamNames){
+            this.opposingTeamNames = opposingTeamNames;
+        };
+        this.getOpposingTeamNames = function(){
+            return this.opposingTeamNames;
+        };
+    });
 })(angular);

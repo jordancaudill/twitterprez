@@ -1,0 +1,29 @@
+<div ng-controller="SearchController as SearchCtrl">
+    <img id="sword" src="../img/sword.png">
+
+    <div class="centeredContent">
+        <h1>Team Statter</h1>
+        <p>Get quick stats on your LoL 5v5 Team</p>
+        <form id="summonerForm" ng-submit="SearchCtrl.searchSummoner(summoner, selectedRegion)">
+            <div>
+                <select id="region" ng-model="selectedRegion" ng-init="selectedRegion = SearchCtrl.regions[0]" ng-options="region for region in SearchCtrl.regions"></select>
+                <input placeholder="Summoner Name" type="text" class="text-center" id="summoner" ng-model="summoner">
+                <input id="enterSummoner" type="submit" value="Go" ng-click="isError = false">
+            </div>
+        </form>
+        <div id="error">{{error}}</div>
+    </div>
+
+
+    <footer>
+        <p>Created by <a id="creator" href="http://www.jordancaudill.com">Jordan Caudill</a>. View the Team Statter documentation <a id="docs" href="../docs.html">here.</a> View the legal notice <a id="legal" data-toggle="modal" data-target=".bs-example-modal-sm">here.</a></p>
+    </footer>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <p>Team Statter isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</p>
+            </div>
+        </div>
+    </div>
+</div>

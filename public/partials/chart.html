@@ -1,0 +1,41 @@
+<div ng-controller="ChartController as ChartCtrl">
+    <div class="text-center container">
+        <h4 id="teamName">{{ChartCtrl.selectedTeam.name}}</h4>
+        <div class="row">
+            <div class="col-xs-4">
+                <a href="#/teams" id="back-btn-cont">
+                    <div id="back-btn">Back</div>
+                </a>
+            </div>
+            <div class="col-xs-4">
+                <select ng-model="selectedStat" ng-init="selectedStat = ChartCtrl.statNameList[0]" ng-change="ChartCtrl.makeChart(selectedStat, average, teamTotal)" id="stat" ng-selected="ChartCtrlstatNameList[0]"  ng-options="statName for statName in ChartCtrl.statNameList"></select>
+            </div>
+            <form class="col-xs-4">
+                <div align="left" class="checkbox">
+                    <div class="squaredOne">
+                        <input type="checkbox" ng-model="ChartCtrl.average" ng-init="ChartCtrl.average = false" ng-change="ChartCtrl.makeChart(selectedStat)" value="None" id="squaredOne" name="check" checked />
+                        <label for="squaredOne"><p>Average</p></label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="chartContainer">
+        <canvas id="chart"></canvas>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-15" ng-repeat="member in ChartCtrl.team.members">
+                <div ng-style="{'background-image': '-webkit-linear-gradient('+member.color+', '+member.darkColor+')',
+                                            'background-image': '-o-linear-gradient('+member.color+', '+member.darkColor+')',
+                                            'background-image': '-moz-linear-gradient('+member.color+', '+member.darkColor+')',
+                                            'background-image': 'linear-gradient('+member.color+', '+member.darkColor+')'}" class="teamMember">
+                    {{member.summonerName}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

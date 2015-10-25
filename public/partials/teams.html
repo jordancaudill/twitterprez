@@ -1,0 +1,15 @@
+<div ng-controller="TeamController as TeamCtrl">
+    <div class="centeredContent">
+        <div id="summonerName">{{TeamCtrl.summoner.name}}'s Teams</div>
+        <div class="team" ng-repeat="team in TeamCtrl.summoner.teams">
+            <button ng-click="TeamCtrl.getMatches(team, TeamCtrl.summoner.region)" class="team-btn">{{team.name}}</button>
+        </div>
+        <div id="back-btn-cont">
+            <a href="#/search">
+                <div id="back-btn">Back</div>
+            </a>
+        </div>
+        <div id="error">{{error}}</div>
+
+    </div>
+</div>

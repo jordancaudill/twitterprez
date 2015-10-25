@@ -12,100 +12,21 @@
 
     </head>
     <body ng-app="league">
-        <div id="pageContent" ng-controller="UserController">
-            <header ng-hide="teamClicked">
-                <div class="container">
-                    <div class="row">
-                        <h1 class="col-xs-12" id="logo">Team Statter</h1>
-                        <p class="col-xs-12 slogan">Get Quick Stats on your LoL 5v5 Team</p>
-                        <!--<p class="col-xs-12 slogan">Enter your Summoner name and choose your Ranked Team</p>-->
-                    </div>
-                </div>
-
-            </header>
-            <div class="container">
-                <div class="row">
-
-                    <form ng-hide="teamClicked" id="summonerForm" ng-submit="searchSummoner(summoner, selectedRegion)">
-                        <div class="col-xs-12 text-center">
-                            <select ng-hide="teamClicked" id="region" ng-model="selectedRegion" ng-init="selectedRegion = regions[0]" ng-options="region for region in regions"></select>
-                            <input placeholder="Summoner Name" type="text" class="text-center" id="summoner" ng-model="summoner">
-                            <input id="enterSummoner" type="submit" value="Go" ng-click="isError = false">
-                        </div>
-                    </form>
-                </div>
-                <div class="row">
-
-                    <div class="col-xs-12 text-center" ng-show="isError" id="error">
-                            {{error}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div ng-show="searched" ng-hide="teamClicked" class="col-xs-12 text-center team" ng-repeat="team in teams">
-                        <button ng-click="getMatches(team, selectedRegion)" class="team-btn">{{team.name}}</button>
-                    </div>
-                </div>
+        <div id="pageContent" ng-view>
 
 
-                <div ng-show="teamClicked" class="text-center">
-                    <h4 id="teamName">{{selectedTeam}}</h4>
-
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-4">
-                            <div id="back-btn-cont">
-                                <button id="back-btn" ng-click="teamClicked = false; resetCanvas();">Back</button>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-4">
-                            <select ng-show="teamClicked" ng-model="selectedStat" ng-init="selectedStat = defaultStat" ng-change="makeChart(selectedStat, average, teamTotal)" id="stat" ng-selected="statNameList[0]"  ng-options="statName for statName in statNameList"></select>
-                        </div>
-                        <form class="col-xs-12 col-sm-4">
-                            <div align="left" class="checkbox">
-                                <div class="squaredOne">
-                                    <input type="checkbox" ng-model="average" ng-init="average = false" ng-change="makeChart(selectedStat, average, teamTotal)" value="None" id="squaredOne" name="check" checked />
-                                    <label for="squaredOne"><p>Average</p></label>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="row" id="chartContainer">
-                        <canvas ng-show="teamClicked" id="chart"></canvas>
-                </div>
-                <div ng-show="teamClicked" class="row">
-                    <div class="col-xs-6 col-sm-4 col-md-3" ng-repeat="member in team.members">
-                        <div ng-style="{'background-image': '-webkit-linear-gradient('+member.color+', '+member.darkColor+')',
-                                        'background-image': '-o-linear-gradient('+member.color+', '+member.darkColor+')',
-                                        'background-image': '-moz-linear-gradient('+member.color+', '+member.darkColor+')',
-                                        'background-image': 'linear-gradient('+member.color+', '+member.darkColor+')'}" class="teamMember">
-                            {{member.summonerName}}
-                        </div>
-                    </div>
-                </div>
-
-                <footer ng-hide="teamClicked">
-                    <p>Created by <a id="creator" href="http://www.jordancaudill.com">Jordan Caudill</a>. View the Team Statter documentation <a id="docs" href="docs.html">here.</a> View the legal notice <a id="legal" data-toggle="modal" data-target=".bs-example-modal-sm">here.</a></p>
-                </footer>
-            </div>
-
-            </div>
         </div>
 
-        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <p>Team Statter isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</p>
-                </div>
-            </div>
-        </div>
+        <div id="error" ng-model="error"></div>
+
 
 
         <script src="js/angular.min.js"></script>
+        <script src="js/angular-route.min.js"></script>
         <script src="app/app.js"></script>
         <script src="app/services.js"></script>
         <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="js/Chart.min.js"></script>
+        <script src="js/Chart.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     </body>
 </html>
