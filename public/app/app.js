@@ -130,10 +130,12 @@
             'Kill Participation',
             'Deaths',
             'Assists',
+            'Kills',
             'Wards Placed per Minute',
             'Wards Killed per Minute',
             'Total Damage Dealt To Champions',
-            'CS per Minute'
+            'CS per Minute',
+            'Gold Earned'
         ];
 
         //gets the team member ids of the players CURRENTLY on the team
@@ -261,8 +263,6 @@
             });
 
             team.stats[statName]['average'] = getAverage(team.stats[statName].perMatch);
-
-
 
             //return the team object with all the new data!
             return team;
@@ -457,6 +457,12 @@
                 case 'CS per Minute':
                     statName = 'minionsKilledPerMin';
                     break;
+                case 'Kills':
+                    statName = 'kills';
+                    break;
+                case 'Gold Earned':
+                    statName = 'goldEarned';
+                    break;
                 default:
                     break;
             }
@@ -581,6 +587,7 @@
             team = getStat(team, matches, 'wardsPlaced');
             team = getStat(team, matches, 'wardsKilled');
             team = getStat(team, matches, 'minionsKilled');
+            team = getStat(team, matches, 'goldEarned');
 
             team = getKillParticipation(team);
             team = getMinionsKilledPerMin(team);
