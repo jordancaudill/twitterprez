@@ -431,8 +431,31 @@
             return parseFloat((total / dividend)).toFixed(2) || 0;
         };
 
-        this.makeChart = function(statName){
+        //toggle the data for a chart
+        this.toggleData = function(selectedMember, selectedStat){
 
+            var memberButton = document.getElementById(selectedMember.summonerId);
+            angular.forEach(team.members, function (member){
+               if(member.summonerId == selectedMember.summonerId){
+                   if(member.showData == true){
+                       var disabledStyle = 'background-image: -webkit-linear-gradient('+member.color+', '+member.darkColor+'); background-image: -o-linear-gradient('+member.color+', '+member.darkColor+'); background-image: -moz-linear-gradient('+member.color+', '+member.darkColor+'); background-image: linear-gradient('+member.color+', ' +member.darkColor+'); opacity: 0.4;';
+                       member.showData = false;
+                       memberButton.removeAttribute('style');
+                       memberButton.setAttribute('style', disabledStyle);
+                   }
+                   else{
+                       var enabledStyle = 'background-image: -webkit-linear-gradient('+member.color+', '+member.darkColor+'); background-image: -o-linear-gradient('+member.color+', '+member.darkColor+'); background-image: -moz-linear-gradient('+member.color+', '+member.darkColor+'); background-image: linear-gradient('+member.color+', ' +member.darkColor+');';
+                       memberButton.removeAttribute('style');
+                       memberButton.setAttribute('style', enabledStyle);
+                       member.showData = true;
+                   }
+               }
+            });
+
+            this.makeChart(selectedStat, team)
+        };
+
+        this.makeChart = function(statName, team){
             var average = this.average;
 
             switch(statName){
@@ -488,14 +511,16 @@
                 }
 
                 angular.forEach(team.members, function (member) {
-                    var playerData = {};
-                    playerData['label'] = member.summonerName;
-                    playerData['strokeColor'] = member.color;
-                    playerData['pointColor'] = member.color;
-                    playerData['pointStrokeColor'] = member.darkColor;
-                    playerData['pointHighlightFill'] = member.darkColor;
-                    playerData['data'] = member.stats[statName].perMatch;
-                    data.datasets.push(playerData);
+                    if(member.showData == true) {
+                        var playerData = {};
+                        playerData['label'] = member.summonerName;
+                        playerData['strokeColor'] = member.color;
+                        playerData['pointColor'] = member.color;
+                        playerData['pointStrokeColor'] = member.darkColor;
+                        playerData['pointHighlightFill'] = member.darkColor;
+                        playerData['data'] = member.stats[statName].perMatch;
+                        data.datasets.push(playerData);
+                    }
                 });
 
 
@@ -524,14 +549,16 @@
                 data['labels'] = ['Averages'];
                 data.datasets = [];
                 angular.forEach(team.members, function (member) {
-                    var datasets = data.datasets;
-                    var playerData = {};
-                    playerData['label'] = member.summonerName;
-                    playerData['fillColor'] = member.color;
-                    playerData['strokeColor'] = member.darkColor;
-                    playerData['data'] = [];
-                    playerData.data.push(member.stats[statName].average);
-                    datasets.push(playerData);
+                    if(member.showData == true) {
+                        var datasets = data.datasets;
+                        var playerData = {};
+                        playerData['label'] = member.summonerName;
+                        playerData['fillColor'] = member.color;
+                        playerData['strokeColor'] = member.darkColor;
+                        playerData['data'] = [];
+                        playerData.data.push(member.stats[statName].average);
+                        datasets.push(playerData);
+                    }
                 });
                 new Chart(ctx).Bar(data, {
                     //define chart options here
@@ -577,6 +604,7 @@
             //create stats object for each member
             angular.forEach(team.members, function(member){
                 member['stats'] = {};
+                member['showData'] = true;
             });
 
             //put all the stats into the object
@@ -596,72 +624,8 @@
 
             this.team = team;
 
-            //Forcing the app to wait .1 second before making the first chart, in order to give the DOM time to load.
-            this.makeChart(this.statNameList[0]);
+            this.makeChart(this.statNameList[0], team);
 
-            //var getMinionsKilledAt10Min = function(team, matches){
-            //    team.stats['minionsKilledAt10Min'] = {};
-            //    team.stats.minionsKilledAt10Min['perMatch'] = [];
-            //
-            //    angular.forEach(team.members, function(member) {
-            //        member.stats['minionsKilledAt10Min'] = {};
-            //        member.stats.minionsKilledAt10Min['perMatch'] = [];
-            //    });
-            //
-            //    angular.forEach(matches, function(match){
-            //        //variable to hold the total for a single match, which will then be pushed to team.stats[statName].perMatch
-            //        var statTotal = 0;
-            //
-            //        angular.forEach(team.members, function(member){
-            //
-            //            var foundMember = false;
-            //
-            //            for(var k = 0; k < match.participantIdentities.length; k ++){
-            //                var participantIdentity = match.participantIdentities[k];
-            //                var participant = match.participants[k];
-            //                if (participantIdentity.player.summonerId == member.summonerId) {
-            //                    var csTimeline = participant.timeline.creepsPerMinDeltas;
-            //                    if(csTimeline.thirtyToEnd){
-            //                        var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
-            //                        var csMinAt30 = csMinAtEnd / ((csTimeline.thirtyToEnd / 100) + 1);
-            //                        var csMinAt20 = csMinAt30 / ((csTimeline.twentyToThirty / 100) + 1);
-            //                        var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
-            //                        var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
-            //                    }
-            //                    else if (csTimeline.twentyToThirty){
-            //                        var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
-            //                        var csMinAt20 = csMinAtEnd / ((csTimeline.twentyToThirty / 100) + 1);
-            //                        var csMinAt10 = csMinAt20 / ((csTimeline.tenToTwenty / 100) + 1);
-            //                        var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
-            //                    }
-            //                    else if (csTimeline.tenToTwenty){
-            //                        var csMinAtEnd = participant.stats.minionsKilled / (match.matchDuration / 60);
-            //                        var csMinAt10 = csMinAtEnd / ((csTimeline.tenToTwenty / 100) + 1);
-            //                        var csAt10 = parseFloat((csMinAt10 * 10).toFixed(0));
-            //                    }
-            //                    member.stats.minionsKilledAt10Min.perMatch.push(csAt10);
-            //                    statTotal += csAt10;
-            //                    foundMember = true;
-            //                }
-            //            }
-            //            if (foundMember == false){
-            //                member.stats.minionsKilledAt10Min.perMatch.push(null);
-            //            }
-            //
-            //            //get the average for the stat from all games
-            //            member.stats.minionsKilledAt10Min['average'] = getAverage(member.stats.minionsKilledAt10Min.perMatch);
-            //        });
-            //        team.stats.minionsKilledAt10Min.perMatch.push(statTotal);
-            //
-            //    });
-            //
-            //    team.stats.minionsKilledAt10Min['average'] = getAverage(team.stats.minionsKilledAt10Min.perMatch);
-            //
-            //
-            //
-            //    //return the team object with all the new data!
-            //    return team;
-            //};
         }
 
     }]);

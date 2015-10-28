@@ -8,12 +8,12 @@
                 </a>
             </div>
             <div class="col-xs-4">
-                <select ng-model="selectedStat" ng-init="selectedStat = ChartCtrl.statNameList[0]" ng-change="ChartCtrl.makeChart(selectedStat, average, teamTotal)" id="stat" ng-selected="ChartCtrlstatNameList[0]"  ng-options="statName for statName in ChartCtrl.statNameList"></select>
+                <select ng-model="selectedStat" ng-init="selectedStat = ChartCtrl.statNameList[0]" ng-change="ChartCtrl.makeChart(selectedStat, ChartCtrl.team)" id="stat" ng-options="statName for statName in ChartCtrl.statNameList"></select>
             </div>
             <form class="col-xs-4">
                 <div align="left" class="checkbox">
                     <div class="squaredOne">
-                        <input type="checkbox" ng-model="ChartCtrl.average" ng-init="ChartCtrl.average = false" ng-change="ChartCtrl.makeChart(selectedStat)" value="None" id="squaredOne" name="check" checked />
+                        <input type="checkbox" ng-model="ChartCtrl.average" ng-init="ChartCtrl.average = false" ng-change="ChartCtrl.makeChart(selectedStat, ChartCtrl.team)" value="None" id="squaredOne" name="check" checked />
                         <label for="squaredOne"><p>Average</p></label>
                     </div>
                 </div>
@@ -28,12 +28,13 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-15" ng-repeat="member in ChartCtrl.team.members">
-                <div ng-style="{'background-image': '-webkit-linear-gradient('+member.color+', '+member.darkColor+')',
+                <button ng-attr-id="{{ member.summonerId }}" class="teamMember" ng-click="ChartCtrl.toggleData(member, selectedStat)" ng-style="{
+                                            'background-image': '-webkit-linear-gradient('+member.color+', '+member.darkColor+')',
                                             'background-image': '-o-linear-gradient('+member.color+', '+member.darkColor+')',
                                             'background-image': '-moz-linear-gradient('+member.color+', '+member.darkColor+')',
-                                            'background-image': 'linear-gradient('+member.color+', '+member.darkColor+')'}" class="teamMember">
+                                            'background-image': 'linear-gradient('+member.color+', '+member.darkColor+')'}">
                     {{member.summonerName}}
-                </div>
+                </button>
             </div>
         </div>
     </div>
