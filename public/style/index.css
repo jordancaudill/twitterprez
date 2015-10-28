@@ -68,6 +68,7 @@ body #summonerForm #region {
   border-radius: 5px;
   color: white;
   font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  outline: none;
 }
 body #summonerForm #region:hover {
   color: #eca0b3;
@@ -83,6 +84,7 @@ body #summonerForm #summoner {
   background-color: #222222;
   color: white;
   font-size: .9em;
+  outline: none;
 }
 body #summonerForm #enterSummoner {
   background: -webkit-linear-gradient(#a03550, #490012);
@@ -101,6 +103,7 @@ body #summonerForm #enterSummoner {
   border-width: 2px;
   border-style: solid;
   color: white;
+  outline: none;
 }
 body #summonerForm #enterSummoner:hover {
   color: #eca0b3;
@@ -146,6 +149,7 @@ body .team button {
   border-color: #222222;
   border-width: 2px;
   border-style: solid;
+  outline: none;
 }
 body .team button:hover {
   color: #eca0b3;
@@ -171,6 +175,7 @@ body .team button:hover {
   height: 34px;
   color: white;
   font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  outline: none;
 }
 #stat:hover {
   color: #eca0b3;
@@ -329,13 +334,17 @@ body .team button:hover {
   border-color: #222222;
   border-width: 2px;
   border-style: solid;
+  outline: none;
 }
 @media screen and (min-width: 768px) {
   .teamMember {
-    width: 130px;
-    height: 30px;
+    width: 140px;
+    height: 40px;
     padding-top: 3px;
   }
+}
+.teamMember:focus {
+  outline: none;
 }
 .modal-content {
   padding: 10px 10px 10px 10px;
