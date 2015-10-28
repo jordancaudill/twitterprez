@@ -343,8 +343,8 @@ body .team button:hover {
     padding-top: 3px;
   }
 }
-.teamMember:focus {
-  outline: none;
+.teamMember:hover {
+  opacity: .7;
 }
 .modal-content {
   padding: 10px 10px 10px 10px;

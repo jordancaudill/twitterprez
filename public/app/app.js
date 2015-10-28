@@ -452,10 +452,10 @@
                }
             });
 
-            this.makeChart(selectedStat, team)
+            this.makeChart(selectedStat, team, false)
         };
 
-        this.makeChart = function(statName, team){
+        this.makeChart = function(statName, team, animation){
             var average = this.average;
 
             switch(statName){
@@ -526,6 +526,7 @@
 
                 new Chart(ctx).Line(data, {
                     //define chart options here
+                    animation: animation,
                     responsive: true,
                     datasetFill : false,
                     bezierCurve : false,
@@ -562,6 +563,7 @@
                 });
                 new Chart(ctx).Bar(data, {
                     //define chart options here
+                    animation: animation,
                     responsive: true,
                     animationEasing: "easeOutQuint",
                     scaleFontSize: 16,
@@ -624,7 +626,7 @@
 
             this.team = team;
 
-            this.makeChart(this.statNameList[0], team);
+            this.makeChart(this.statNameList[0], team, true);
 
         }
 

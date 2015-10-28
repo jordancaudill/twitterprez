@@ -8,12 +8,12 @@
                 </a>
             </div>
             <div class="col-xs-4">
-                <select ng-model="selectedStat" ng-init="selectedStat = ChartCtrl.statNameList[0]" ng-change="ChartCtrl.makeChart(selectedStat, ChartCtrl.team)" id="stat" ng-options="statName for statName in ChartCtrl.statNameList"></select>
+                <select ng-model="selectedStat" ng-init="selectedStat = ChartCtrl.statNameList[0]" ng-change="ChartCtrl.makeChart(selectedStat, ChartCtrl.team, true)" id="stat" ng-options="statName for statName in ChartCtrl.statNameList"></select>
             </div>
             <form class="col-xs-4">
                 <div align="left" class="checkbox">
                     <div class="squaredOne">
-                        <input type="checkbox" ng-model="ChartCtrl.average" ng-init="ChartCtrl.average = false" ng-change="ChartCtrl.makeChart(selectedStat, ChartCtrl.team)" value="None" id="squaredOne" name="check" checked />
+                        <input type="checkbox" ng-model="ChartCtrl.average" ng-init="ChartCtrl.average = false" ng-change="ChartCtrl.makeChart(selectedStat, ChartCtrl.team, true)" value="None" id="squaredOne" name="check" checked />
                         <label for="squaredOne"><p>Average</p></label>
                     </div>
                 </div>
