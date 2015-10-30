@@ -5,7 +5,7 @@
     <style type="text/css"></style></head>
     <body>
     <h1>Team Statter Docs</h1>
-    <h2>v1.0.7</h2>
+    <h2>v1.0.8</h2>
 
     <p>Team Statter is a one page web application that displays Ranked 5's Team match statistics using charts.
         The user can see charts based on their average performance or each match in the team's match history. Just pick your
@@ -24,10 +24,17 @@
     <h3>To-Do</h3>
     <ul>
         <li>Various front-end design changes. I know this is vague :/</li>
+        <li>Include whether the match was a victory or loss in the tooltips.</li>
+        <li>Include informational pop ups with short descriptions about how each stat is important.</li>
     </ul>
+
+    <h3>FAQ</h3>
+        <em>Why are all the stats "per minute"?</em>
+        <p>To avoid stat inflation caused by game duration. For example, matches with longer durations can make it seem as though your team did really well on CS (creep score) if you look at the total amount of minions killed for the match. By showing the stat on a "per minute" basis, we get a better idea of how consistently each player was killing minions over all matches. The same goes for other stats.</p>
 
     <h3>Updates</h3>
     <ul>
+        <li>1.0.8 - Moved all stats to a per-minute basis, to avoid stat inflation. See FAQ.</li>
         <li>1.0.7 - Team member toggle buttons now have hover effects. Added favicon. Chart no longer animates on member toggle.</li>
         <li>1.0.6 - Member names are now toggle buttons that shows and hides their data in the chart.</li>
         <li>1.0.5 - Reformmated size of the chart at different screen widths. Added Gold Earned and Kills to the list of available stats.</li>

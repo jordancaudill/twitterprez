@@ -128,14 +128,14 @@
         //the stats i want to display to the user
         this.statNameList = [
             'Kill Participation',
-            'Deaths',
-            'Assists',
-            'Kills',
-            'Wards Placed per Minute',
-            'Wards Killed per Minute',
-            'Total Damage Dealt To Champions',
-            'CS per Minute',
-            'Gold Earned'
+            'Deaths per min.',
+            'Assists per min.',
+            'Kills per min.',
+            'Wards Placed per min.',
+            'Wards Killed per min.',
+            'Damage to Champions per min.',
+            'CS per min.',
+            'Gold Earned per min.'
         ];
 
         //gets the team member ids of the players CURRENTLY on the team
@@ -313,104 +313,38 @@
             return team;
         };
 
-        var getMinionsKilledPerMin= function(team){
-            team.stats['minionsKilledPerMin'] = {};
-            team.stats.minionsKilledPerMin['perMatch'] = [];
+        var getStatPerMin = function(team, statName) {
+            var statNamePerMin = statName+'PerMin';
+            team.stats[statNamePerMin] = {};
+            team.stats[statNamePerMin]['perMatch'] = [];
 
             angular.forEach(team.members, function(member) {
 
-                member.stats['minionsKilledPerMin'] = {};
-                member.stats.minionsKilledPerMin['perMatch'] = [];
+                member.stats[statNamePerMin] = {};
+                member.stats[statNamePerMin]['perMatch'] = [];
 
-                for(var x = 0; x < member.stats.minionsKilled.perMatch.length; x++){
-                    if(member.stats.minionsKilled.perMatch[x] == null){
-                        var minionsKilledPerMin = null;
+                for(var x = 0; x < member.stats[statName].perMatch.length; x++){
+                    if(member.stats[statName].perMatch[x] == null){
+                        var stat = null;
                     }
                     else {
-                        var minionsKilledPerMin = parseFloat((member.stats.minionsKilled.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
+                        var stat = parseFloat((member.stats[statName].perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
                     }
-                    member.stats.minionsKilledPerMin.perMatch.push(minionsKilledPerMin);
-                    if(!team.stats.minionsKilledPerMin.perMatch[x]){
-                        team.stats.minionsKilledPerMin.perMatch.push(minionsKilledPerMin);
-                    }
-                    else{
-                        team.stats.minionsKilledPerMin.perMatch[x] += (minionsKilledPerMin);
-                    }
-                }
-                member.stats.minionsKilledPerMin['average'] = getAverage(member.stats.minionsKilledPerMin.perMatch);
-            });
-
-            team.stats.minionsKilledPerMin['average'] = getAverage(team.stats.minionsKilledPerMin.perMatch);
-
-            return team;
-        };
-
-        var getWardsKilledPerMin= function(team){
-            team.stats['wardsKilledPerMin'] = {};
-            team.stats.wardsKilledPerMin['perMatch'] = [];
-
-            angular.forEach(team.members, function(member) {
-
-                member.stats['wardsKilledPerMin'] = {};
-                member.stats.wardsKilledPerMin['perMatch'] = [];
-
-                for(var x = 0; x < member.stats.wardsKilled.perMatch.length; x++){
-                    if(member.stats.wardsKilled.perMatch[x] == null){
-                        var wardsKilledPerMin = null;
-                    }
-                    else {
-                        var wardsKilledPerMin = parseFloat((member.stats.wardsKilled.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
-                    }
-                    member.stats.wardsKilledPerMin.perMatch.push(wardsKilledPerMin);
-                    if(!team.stats.wardsKilledPerMin.perMatch[x]){
-                        team.stats.wardsKilledPerMin.perMatch.push(wardsKilledPerMin);
+                    member.stats[statNamePerMin].perMatch.push(stat);
+                    if(!team.stats[statNamePerMin].perMatch[x]){
+                        team.stats[statNamePerMin].perMatch.push(stat);
                     }
                     else{
-                        team.stats.wardsKilledPerMin.perMatch[x] += (wardsKilledPerMin);
-
+                        team.stats[statNamePerMin].perMatch[x] += (stat);
                     }
-
                 }
-                member.stats.wardsKilledPerMin['average'] = getAverage(member.stats.wardsKilledPerMin.perMatch);
+                member.stats[statNamePerMin]['average'] = getAverage(member.stats[statNamePerMin].perMatch);
             });
 
-            team.stats.wardsKilledPerMin['average'] = getAverage(team.stats.wardsKilledPerMin.perMatch);
+            team.stats[statNamePerMin]['average'] = getAverage(team.stats[statNamePerMin].perMatch);
 
             return team;
-        };
 
-        var getWardsPlacedPerMin= function(team){
-            team.stats['wardsPlacedPerMin'] = {};
-            team.stats.wardsPlacedPerMin['perMatch'] = [];
-
-            angular.forEach(team.members, function(member) {
-
-                member.stats['wardsPlacedPerMin'] = {};
-                member.stats.wardsPlacedPerMin['perMatch'] = [];
-
-                for(var x = 0; x < member.stats.wardsPlaced.perMatch.length; x++){
-                    if(member.stats.wardsPlaced.perMatch[x] == null){
-                        var wardsplacedPerMin = null;
-                    }
-                    else {
-                        var wardsplacedPerMin = parseFloat((member.stats.wardsPlaced.perMatch[x] / team.stats.matchDurations[x]).toFixed(2));
-                    }
-
-                    member.stats.wardsPlacedPerMin.perMatch.push(wardsplacedPerMin);
-                    if(!team.stats.wardsPlacedPerMin.perMatch[x]){
-                        team.stats.wardsPlacedPerMin.perMatch.push(wardsplacedPerMin);
-                    }
-                    else{
-                        team.stats.wardsPlacedPerMin.perMatch[x] += (wardsplacedPerMin);
-                    }
-
-                }
-                member.stats.wardsPlacedPerMin['average'] = getAverage(member.stats.wardsPlacedPerMin.perMatch);
-            });
-
-            team.stats.wardsPlacedPerMin['average'] = getAverage(team.stats.wardsPlacedPerMin.perMatch);
-
-            return team;
         };
 
         //averages whatever stat you send in
@@ -462,29 +396,29 @@
                 case 'Kill Participation':
                     statName = 'killParticipation';
                     break;
-                case 'Deaths':
-                    statName = 'deaths';
+                case 'Deaths per min.':
+                    statName = 'deathsPerMin';
                     break;
-                case 'Assists':
-                    statName = 'assists';
+                case 'Assists per min.':
+                    statName = 'assistsPerMin';
                     break;
-                case 'Wards Placed per Minute':
+                case 'Wards Placed per min.':
                     statName = 'wardsPlacedPerMin';
                     break;
-                case 'Wards Killed per Minute':
+                case 'Wards Killed per min.':
                     statName = 'wardsKilledPerMin';
                     break;
-                case 'Total Damage Dealt To Champions':
-                    statName = 'totalDamageDealtToChampions';
+                case 'Damage to Champions per min.':
+                    statName = 'totalDamageDealtToChampionsPerMin';
                     break;
-                case 'CS per Minute':
+                case 'CS per min.':
                     statName = 'minionsKilledPerMin';
                     break;
-                case 'Kills':
-                    statName = 'kills';
+                case 'Kills per min.':
+                    statName = 'killsPerMin';
                     break;
-                case 'Gold Earned':
-                    statName = 'goldEarned';
+                case 'Gold Earned per min.':
+                    statName = 'goldEarnedPerMin';
                     break;
                 default:
                     break;
@@ -620,9 +554,14 @@
             team = getStat(team, matches, 'goldEarned');
 
             team = getKillParticipation(team);
-            team = getMinionsKilledPerMin(team);
-            team = getWardsKilledPerMin(team);
-            team = getWardsPlacedPerMin(team);
+            team = getStatPerMin(team, 'kills');
+            team = getStatPerMin(team, 'deaths');
+            team = getStatPerMin(team, 'assists');
+            team = getStatPerMin(team, 'wardsPlaced');
+            team = getStatPerMin(team, 'wardsKilled');
+            team = getStatPerMin(team, 'minionsKilled');
+            team = getStatPerMin(team, 'totalDamageDealtToChampions');
+            team = getStatPerMin(team, 'goldEarned');
 
             this.team = team;
 
