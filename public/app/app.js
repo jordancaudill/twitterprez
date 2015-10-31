@@ -176,6 +176,30 @@
             return members;
         };
 
+        //figure out whether a single match was a victory for the selected team. return bool
+        var getVictory = function(match, team){
+            var victory = '';
+            angular.forEach(team.members, function(member){
+                for(var x = 0; x < match.participantIdentities.length; x++) {
+                    if (match.participantIdentities[x].player.summonerName == member.summonerName) {
+                        if (x < 5){
+                            var teamId = 100;
+                        }
+                        else{
+                            var teamId = 200;
+                        }
+                        return angular.forEach(match.teams, function(matchTeam){
+                            if(matchTeam.teamId == teamId){
+                                victory = matchTeam.winner;
+                            }
+                        });
+
+                    }
+                }
+            });
+            return victory;
+        };
+
         //add a color to each member
         var addColors = function(team) {
             var colors = [ '#A03550',
@@ -441,7 +465,13 @@
 
                 for(var i = 0; i < opposingTeamNames.length; i++)
                 {
-                    data.labels[i] = 'vs. '+opposingTeamNames[i];
+                    if(team.stats.victories[i] == true){
+                        var result = 'Victory';
+                    }
+                    else{
+                        var result = 'Defeat';
+                    }
+                    data.labels[i] =  result+' - vs '+opposingTeamNames[i];
                 }
 
                 angular.forEach(team.members, function (member) {
@@ -532,7 +562,9 @@
 
             //get the match durations
             team.stats['matchDurations'] = [];
+            team.stats['victories'] = [];
             angular.forEach(matches, function(match){
+                team.stats.victories.push(getVictory(match, team));
                 team.stats.matchDurations.push(match.matchDuration / 60);
             });
 
