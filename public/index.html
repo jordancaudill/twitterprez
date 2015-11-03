@@ -4,11 +4,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Team Statter</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
         <link rel="stylesheet" href="style/index.css">
         <link rel="stylesheet" href="style/variables.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-        <link href='http://fonts.googleapis.com/css?family=PT+Serif' rel='stylesheet' type='text/css'>
-
+        <link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet' type='text/css'>
 
         <link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-icon-57x57.png">
         <link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-icon-60x60.png">
@@ -30,16 +30,17 @@
 
     </head>
     <body ng-app="league">
-        <div id="pageContent" ng-view></div>
+        <div ng-view></div>
 
         <div id="error" ng-model="error"></div>
 
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="js/angular.min.js"></script>
         <script src="js/angular-route.min.js"></script>
         <script src="app/app.js"></script>
         <script src="app/services.js"></script>
-        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="js/Chart.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script src="js/index.js"></script>
     </body>
 </html>

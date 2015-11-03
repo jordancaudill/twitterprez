@@ -1,25 +1,16 @@
-/**
- * Created by Jordan on 9/22/15.
- */
-//keeps the cover page the entire vertical width of the window. Using because iOS and Safari don't like vh
-$(window).on('resize', function () {
-
-    var windowheight = $(window).height();
-
-    $('#pagecontent').css({
-        'height': windowheight
-    });
-
-});
+//$(window).on('resize', function(){
+//    var element = $('.centerdiv');
+//    element.css({
+//        'margin-top': -(element.height() / 2),
+//        'margin-left': -(element.width() / 2)
+//    });
+//});
 
 
-$(document).ready(function () {
-
-
-    var windowheight = $(window).height();
-
-    $('#pagecontent').css({
-        'height': windowheight
-    });
-
-});
+//$(document).on('ready', function(){
+//    var element = $('.centerdiv');
+//    element.css({
+//        'margin-top': -(element.height() / 2),
+//        'margin-left': -(element.width() / 2)
+//    });
+//});

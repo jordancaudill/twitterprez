@@ -1,184 +1,234 @@
 /* Colors */
-body {
-  text-align: center;
-  background: url(../img/background6.jpg) no-repeat center center fixed;
-  background-size: cover;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-}
-body #summonerName {
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
-  font-size: 2em;
-  color: white;
-}
-body #sword {
-  position: fixed;
-  z-index: -1;
-  top: 50%;
-  left: 50%;
-  height: 400px;
-  width: 120px;
-  margin-top: -200px;
-  margin-left: -60px;
-}
-body .centeredContent {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  text-align: center;
-  color: white;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
-  margin-top: -100px;
-  margin-left: -150px;
-  height: 200px;
-  width: 300px;
-}
-body .centeredContent h1 {
+/* Fonts */
+#teamstatter {
+  margin-top: 50px;
+  color: black;
   font-size: 3em;
+  font-family: "Russo One", Helvetica, Arial, sans-serif;
+  text-align: center;
 }
-body .centeredContent p {
+@media (min-width: 768px) {
+  #teamstatter {
+    font-size: 5em;
+    margin-top: 100px;
+  }
+}
+#slogan {
+  color: black;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  text-align: center;
+  font-weight: 300;
   font-size: 1em;
+  margin-bottom: 20px;
 }
-body #summonerName {
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
-  font-size: 2em;
-  color: white;
+@media (min-width: 768px) {
+  #slogan {
+    font-size: 1.5em;
+  }
 }
-body #summonerForm {
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
-  font-size: 20px;
+#logo {
+  display: block;
+  width: 100px;
+  height: auto;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
-body #summonerForm #region {
-  background: -webkit-linear-gradient(#a03550, #490012);
-  /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(#a03550, #490012);
-  /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(#a03550, #490012);
-  /* For Firefox 3.6 to 15 */
-  background: linear-gradient(#a03550, #490012);
-  /* Standard syntax */
-  width: 70px;
+@media (min-width: 768px) {
+  #logo {
+    width: 120px;
+  }
+}
+::selection {
+  background: #ffc107;
+  /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+  background: #ffc107;
+  /* Gecko Browsers */
+}
+#summonerInfo {
+  display: block;
+  margin: 10px auto 10px auto;
+  padding: 0;
+  width: 290px;
+}
+#summonerInfo #region {
+  width: 80px;
   height: 40px;
-  font-size: 14px;
-  line-height: 1.5;
-  border-color: #222222;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 5px;
-  color: white;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  background-color: white;
+  color: black;
+  border-style: none;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #ffc107;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-size: 1.4em;
+  text-align: center;
   outline: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  text-indent: 5px;
 }
-body #summonerForm #region:hover {
-  color: #eca0b3;
+#summonerInfo #region:hover {
+  border-bottom-color: #ffa000;
 }
-body #summonerForm #region:focus {
+#summonerInfo #summonerName {
+  width: 200px;
+  height: 40px;
+  background-color: white;
+  background: none;
+  border-style: none;
+  margin-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #ffc107;
+  font-size: 1.4em;
+  color: black;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  text-align: left;
+  outline: none;
+  padding-left: 5px;
+}
+#summonerInfo #summonerName:hover {
+  border-bottom-color: #ffa000;
+}
+@media (min-width: 768px) {
+  #summonerInfo {
+    width: 600px;
+  }
+  #summonerInfo #region {
+    width: 160px;
+    height: 80px;
+    font-size: 2.6em;
+    border-bottom-width: 5px;
+  }
+  #summonerInfo #summonerName {
+    width: 400px;
+    height: 80px;
+    font-size: 2.6em;
+    margin-right: 10px;
+    border-bottom-width: 5px;
+  }
+}
+#enterSummoner {
+  display: block;
+  margin: 10px auto 10px auto;
+  width: 100px;
+  height: 40px;
+  border-style: none;
+  background-color: #ffc107;
+  color: white;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-size: 1.1em;
+  outline: none;
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+}
+@media (min-width: 768px) {
+  #enterSummoner {
+    margin: 20px auto 20px auto;
+    width: 200px;
+    height: 60px;
+    font-size: 1.8em;
+  }
+}
+#enterSummoner:hover {
+  background-color: #ffa000;
+}
+footer p {
+  position: fixed;
+  bottom: 0;
+  left: 15px;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-weight: 300;
   color: black;
 }
-body #summonerForm #summoner {
-  height: 40px;
-  width: 160px;
-  border-radius: 5px;
-  border-style: none;
-  background-color: #222222;
-  color: white;
-  font-size: .9em;
-  outline: none;
+footer p #creator,
+footer p #legal,
+footer p #docs {
+  color: #ffc107;
 }
-body #summonerForm #enterSummoner {
-  background: -webkit-linear-gradient(#a03550, #490012);
-  /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(#a03550, #490012);
-  /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(#a03550, #490012);
-  /* For Firefox 3.6 to 15 */
-  background: linear-gradient(#a03550, #490012);
-  /* Standard syntax */
-  height: 40px;
-  width: 40px;
+footer p #creator:hover,
+footer p #legal:hover,
+footer p #docs:hover {
+  text-decoration: none;
+  color: #ffa000;
+}
+@media (min-width: 768px) {
+  footer p {
+    font-size: 1.2em;
+  }
+}
+#teamListTitle {
+  color: black;
+  margin-top: 50px;
+  display: block;
+  font-size: 2em;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
   text-align: center;
-  border-radius: 5px;
-  border-color: #222222;
-  border-width: 2px;
-  border-style: solid;
-  color: white;
-  outline: none;
 }
-body #summonerForm #enterSummoner:hover {
-  color: #eca0b3;
+@media (min-width: 768px) {
+  #teamListTitle {
+    font-size: 3em;
+    margin-top: 100px;
+  }
 }
-body footer p {
-  position: fixed;
-  right: 15px;
-  bottom: 0;
-  text-align: center;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
-  color: #bbbbbb;
-}
-body footer p #creator,
-body footer p #legal,
-body footer p #docs {
-  color: #a03550;
-}
-body footer p #legal {
-  color: #a03550;
-}
-body footer p #creator:hover,
-body footer p #legal:hover,
-body footer p #docs:hover {
-  color: #eca0b3;
-}
-body .team button {
-  margin-top: 15px;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
-  font-size: 20px;
+.team-btn {
   height: 40px;
   width: 245px;
-  background: -webkit-linear-gradient(#a03550, #490012);
-  /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(#a03550, #490012);
-  /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(#a03550, #490012);
-  /* For Firefox 3.6 to 15 */
-  background: linear-gradient(#a03550, #490012);
-  /* Standard syntax */
+  margin: 30px auto 30px auto;
+  border-style: none;
+  display: block;
+  background-color: #ffc107;
   color: white;
-  text-align: center;
-  border-radius: 5px;
-  border-color: #222222;
-  border-width: 2px;
-  border-style: solid;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-size: 1.4em;
   outline: none;
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
 }
-body .team button:hover {
-  color: #eca0b3;
+@media (min-width: 768px) {
+  .team-btn {
+    font-size: 2em;
+    height: 60px;
+    width: 400px;
+  }
+}
+.team-btn:hover {
+  background-color: #ffa000;
+}
+#statstuff {
+  text-align: center;
 }
 #stat {
-  background: -webkit-linear-gradient(#a03550, #490012);
-  /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(#a03550, #490012);
-  /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(#a03550, #490012);
-  /* For Firefox 3.6 to 15 */
-  background: linear-gradient(#a03550, #490012);
-  /* Standard syntax */
-  border-color: #222222;
-  border-width: 2px;
-  border-style: solid;
-  width: 220px;
-  padding: 5px;
-  margin-top: 10px;
-  font-size: 14px;
-  line-height: 1.5;
-  border-radius: 5px;
-  height: 34px;
-  color: white;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  width: 200px;
+  height: 40px;
+  background-color: white;
+  color: black;
+  border-style: none;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-bottom-color: #ffc107;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-size: 1.2em;
+  text-align: center;
   outline: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  text-indent: 5px;
+}
+@media (min-width: 768px) {
+  #stat {
+    width: 300px;
+    height: 50px;
+    font-size: 1.8em;
+  }
 }
 #stat:hover {
-  color: #eca0b3;
+  color: #ffd54f;
 }
 #stat:focus {
   color: black;
@@ -206,115 +256,49 @@ body .team button:hover {
     max-width: 1000px;
   }
 }
-.checkbox {
-  text-align: left;
-}
-@media screen and (min-width: 768px) {
-  .checkbox {
-    margin-left: 0;
-  }
-}
-.checkbox .squaredOne {
-  width: 28px;
-  height: 28px;
-  position: relative;
-  margin: 5px auto;
-  background: #333333;
-  box-shadow: inset 0px 1px 1px #666666, 0px 1px 3px rgba(0, 0, 0, 0.5);
-  border-radius: 5px;
-}
-.checkbox .squaredOne label {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  cursor: pointer;
-  background: linear-gradient(top, #222222 0%, #45484d 100%);
-  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px #ffffff;
-}
-.checkbox .squaredOne label p {
-  color: white;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
-  margin-left: 10px;
-}
-.checkbox .squaredOne label:after {
-  content: '';
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  background: #a03550;
-  background: -webkit-linear-gradient(#a03550, #490012);
-  /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(#a03550, #490012);
-  /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(#a03550, #490012);
-  /* For Firefox 3.6 to 15 */
-  background: linear-gradient(#a03550, #490012);
-  /* Standard syntax */
-  box-shadow: inset 0px 1px 1px #666666, 0px 1px 3px rgba(0, 0, 0, 0.5);
-  opacity: 0;
-}
-.checkbox .squaredOne label:hover::after {
-  opacity: 0.3;
-}
-.checkbox .squaredOne input[type=checkbox] {
-  visibility: hidden;
-}
-.checkbox .squaredOne input[type=checkbox]:checked + label:after {
-  opacity: 1;
-}
 #error {
   color: orangered;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
   font-size: 16px;
   text-align: center;
   margin-top: 15px;
 }
-#back-btn-cont {
-  margin-top: 20px;
-}
 #back-btn {
-  margin-left: auto;
-  margin-right: auto;
-  background: -webkit-linear-gradient(#a03550, #490012);
-  /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(#a03550, #490012);
-  /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(#a03550, #490012);
-  /* For Firefox 3.6 to 15 */
-  background: linear-gradient(#a03550, #490012);
-  /* Standard syntax */
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
-  height: 34px;
-  width: 50px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-size: 1.4em;
+  padding-top: 5px;
+  height: 40px;
+  width: 80px;
   text-align: center;
-  border-radius: 5px;
-  padding-top: 4px;
-  color: white;
-  border-color: #222222;
-  border-width: 2px;
-  border-style: solid;
-  text-decoration: none;
-}
-#back-btn-cont:hover {
-  text-decoration: none;
-}
-#back-btn-cont:hover a {
+  background-color: white;
+  color: #ffc107;
+  border-style: none;
+  border-bottom-style: solid;
+  border-bottom-color: #ffc107;
+  border-bottom-width: 3px;
+  padding-bottom: 5px;
+  border-right-style: solid;
+  border-right-color: #ffc107;
+  border-right-width: 3px;
+  padding-right: 5px;
   text-decoration: none;
 }
 #back-btn:hover {
-  color: #eca0b3;
-  text-decoration: none;
+  color: white;
+  background-color: #ffc107;
 }
 #teamName {
-  color: white;
-  margin-bottom: 10px;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  color: black;
+  margin-top: 50px;
+  display: block;
+  font-size: 2em;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  text-align: center;
 }
-@media screen and (min-width: 768px) {
+@media (min-width: 768px) {
   #teamName {
     font-size: 3em;
   }
@@ -328,13 +312,14 @@ body .team button:hover {
   width: 130px;
   height: 30px;
   color: white;
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
-  border-radius: 5px;
-  margin-bottom: 5px;
-  border-color: #222222;
-  border-width: 2px;
-  border-style: solid;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  margin-bottom: 10px;
   outline: none;
+  display: block;
+  border-style: none;
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
 }
 @media screen and (min-width: 768px) {
   .teamMember {
@@ -346,12 +331,38 @@ body .team button:hover {
 .teamMember:hover {
   opacity: .7;
 }
+#average {
+  margin-left: 20px;
+  width: 60px;
+  height: 25px;
+  border-style: none;
+  background-color: #ffc107;
+  color: white;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-size: .8em;
+  outline: none;
+  opacity: 0.4;
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+}
+@media (min-width: 768px) {
+  #average {
+    margin-left: 20px;
+    width: 80px;
+    height: 30px;
+    font-size: 1em;
+  }
+}
+#average:hover {
+  opacity: .7;
+}
 .modal-content {
   padding: 10px 10px 10px 10px;
   margin: 115px 10px 10px 10px;
 }
 .modal-content p {
-  font-family: "PT Serif", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
   line-height: 1.2em;
 }
 .col-xs-15,

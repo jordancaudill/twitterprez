@@ -202,38 +202,38 @@
 
         //add a color to each member
         var addColors = function(team) {
-            var colors = [ '#A03550',
-                '#27765A',
-                '#AF603A',
-                '#5C9A33',
-                '#35357B',
-                '#36C9BB',
-                '#0544d3',
-                '#6b0392',
-                '#f05b4f',
-                '#dda458',
-                '#eacf7d',
-                '#86797d',
-                '#b2c326',
-                '#6188e2',
-                '#a748ca'];
+            var colors = [ '#F44336',
+                '#4CAF50',
+                '#00BCD4',
+                '#9C27B0',
+                '#3F51B5',
+                '#FF9800',
+                '#CDDC39',
+                '#FF5722',
+                '#673AB7',
+                '#2196F3',
+                '#FFEB3B',
+                '#8BC34A',
+                '#009688',
+                '#E91E63',
+                '#03A9F4'];
 
             //these darkColors corresponds with colors
-            var darkColors = [ '#7E1630',
-                '#115D42',
-                '#893D18',
-                '#3D7916',
-                '#1D1D61',
-                '#009888',
-                '#04329D',
-                '#410158',
-                '#AE1D12',
-                '#996117',
-                '#9C7F25',
-                '#31272A',
-                '#697600',
-                '#2051C1',
-                '#7B07A5'];
+            var darkColors = [ '#D32F2F',
+                '#388E3C',
+                '#0097A7',
+                '#7B1FA2',
+                '#303F9F',
+                '#F57C00',
+                '#CDDC39',
+                '#E64A19',
+                '#512DA8',
+                '#1976D2',
+                '#FBC02D',
+                '#689F3',
+                '#00796B',
+                '#C2185B',
+                '#0288D1'];
 
 
 
@@ -389,6 +389,21 @@
             return parseFloat((total / dividend)).toFixed(2) || 0;
         };
 
+        //toggles whether or not to show the averages (bar or line chart)
+        this.toggleAverage = function(){
+            var averageButton = document.getElementById('average');
+            if(this.average == false){
+                this.average = true;
+                averageButton.removeAttribute('style');
+                averageButton.setAttribute('style', 'opacity: 1;');
+
+            }
+            else{
+                this.average = false;
+                averageButton.removeAttribute('style');
+            }
+        };
+
         //toggle the data for a chart
         this.toggleData = function(selectedMember, selectedStat){
 
@@ -396,13 +411,13 @@
             angular.forEach(team.members, function (member){
                if(member.summonerId == selectedMember.summonerId){
                    if(member.showData == true){
-                       var disabledStyle = 'background-image: -webkit-linear-gradient('+member.color+', '+member.darkColor+'); background-image: -o-linear-gradient('+member.color+', '+member.darkColor+'); background-image: -moz-linear-gradient('+member.color+', '+member.darkColor+'); background-image: linear-gradient('+member.color+', ' +member.darkColor+'); opacity: 0.4;';
+                       var disabledStyle = 'background-color: '+member.color+'; opacity: 0.4;';
                        member.showData = false;
                        memberButton.removeAttribute('style');
                        memberButton.setAttribute('style', disabledStyle);
                    }
                    else{
-                       var enabledStyle = 'background-image: -webkit-linear-gradient('+member.color+', '+member.darkColor+'); background-image: -o-linear-gradient('+member.color+', '+member.darkColor+'); background-image: -moz-linear-gradient('+member.color+', '+member.darkColor+'); background-image: linear-gradient('+member.color+', ' +member.darkColor+');';
+                       var enabledStyle = 'background-color: '+member.color+';';
                        memberButton.removeAttribute('style');
                        memberButton.setAttribute('style', enabledStyle);
                        member.showData = true;
@@ -494,13 +509,13 @@
                     responsive: true,
                     datasetFill : false,
                     bezierCurve : false,
-                    scaleGridLineColor : "#666666",
-                    scaleFontSize: 14,
-                    tooltipFontSize: 16,
-                    scaleFontColor: "#cccccc",
-                    tooltipFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
-                    scaleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
-                    tooltipTitleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
+                    scaleGridLineColor : "#000000",
+                    scaleFontSize: 16,
+                    tooltipFontSize: 18,
+                    scaleFontColor: "#000000",
+                    tooltipFontFamily: "'Roboto', 'Helvetica', 'Arial', 'sans-serif'",
+                    scaleFontFamily: "'Roboto', 'Helvetica', 'Arial', 'sans-serif'",
+                    tooltipTitleFontFamily: "'Roboto', 'Helvetica', 'Arial', 'sans-serif'",
                     pointDotRadius: 7,
                     pointDotStrokeWidth: 3,
                     datasetStrokeWidth: 6
@@ -531,14 +546,14 @@
                     responsive: true,
                     animationEasing: "easeOutQuint",
                     scaleFontSize: 16,
-                    scaleGridLineColor : "#666666",
+                    scaleGridLineColor : "#000000",
                     barValueSpacing: 0,
                     barStrokeWidth: 3,
-                    tooltipFontSize: 16,
-                    scaleFontColor: "#cccccc",
-                    scaleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
-                    tooltipFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'",
-                    tooltipTitleFontFamily: "'PT Serif', 'Helvetica', 'Arial', 'sans-serif'"
+                    tooltipFontSize: 18,
+                    scaleFontColor: "#000000",
+                    tooltipFontFamily: "'Roboto', 'Helvetica', 'Arial', 'sans-serif'",
+                    scaleFontFamily: "'Roboto', 'Helvetica', 'Arial', 'sans-serif'",
+                    tooltipTitleFontFamily: "'Roboto', 'Helvetica', 'Arial', 'sans-serif'"
 
                 });
             }
@@ -603,6 +618,5 @@
 
     }]);
 
-
-    }(angular));
+}(angular));
 

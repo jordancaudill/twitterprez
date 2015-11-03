@@ -1,19 +1,14 @@
 <div ng-controller="SearchController as SearchCtrl">
-    <img id="sword" src="../img/sword.png">
-
-    <div class="centeredContent">
-        <h1>Team Statter</h1>
-        <p>Get quick stats on your LoL 5v5 Team</p>
-        <form id="summonerForm" ng-submit="SearchCtrl.searchSummoner(summoner, selectedRegion)">
-            <div>
-                <select id="region" ng-model="selectedRegion" ng-init="selectedRegion = SearchCtrl.regions[0]" ng-options="region for region in SearchCtrl.regions"></select>
-                <input placeholder="Summoner Name" type="text" class="text-center" id="summoner" ng-model="summoner">
-                <input id="enterSummoner" type="submit" value="Go" ng-click="isError = false">
-            </div>
-        </form>
-        <div id="error">{{error}}</div>
-    </div>
-
+    <h1 id="teamstatter">Team Statter</h1>
+    <p id="slogan">Analyze your League of Legends 5v5 Team</p>
+    <img id="logo" src="../img/logo.png">
+    <form ng-submit="SearchCtrl.searchSummoner(summoner, selectedRegion)">
+        <div id="summonerInfo">
+            <input id="summonerName" placeholder="Summoner Name" type="text" ng-model="summoner">
+            <select id="region" ng-model="selectedRegion" ng-init="selectedRegion = SearchCtrl.regions[0]" ng-options="region for region in SearchCtrl.regions"></select>
+        </div>
+        <input id="enterSummoner" type="submit" value="SEARCH">
+    </form>
 
     <footer>
         <p>Created by <a id="creator" href="http://www.jordancaudill.com">Jordan Caudill</a>. View the Team Statter documentation <a id="docs" href="../docs.html">here.</a> View the legal notice <a id="legal" data-toggle="modal" data-target=".bs-example-modal-sm">here.</a></p>
