@@ -67,6 +67,8 @@
   text-align: center;
   outline: none;
   -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   border-radius: 0;
   text-indent: 5px;
 }
@@ -228,7 +230,8 @@ footer p #docs:hover {
   }
 }
 #stat:hover {
-  color: #ffd54f;
+  color: #ffc107;
+  border-bottom-color: #ffa000;
 }
 #stat:focus {
   color: black;
