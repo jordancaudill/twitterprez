@@ -206,7 +206,7 @@ footer p #docs:hover {
   text-align: center;
 }
 #stat {
-  width: 200px;
+  width: 150px;
   height: 40px;
   background-color: white;
   color: black;
@@ -221,6 +221,7 @@ footer p #docs:hover {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  margin-left: 20px;
   border-radius: 0;
   text-indent: 5px;
 }
@@ -336,6 +337,38 @@ footer p #docs:hover {
 .teamMember:hover {
   opacity: .7;
 }
+#tooltip {
+  text-align: center;
+  width: 25px;
+  height: 25px;
+  border-style: none;
+  border-radius: 0;
+  background-color: #ffc107;
+  color: white;
+  font-family: "Russo One", Helvetica, Arial, sans-serif;
+  font-size: .8em;
+  outline: none;
+  -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
+}
+@media (min-width: 768px) {
+  #tooltip {
+    width: 30px;
+    height: 30px;
+    font-size: 1em;
+  }
+}
+#tooltip:hover {
+  background-color: #ffa000;
+}
+.tooltip-inner {
+  background: rgba(0, 0, 0, 0.9);
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-size: 1.2em;
+  color: white;
+  text-align: left;
+}
 #average {
   margin-left: 20px;
   width: 60px;
@@ -353,7 +386,6 @@ footer p #docs:hover {
 }
 @media (min-width: 768px) {
   #average {
-    margin-left: 20px;
     width: 80px;
     height: 30px;
     font-size: 1em;

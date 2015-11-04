@@ -121,6 +121,11 @@
     }]);
 
     app.controller('ChartController', ['$q', 'shareData', 'getSummoner', 'getTeams', 'getMatchDetails', '$location', '$timeout', function($q, shareData, getSummoner, getTeams, getMatchDetails, $location, $timeout){
+        //enable bootstrap tooltips
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
         var matches = shareData.getMatches();
         var opposingTeamNames = shareData.getOpposingTeamNames();
         this.selectedTeam = shareData.getTeam();
@@ -430,34 +435,53 @@
 
         this.makeChart = function(statName, team, animation){
             var average = this.average;
+            var tooltip = document.getElementById('tooltip');
 
             switch(statName){
                 case 'Kill Participation':
+                    var message = 'Kill Participation (KP) = (Kills + Assists) / Total Team Kills. It is an indicator of participation in team fights and overall teamwork. A good team has all players with high KP. The values shown here are a percentage of the total team kills (60 = 60%). 50-70 is considered average KP, and 70-100 is considered great KP.';
                     statName = 'killParticipation';
+                    tooltip.setAttribute('data-original-title', message);
                     break;
                 case 'Deaths per min.':
+                    var message = 'Deaths lead to spikes in the gold deficit between the enemy team and your team. Dead teammates give the enemy opportunities to force team fights, take objectives, and split push. If a single player has consistently more deaths than the rest of the team, there may be a problem.';
                     statName = 'deathsPerMin';
+                    tooltip.setAttribute('data-original-title', message);
                     break;
                 case 'Assists per min.':
+                    var message = 'A high amount of assists implies participation in team fights, synergy, and good global positioning and roaming. Typically, the Support should lead the boards in assists.';
                     statName = 'assistsPerMin';
+                    tooltip.setAttribute('data-original-title', message);
                     break;
                 case 'Wards Placed per min.':
+                    var message = 'Warding is an essential part of any teams playstyle, as it provides vision that will allow a team to capitalize on an enemy’s mistakes. While everyone on the team should be warding, the Support typically has the most Wards placed per minute.';
                     statName = 'wardsPlacedPerMin';
+                    tooltip.setAttribute('data-original-title', message);
                     break;
                 case 'Wards Killed per min.':
+                    var message = 'Destroying enemy Wards is important part of the vision game, as it allows your team to make plays without the enemys knowledge. It can also save your team when players have bad positioning.';
                     statName = 'wardsKilledPerMin';
+                    tooltip.setAttribute('data-original-title', message);
                     break;
                 case 'Damage to Champions per min.':
+                    var message = 'This is an important indicator of how consistently each player is dealing damage to the enemy team. It’s very important for the Mid laner and ADC to have high damage to Champions, or the team will lose most fights.';
                     statName = 'totalDamageDealtToChampionsPerMin';
+                    tooltip.setAttribute('data-original-title', message);
                     break;
                 case 'CS per min.':
+                    var message = 'Creep Score (CS) is the amount of minions killed in a game.  Mid, ADC, and Top laners should have the highest CS of a team. Professional players typically have a CS of about 8-10 per minute.';
                     statName = 'minionsKilledPerMin';
+                    tooltip.setAttribute('data-original-title', message);
                     break;
                 case 'Kills per min.':
+                    var message = 'Kills give a large gold and power spike, especially for a carry. Typically, the ADC and Mid should lead the team in kills because of their high damage output. Top laners and Junglers can also be at the top of the boards if they play more carry-focused champions.';
                     statName = 'killsPerMin';
+                    tooltip.setAttribute('data-original-title', message);
                     break;
                 case 'Gold Earned per min.':
+                    var message = 'The amount of gold earned is the best single-value indicator of a team or player’s performance because it directly correlates with CS, Kills, Assists, and Objectives. Simply put, great players earn a lot of gold.';
                     statName = 'goldEarnedPerMin';
+                    tooltip.setAttribute('data-original-title', message);
                     break;
                 default:
                     break;
