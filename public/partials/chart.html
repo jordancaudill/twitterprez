@@ -1,17 +1,17 @@
 <div ng-controller="ChartController as ChartCtrl">
     <h4 id="teamName">{{ChartCtrl.selectedTeam.name}}</h4>
-    <form id="statstuff">
-        <button style="display: inline" type="button" id="tooltip" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" >?</button>
+    <div class="statstuff">
+        <input type="button" value="Back" onclick="window.location.href='#/teams'" class="back-btn">
+        <button id="average" ng-init="ChartCtrl.average = false" ng-click="ChartCtrl.toggleAverage();ChartCtrl.makeChart(selectedStat, ChartCtrl.team, true);">Average</button>
+    </div>
+    <div class="statstuff">
         <select style="display: inline" ng-model="selectedStat" ng-init="selectedStat = ChartCtrl.statNameList[0]" ng-change="ChartCtrl.makeChart(selectedStat, ChartCtrl.team, true)" id="stat" ng-options="statName for statName in ChartCtrl.statNameList"></select>
-        <button id="average" style="display: inline;" ng-init="ChartCtrl.average = false" ng-click="ChartCtrl.toggleAverage();ChartCtrl.makeChart(selectedStat, ChartCtrl.team, true);">Average</button>
-    </form>
+        <button style="display: inline" type="button" id="tooltip" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" >?</button>
+    </div>
 
     <div id="chartContainer">
         <canvas id="chart"></canvas>
     </div>
-    <a href="#/teams">
-        <div id="back-btn">Back</div>
-    </a>
 
     <div class="container">
         <div class="row">

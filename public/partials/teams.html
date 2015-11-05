@@ -1,9 +1,8 @@
 <div ng-controller="TeamController as TeamCtrl">
+    <div class="statstuff">
+        <input id="teamback" type="button" value="Back" onclick="window.location.href='#/'" class="back-btn">
+    </div>
     <div id="teamListTitle">{{TeamCtrl.summoner.name}}'s Teams</div>
     <button ng-repeat="team in TeamCtrl.summoner.teams" ng-click="TeamCtrl.getMatches(team, TeamCtrl.summoner.region)" class="team-btn">{{team.name}}</button>
     <div id="error">{{error}}</div>
-    <a href="#/search">
-        <div id="back-btn">Back</div>
-    </a>
-
 </div>
