@@ -488,11 +488,9 @@
             }
 
             //need to reset the canvas
-            var chart = $('#chart');
-            if(chart){
-                chart.remove();
-            }
-            $('#chartContainer').append('<canvas id="chart"></canvas>');
+            var chartContainer= $('#chartContainer');
+            chartContainer.empty();
+            chartContainer.append('<canvas id="chart"></canvas>');
 
             var ctx = document.getElementById("chart").getContext("2d");
 
@@ -526,11 +524,11 @@
                     }
                 });
 
-
                 new Chart(ctx).Line(data, {
                     //define chart options here
                     animation: animation,
                     responsive: true,
+                    maintainAspectRatio: false,
                     datasetFill : false,
                     bezierCurve : false,
                     scaleGridLineColor : "#000000",
@@ -540,9 +538,9 @@
                     tooltipFontFamily: "'Roboto', 'Helvetica', 'Arial', 'sans-serif'",
                     scaleFontFamily: "'Roboto', 'Helvetica', 'Arial', 'sans-serif'",
                     tooltipTitleFontFamily: "'Roboto', 'Helvetica', 'Arial', 'sans-serif'",
-                    pointDotRadius: 7,
-                    pointDotStrokeWidth: 3,
-                    datasetStrokeWidth: 6
+                    pointDotRadius: 6,
+                    pointDotStrokeWidth: 2,
+                    datasetStrokeWidth: 5
 
                 });
             }
@@ -568,6 +566,7 @@
                     //define chart options here
                     animation: animation,
                     responsive: true,
+                    maintainAspectRatio: false,
                     animationEasing: "easeOutQuint",
                     scaleFontSize: 16,
                     scaleGridLineColor : "#000000",
@@ -643,4 +642,3 @@
     }]);
 
 }(angular));
-

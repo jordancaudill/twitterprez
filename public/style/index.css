@@ -140,7 +140,7 @@
   background-color: #ffa000;
 }
 footer p {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 15px;
   font-family: "Roboto", Helvetica, Arial, sans-serif;
@@ -241,25 +241,29 @@ footer p #docs:hover {
 }
 #chartContainer {
   text-align: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 300px;
+  height: 300px;
 }
 @media screen and (min-width: 768px) {
   #chartContainer {
-    max-width: 600px;
+    width: 600px;
+    height: 300px;
   }
 }
 @media screen and (min-width: 992px) {
   #chartContainer {
-    max-width: 800px;
+    width: 800px;
+    height: 400px;
   }
 }
 @media screen and (min-width: 1200px) {
   #chartContainer {
-    max-width: 1000px;
+    width: 1000px;
+    height: 500px;
   }
 }
 #error {
@@ -348,6 +352,7 @@ footer p #docs:hover {
   font-family: "Russo One", Helvetica, Arial, sans-serif;
   font-size: .8em;
   outline: none;
+  text-indent: -2px;
   -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.75);
@@ -357,6 +362,7 @@ footer p #docs:hover {
     width: 30px;
     height: 30px;
     font-size: 1em;
+    text-indent: 0px;
   }
 }
 #tooltip:hover {

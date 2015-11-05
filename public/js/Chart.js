@@ -765,12 +765,12 @@
 			});
 		},
 		getMaximumWidth = helpers.getMaximumWidth = function(domNode){
-			var container = domNode.parentNode;
+			var container = document.getElementById('chartContainer');
 			// TODO = check cross browser stuff with this.
 			return container.clientWidth;
 		},
 		getMaximumHeight = helpers.getMaximumHeight = function(domNode){
-			var container = domNode.parentNode;
+			var container = document.getElementById('chartContainer');
 			// TODO = check cross browser stuff with this.
 			return container.clientHeight;
 		},
