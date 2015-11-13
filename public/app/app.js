@@ -157,20 +157,20 @@
                             if (participant.player.summonerId == rosterMember.playerId && x <= 4){
                                 for(var p = 0; p <= 4; p++){
                                     var member = match.participantIdentities[p];
-                                    if(!members[member.player.summonerName]){
-                                        members[member.player.summonerName] = {};
-                                        members[member.player.summonerName]['summonerName'] = member.player.summonerName;
-                                        members[member.player.summonerName]['summonerId'] = member.player.summonerId;
+                                    if(!members[member.player.summonerId]){
+                                        members[member.player.summonerId] = {};
+                                        members[member.player.summonerId]['summonerName'] = member.player.summonerName;
+                                        members[member.player.summonerId]['summonerId'] = member.player.summonerId;
                                     }
                                 }
                             }
                             else if (participant.player.summonerId == rosterMember.playerId && x >= 5){
                                 for(var k = 5; k >= 9 ; k++){
                                     var member = match.participantIdentities[k];
-                                    if(!members[member.player.summonerName]){
-                                        members[member.player.summonerName] = {};
-                                        members[member.player.summonerName]['summonerName'] = member.player.summonerName;
-                                        members[member.player.summonerName]['summonerId'] = member.player.summonerId;
+                                    if(!members[member.player.summonerId]){
+                                        members[member.player.summonerId] = {};
+                                        members[member.player.summonerId]['summonerName'] = member.player.summonerName;
+                                        members[member.player.summonerId]['summonerId'] = member.player.summonerId;
                                     }
                                 }
                             }
@@ -633,6 +633,7 @@
             team = getStatPerMin(team, 'totalDamageDealtToChampions');
             team = getStatPerMin(team, 'goldEarned');
 
+            console.log(team);
             this.team = team;
 
             this.makeChart(this.statNameList[0], team, true);
