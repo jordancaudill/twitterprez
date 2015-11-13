@@ -633,7 +633,6 @@
             team = getStatPerMin(team, 'totalDamageDealtToChampions');
             team = getStatPerMin(team, 'goldEarned');
 
-            console.log(team);
             this.team = team;
 
             this.makeChart(this.statNameList[0], team, true);
