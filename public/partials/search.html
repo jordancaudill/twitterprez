@@ -1,25 +1,27 @@
 <div ng-controller="SearchController as SearchCtrl">
-    <h1 id="teamstatter">Team Statter</h1>
-    <p id="slogan">Analyze your League of Legends 5v5 Team</p>
-    <img id="logo" src="../img/logo.png">
-    <form ng-submit="SearchCtrl.searchSummoner(summoner, selectedRegion)">
-        <div id="summonerInfo">
-            <input id="summonerName" placeholder="Summoner Name" type="text" ng-model="summoner">
-            <select id="region" ng-model="selectedRegion" ng-init="selectedRegion = SearchCtrl.regions[0]" ng-options="region for region in SearchCtrl.regions"></select>
-        </div>
-        <input id="enterSummoner" type="submit" value="SEARCH">
-    </form>
-    <p id="error">{{error}}</p>
-
-    <footer>
-        <p>Created by <a id="creator" href="https://twitter.com/jcaudill74">Jordan Caudill</a>. View the Team Statter documentation <a id="docs" href="../docs.html">here.</a> View the legal notice <a id="legal" data-toggle="modal" data-target=".bs-example-modal-sm">here.</a></p>
-    </footer>
-
-    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <p>Team Statter isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.</p>
+    <h1 id="teamstatter">Presidential Twitter</h1>
+    <p id="slogan">What are the candidates talking about today?</p>
+    <p id="error" ng-if="error">{{error}}</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-3">
+                <h3>Republican</h3>
+                <a class="twitter-timeline" href="https://twitter.com/realDonaldTrump">Tweets by realDonaldTrump</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+            <div class="col-xs-3">
+                <h3>Democrat</h3>
+                <a class="twitter-timeline" href="https://twitter.com/HillaryClinton">Tweets by HillaryClinton</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>        </div>
+            <div class="col-xs-3">
+                <h3>Libertarian</h3>
+                <a class="twitter-timeline" href="https://twitter.com/GovGaryJohnson">Tweets by GovGaryJohnson</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>        </div>
+            <div class="col-xs-3">
+                <h3>Green Party</h3>
+                <a class="twitter-timeline" href="https://twitter.com/DrJillStein">Tweets by DrJillStein</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
         </div>
     </div>
+    <footer>
+        <p>Created by <a id="creator" href="https://twitter.com/jcaudill74">Jordan Caudill
+    </footer>
+
 </div>
